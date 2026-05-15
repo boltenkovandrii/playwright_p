@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-playwright"
+version = "0.1.0"
+description = "Playwright automation framework"
+requires-python = ">=3.10"
+
+dependencies = [
+    "pytest",
+    "playwright",
+    "pytest-playwright",
+    "allure-pytest",
+    "pytest-xdist",
+    "pytest-rerunfailures",
+    "allure-python-commons",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
