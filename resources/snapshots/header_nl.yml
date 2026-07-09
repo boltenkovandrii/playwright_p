@@ -1,0 +1,22 @@
+
+- banner:
+  - navigation "Site":
+    - button "Hoofdmenu"
+  - link "Wikipedia de vrije encyclopedie":
+    - /url: /wiki/Hoofdpagina
+    - img "Wikipedia"
+    - img "de vrije encyclopedie"
+  - search:
+    - searchbox "Wikipedia doorzoeken"
+    - button "Zoeken"
+  - navigation "Persoonlijke hulpmiddelen":
+    - list:
+      - listitem:
+        - link "Doneren":
+          - /url: https://donate.wikimedia.org/?wmf_source=donate&wmf_medium=sidebar&wmf_campaign=nl.wikipedia.org&uselang=nl
+      - listitem:
+        - link "Account aanmaken":
+          - /url: //w/index.php\?title=Speciaal:GebruikerAanmaken&returnto=.*/
+      - listitem:
+        - link "Aanmelden":
+          - /url: //w/index.php\?title=Speciaal:Aanmelden&returnto=.*/

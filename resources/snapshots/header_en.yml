@@ -1,0 +1,21 @@
+- banner:
+  - navigation "Site":
+    - button "Main menu"
+  - link "Wikipedia The Free Encyclopedia":
+    - /url: /wiki/Main_Page
+    - img "Wikipedia"
+    - img "The Free Encyclopedia"
+  - search:
+    - searchbox "Search Wikipedia"
+    - button "Search"
+  - navigation "Personal tools":
+    - list:
+      - listitem:
+        - link "Donate":
+          - /url: https://donate.wikimedia.org/?wmf_source=donate&wmf_medium=sidebar&wmf_campaign=en.wikipedia.org&uselang=en
+      - listitem:
+        - link "Create account":
+          - /url: /.*/w/index.php\?title=Special.*CreateAccount&returnto=.*/
+      - listitem:
+        - link "Log in":
+          - /url: /.*/w/index.php\?title=Special.*UserLogin&returnto=.*/
