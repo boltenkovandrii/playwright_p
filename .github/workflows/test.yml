@@ -1,0 +1,89 @@
+name: Tests
+
+on:
+  # having both 'push' and 'pull_request' is probably excessive but for a sample project it is ok
+  # Runs on current branch
+  push:
+    branches:
+      - main
+      - feature/**
+  # Runs on temporary commit based on main and current branch - actually testing results after the merge.
+  pull_request:
+    branches:
+      - main
+      - feature/**
+  workflow_dispatch:
+    inputs:
+      browsers:
+        description: 'Comma or space-separated list of browsers (e.g. firefox,chromium). If empty, defaults applied.'
+        required: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Determine browsers
+        id: set-browsers
+        run: |
+          # Normalize workflow_dispatch input (comma or space separated)
+          RAW_INPUT="${{ github.event.inputs.browsers || '' }}"
+          # replace commas with spaces and trim
+          RAW_INPUT=$(echo "$RAW_INPUT" | tr ',' ' ' | xargs)
+
+          if [ -n "$RAW_INPUT" ]; then
+            BROWSERS="$RAW_INPUT"
+          elif [ "${{ github.ref }}" = 'refs/heads/main' ]; then
+            # full set for main
+            BROWSERS="firefox chromium webkit"
+          else
+            # default for feature branches / PRs
+            BROWSERS="firefox"
+          fi
+
+          echo "browsers=$BROWSERS" >> $GITHUB_OUTPUT
+
+      - name: Install Playwright browsers
+        run: python -m playwright install --with-deps "${{ steps.set-browsers.outputs.browsers }}"
+
+      - name: Run tests
+        run: |
+          BROWSERS="${{ steps.set-browsers.outputs.browsers }}"
+          ARGS=""
+          for b in $BROWSERS; do
+            ARGS="$ARGS --browser $b"
+          done
+          echo "Running pytest for browsers: $BROWSERS"
+          pytest $ARGS -n 8 --alluredir=reports/allure-results
+
+      - name: Install Allure
+        if: always()
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-jre
+          npm install -g allure-commandline
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          allure generate reports/allure-results --clean -o reports/allure-report
+
+      - name: Upload report and other test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: reports/
+          retention-days: 3
