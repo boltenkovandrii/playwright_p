@@ -56,7 +56,8 @@ jobs:
           echo "browsers=$BROWSERS" >> $GITHUB_OUTPUT
 
       - name: Install Playwright browsers
-        run: python -m playwright install --with-deps ${{ steps.set-browsers.outputs.browsers }}
+        run: python -m playwright install --with-deps
+#        run: python -m playwright install --with-deps ${{ steps.set-browsers.outputs.browsers }}  ## providing user input directly to bash is not safe and just installing all the browsers does not consume a lot of resources
 
       - name: Run tests
         run: |
@@ -66,7 +67,7 @@ jobs:
             ARGS="$ARGS --browser $b"
           done
           echo "Running pytest for browsers: $BROWSERS"
-          pytest $ARGS -n 8 --alluredir=reports/allure-results
+          pytest $ARGS -n auto --alluredir=reports/allure-results
 
       - name: Install Allure
         if: always()

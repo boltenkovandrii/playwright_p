@@ -1,43 +1,45 @@
 import pytest
-from playwright.sync_api import sync_playwright
 
-from utils.allure_reporting import attach_screenshot
+from tests.config.profiles import get_profile
+from utils.allure_reporting import attach_screenshot, attach_playwright_artifacts
+
 
 pytest_plugins = [
     "tests.fixtures.pages",
     "tests.fixtures.locale",
+    "tests.fixtures.profile",
 ]
-'''
-@pytest.fixture(scope="session")
-def browser_f():
-    with sync_playwright() as p:
-        browser_f = p.chromium.launch(headless=False, slow_mo=1000, channel="msedge")
-        print(browser_f.version)
-        yield browser_f
 
-        browser_f.close()
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--profile",
+        action="append",
+        help="Profile name",
+    )
+
+def pytest_generate_tests(metafunc):
+    if "profile" not in metafunc.fixturenames:
+        return
+
+    profiles = metafunc.config.getoption("profile")
+
+    if not profiles:
+        profiles = ["desktop"]
+
+    metafunc.parametrize("profile", profiles)
 
 @pytest.fixture
-def page_f(browser_f):
-    context = browser_f.new_context()
-    page_f = context.new_page()
+def browser_context_args(browser_context_args, playwright, profile, browser_name):
+    for name in sorted(playwright.devices):
+        print(name)
 
-    yield page_f
-
-    context.close()
-'''
-
-@pytest.fixture
-def browser_context_args(browser_context_args):
+    if browser_name == "firefox" and profile != "desktop":
+        pytest.skip("Firefox doesn't support mobile emulation")
 
     return {
         **browser_context_args,
-        "viewport": {
-#            "width": 2560,
-#            "height": 1600
-            "width": 1920,
-            "height": 1080
-        }
+        **get_profile(playwright, profile),
     }
 
 # final screenshot
@@ -54,3 +56,14 @@ def page(context):
 @pytest.fixture(scope="session", autouse=True)
 def selectors(playwright):
     playwright.selectors.set_test_id_attribute("id")
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when == "call" and report.failed:
+        attach_playwright_artifacts(item.funcargs["output_path"])
+
+
