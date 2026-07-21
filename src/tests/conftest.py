@@ -31,8 +31,6 @@ def pytest_generate_tests(metafunc):
 
 @pytest.fixture
 def browser_context_args(browser_context_args, playwright, profile, browser_name):
-    for name in sorted(playwright.devices):
-        print(name)
 
     if browser_name == "firefox" and profile != "desktop":
         pytest.skip("Firefox doesn't support mobile emulation")

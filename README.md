@@ -1,6 +1,9 @@
 ## Overview
 - This project is created to demonstrate usage of pytest+playwright combination.
-- AUT: https://www.wikipedia.org/
+- AUT's: 
+  - https://www.wikipedia.org/ (will be remover in the future)
+  - https://demo.opencart.com/ )WIP_
+  - MediaWiki sandbox docker image (WIP)
 - CI: GitHub Actions (runs on commits/PRs to main and feature/* branches)
 - Reporting: Allure
 - Tests themselves are not very meaningful and only serve for demonstrational purposes
@@ -17,6 +20,4 @@
       ```
 
 ## Notes
-- Snapshot-based testing is not the best approach for wiki - multilingual application, 
-where the structure of components may be language-dependent. Only added here for the demonstration purposes.
 - It would be better to use dedicated test id instead of 'id' attribute. Working with what we have. 
