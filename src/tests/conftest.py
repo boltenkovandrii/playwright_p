@@ -5,9 +5,10 @@ from utils.allure_reporting import attach_screenshot, attach_playwright_artifact
 
 
 pytest_plugins = [
-    "tests.fixtures.pages",
-    "tests.fixtures.locale",
-    "tests.fixtures.profile",
+    "fixtures.pages",
+    "fixtures.locale",
+    "fixtures.profile",
+    "fixtures.prestashop.pages",
 ]
 
 
@@ -61,7 +62,5 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and report.failed:
+    if report.when == "call" and report.failed and "output_path" in item.funcargs:
         attach_playwright_artifacts(item.funcargs["output_path"])
-
-

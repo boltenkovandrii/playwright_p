@@ -119,7 +119,7 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 - Locators should use the test ID attribute (`id` attribute) where possible; avoid relying on generic selectors
 
 ### Components
-- Components are organized by AUT (Application Under Test) in subdirectories (`mediawiki/`, `opencart/`)
+- Components are organized by AUT (Application Under Test) in subdirectories (`mediawiki/`, `prestashop/`)
 - Components provide methods to verify structure (e.g., `check_structure()`)
 - Components are passed a `page` object or parent container for element interaction
 
@@ -157,7 +157,7 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 ## Testing AUTs (Applications Under Test)
 
 - **Wikipedia** (`https://www.wikipedia.org/`): Main test subject (MainPage, ArticlePage, HomePage)
-- **OpenCart** (`https://demo.opencart.com/`): Work in progress (WIP)
+- **Prestashop** (Docker image): Work in progress (WIP)
 - **MediaWiki Sandbox** (Docker image): Work in progress (WIP)
 
 ---
