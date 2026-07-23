@@ -13,7 +13,7 @@ from utils.allure_reporting import attach_screenshot
 )
 @allure.title("Testing main page title")
 @allure.suite("Main page")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_main_page_title(main_page):
     main_page.open()
     expect(main_page.page).to_have_title(TRANSLATIONS[main_page.locale]["main_page_title"])
@@ -26,7 +26,7 @@ def test_main_page_title(main_page):
 )
 @allure.suite("Main page")
 @allure.title("Check page structure")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_main_page_structure(main_page):
     main_page.open()
     main_page.header.check_structure()
@@ -40,7 +40,7 @@ def test_main_page_structure(main_page):
 )
 @allure.suite("Main page")
 @allure.title("Check font selection")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_main_page_font_selection(main_page):
     main_page = main_page.open()
     main_page = main_page.set_small_text_size()

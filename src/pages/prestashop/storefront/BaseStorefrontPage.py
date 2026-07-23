@@ -13,7 +13,7 @@ class BaseStorefrontPage(BasePage):
         self.header = Header(page)
         self.footer = Footer(page)
         self.notifications = Notification(page)
-        self.content = page.locator("#content")
+        self.content = page.locator("#main")
 
     def open(self, path=""):
         self.page.goto(f"{self.BASE_URL}{path}")
@@ -24,4 +24,11 @@ class BaseStorefrontPage(BasePage):
         expect(self.content).to_be_visible()
         self.header.verify_loaded()
         self.notifications.verify_loaded()
+        return self
+
+    def check_structure(self):
+        expect(self.content).to_be_visible()
+        self.header.check_structure()
+        self.notifications.check_structure()
+        self.footer.check_structure()
         return self

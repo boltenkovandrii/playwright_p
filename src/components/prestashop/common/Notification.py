@@ -8,3 +8,7 @@ class Notification:
     def verify_loaded(self):
         expect(self.container).to_be_attached()
         return self
+
+    def check_structure(self):
+        expect(self.container).to_be_attached()
+        return self

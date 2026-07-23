@@ -59,6 +59,13 @@ jobs:
         run: python -m playwright install --with-deps
 #        run: python -m playwright install --with-deps ${{ steps.set-browsers.outputs.browsers }}  ## providing user input directly to bash is not safe and just installing all the browsers does not consume a lot of resources
 
+      - name: Start app
+        env:
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          docker-compose -f docker/docker-compose-prestashop.yml up --build -d
+
       - name: Run tests
         run: |
           BROWSERS="${{ steps.set-browsers.outputs.browsers }}"

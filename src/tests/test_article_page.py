@@ -8,7 +8,7 @@ from utils.allure_reporting import attach_screenshot
 
 @allure.suite("Article page")
 @allure.title("Testing article page title - localized")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 @pytest.mark.parametrize(
     "locale",
     ["en", "nl", "uk"],
@@ -27,7 +27,7 @@ def test_article_search_chain_localized(article_page):
 )
 @allure.suite("Article page")
 @allure.title("Check page structure")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_article_page_structure(article_page):
     article_page = article_page.open("Playwright")
     article_page.header.check_structure()
@@ -41,7 +41,7 @@ def test_article_page_structure(article_page):
 )
 @allure.suite("Article page")
 @allure.title("Check font selection")
-#@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_article_page_font_selection(article_page):
     article_page = article_page.open("Playwright")
     article_page = article_page.set_small_text_size()
