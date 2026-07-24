@@ -8,55 +8,55 @@
 - list:
   - listitem:
     - link "Prices drop":
-      - /url: http://localhost:8090/en/prices-drop
+      - /url: /.*/en/prices-drop/
   - listitem:
     - link "New products":
-      - /url: http://localhost:8090/en/new-products
+      - /url: /.*/en/new-products/
   - listitem:
     - link "Best sellers":
-      - /url: http://localhost:8090/en/best-sellers
+      - /url: /.*/en/best-sellers/
 - paragraph: Our company
 - list:
   - listitem:
     - link "Delivery":
-      - /url: http://localhost:8090/en/content/1-delivery
+      - /url: /.*/en/content/1-delivery/
   - listitem:
     - link "Legal Notice":
-      - /url: http://localhost:8090/en/content/2-legal-notice
+      - /url: /.*/en/content/2-legal-notice/
   - listitem:
     - link "Terms and conditions of use":
-      - /url: http://localhost:8090/en/content/3-terms-and-conditions-of-use
+      - /url: /.*/en/content/3-terms-and-conditions-of-use/
   - listitem:
     - link "About us":
-      - /url: http://localhost:8090/en/content/4-about-us
+      - /url: /.*/en/content/4-about-us/
   - listitem:
     - link "Secure payment":
-      - /url: http://localhost:8090/en/content/5-secure-payment
+      - /url: /.*/en/content/5-secure-payment/
   - listitem:
     - link "Contact us":
-      - /url: http://localhost:8090/en/contact-us
+      - /url: /.*/en/contact-us/
   - listitem:
     - link "Sitemap":
-      - /url: http://localhost:8090/en/sitemap
+      - /url: /.*/en/sitemap/
   - listitem:
     - link "Stores":
-      - /url: http://localhost:8090/en/stores
+      - /url: /.*/en/stores/
 - paragraph:
   - link "Your account":
-    - /url: http://localhost:8090/en/my-account
+    - /url: /.*/en/my-account/
 - list:
   - listitem:
     - link "Order tracking":
-      - /url: http://localhost:8090/en/guest-tracking
+      - /url: /.*/en/guest-tracking/
   - listitem:
     - link "Sign in":
-      - /url: http://localhost:8090/en/my-account
+      - /url: /.*/en/my-account/
   - listitem:
     - link "Create account":
-      - /url: http://localhost:8090/en/registration
+      - /url: /.*/en/registration/
   - listitem:
     - link "My alerts":
-      - /url: //localhost:8090/en/module/ps_emailalerts/account
+      - /url: /.*/en/module/ps_emailalerts/account/
 - paragraph: Store information
 - text: "PrestaShop France Email us:"
 - link "demo@prestashop.com":
