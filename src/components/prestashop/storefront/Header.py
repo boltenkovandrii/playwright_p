@@ -36,7 +36,7 @@ class Header:
         self.search_input.press("Enter")
         return self
 
-    def open_category(self, name):
+    def click_category(self, name):
         category_links = self.page.locator("#top-menu .category > a")
         if not category_links.first.is_visible():
             self.open_mobile_menu()
@@ -48,7 +48,7 @@ class Header:
             category_links.filter(has_text=name).first.click()
         return self
 
-    def open_cart(self):
+    def click_cart(self):
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.desktop_cart.locator("a").click()
         return self

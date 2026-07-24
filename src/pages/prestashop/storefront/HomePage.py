@@ -1,4 +1,5 @@
 from components.prestashop.storefront.ProductGrid import ProductGrid
+from pages.prestashop.storefront.CatalogPage import CatalogPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
@@ -28,3 +29,7 @@ class HomePage(BaseStorefrontPage):
         expect(self.carousel).to_be_visible()
         self.featured_products.check_structure()
         return self
+
+    def open_category(self, name):
+        self.header.click_category(name)
+        return CatalogPage(self.page).verify_loaded()

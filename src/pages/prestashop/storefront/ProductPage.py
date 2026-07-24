@@ -1,3 +1,4 @@
+from pages.prestashop.storefront.CartPage import CartPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
@@ -35,4 +36,4 @@ class ProductPage(BaseStorefrontPage):
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.cart_modal.locator("a[href*='cart']").click()
         attach_screenshot(self.page, "After navigating to the cart")
-        return self
+        return CartPage(self.page).verify_loaded()
