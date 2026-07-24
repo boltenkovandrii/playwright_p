@@ -26,5 +26,5 @@ class CatalogPage(BaseStorefrontPage):
         return self
 
     def open_product(self, index):
-        self.product_grid.product_at(index).open()
+        self.product_grid.product_at(index).open_product()
         return ProductPage(self.page).verify_loaded()
