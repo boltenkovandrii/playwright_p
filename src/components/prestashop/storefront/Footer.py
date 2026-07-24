@@ -15,11 +15,10 @@ class Footer:
 
     def check_structure(self):
         attach_screenshot(self.container, "Checking footer structure")
-        snapshot_name = (
-            "footer_mobile"
-            if self.page.locator("#menu-icon").is_visible()
-            else "footer"
-        )
+        if self.page.locator("#menu-icon").is_visible():
+            snapshot_name = "footer_mobile"
+        else:
+            snapshot_name = "footer"
         expect(self.container).to_match_aria_snapshot(
             load_snapshot(snapshot_name, namespace="prestashop")
         )
