@@ -1,5 +1,6 @@
 from playwright.sync_api import expect
 
+from tests.config.profiles import is_phone
 from utils.allure_reporting import attach_screenshot
 
 
@@ -31,18 +32,14 @@ class Header:
         expect(self.mobile_menu).to_be_visible()
         return self
 
-    def search(self, query):
-        self.search_input.fill(query)
-        self.search_input.press("Enter")
-        return self
-
-    def click_category(self, name):
-        category_links = self.page.locator("#top-menu .category > a")
-        if not category_links.first.is_visible():
+    def click_category(self ,profile,  name):
+        if is_phone(profile):
             self.open_mobile_menu()
             category_links = self.page.locator(
                 "#mobile_top_menu_wrapper .category > a"
             )
+        else:
+            category_links = self.page.locator("#top-menu .category > a")
 
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             category_links.filter(has_text=name).first.click()

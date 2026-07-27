@@ -53,3 +53,6 @@ def is_tablet(profile):
 
 def is_desktop(profile):
     return profile.startswith("desktop")
+
+def is_phone(profile):
+    return not (is_tablet(profile) or is_desktop(profile))

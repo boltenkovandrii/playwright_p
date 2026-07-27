@@ -30,6 +30,6 @@ class HomePage(BaseStorefrontPage):
         self.featured_products.check_structure()
         return self
 
-    def open_category(self, name):
-        self.header.click_category(name)
+    def open_category(self, profile, name):
+        self.header.click_category(profile, name)
         return CatalogPage(self.page).verify_loaded()
