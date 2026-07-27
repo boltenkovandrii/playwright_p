@@ -16,6 +16,7 @@ dependencies = [
     "pytest-xdist",
     "pytest-rerunfailures",
     "allure-python-commons",
+    "python-dotenv",
 ]
 
 [tool.setuptools.packages.find]

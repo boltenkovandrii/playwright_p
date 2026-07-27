@@ -18,6 +18,9 @@ on:
         description: 'Comma or space-separated list of browsers (e.g. firefox,chromium). If empty, defaults applied.'
         required: false
 
+env:
+  PRESTASHOP_BASE_URL: http://localhost:8091
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -75,6 +78,8 @@ jobs:
           docker-compose -f docker/docker-compose-prestashop.yml up --build -d
 
       - name: Run tests
+        env:
+          PRESTASHOP_BASE_URL: ${{ github.event.inputs.prestashop_base_url || env.PRESTASHOP_BASE_URL }}
         run: |
           BROWSERS="${{ steps.set-browsers.outputs.browsers }}"
           ARGS=""

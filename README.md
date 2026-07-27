@@ -13,8 +13,10 @@
 - Use resources/scripts/test_run.ps1 for local runs
 
 ## Prestashop
-- URL: http://localhost:8090
-- Admin URL: http://localhost:8090/admin-dev/
+- Start application: **docker-compose -f docker/docker-compose-prestashop.yml up --build -d**
+- Set `PRESTASHOP_BASE_URL` in `.env` to configure the application root URL for tests.
+- Default URL: http://localhost:8090
+- Default Admin URL: http://localhost:8090/admin-dev/
 - Admin credentials: demo@prestashop.com/prestashop_demo
 - One employee per language is created with the same password (demo<iso_code>@prestashop.com) - i.e. demofr@prestashop.com
 

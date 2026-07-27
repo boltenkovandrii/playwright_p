@@ -4,9 +4,11 @@ from components.prestashop.storefront.Header import Header
 from pages.BasePage import BasePage
 from playwright.sync_api import expect
 
+from utils.environment import get_env_variable
+
 
 class BaseStorefrontPage(BasePage):
-    BASE_URL = "http://localhost:8090/en/"
+    BASE_URL = f"{get_env_variable("PRESTASHOP_BASE_URL", "http://localhost:8090")}/en/"
 
     def __init__(self, page):
         super().__init__(page)
