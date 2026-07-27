@@ -19,7 +19,7 @@ on:
         required: false
 
 env:
-  PRESTASHOP_BASE_URL: http://localhost:8091
+  PRESTASHOP_BASE_URL: http://localhost:8090
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install Python dependencies
         run: |
