@@ -5,7 +5,10 @@ from utils.environment import get_env_variable
 
 
 class BaseBackofficePage(BasePage):
-    BASE_URL = f"{get_env_variable("PRESTASHOP_BASE_URL", "http://localhost:8090")}/admin-dev/"
+    BASE_URL = get_env_variable(
+        "PRESTASHOP_BASE_URL",
+        "http://localhost:8090",
+    ) + "/admin-dev/"
 
     def open(self, path=""):
         self.page.goto(f"{self.BASE_URL}{path}")

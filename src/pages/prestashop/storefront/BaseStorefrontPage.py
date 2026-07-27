@@ -8,7 +8,10 @@ from utils.environment import get_env_variable
 
 
 class BaseStorefrontPage(BasePage):
-    BASE_URL = f"{get_env_variable("PRESTASHOP_BASE_URL", "http://localhost:8090")}/en/"
+    BASE_URL = get_env_variable(
+        "PRESTASHOP_BASE_URL",
+        "http://localhost:8090",
+    ) + "/en/"
 
     def __init__(self, page):
         super().__init__(page)
