@@ -31,9 +31,9 @@ class BaseStorefrontPage(BasePage):
         self.notifications.verify_loaded()
         return self
 
-    def check_structure(self):
+    def check_structure(self, profile):
         expect(self.content).to_be_visible()
         self.header.check_structure()
         self.notifications.check_structure()
-        self.footer.check_structure()
+        self.footer.check_structure(profile)
         return self
