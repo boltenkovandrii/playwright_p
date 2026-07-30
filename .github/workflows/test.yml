@@ -38,6 +38,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
 
+      - name: Determine profiles
+        id: set-profiles
+        run: |
+          if [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
+            PROFILES=$(python -c "from tests.config.profiles import PROFILES; print(' '.join(PROFILES))")
+          else
+            PROFILES=""
+          fi
+
+          echo "profiles=$PROFILES" >> $GITHUB_OUTPUT
+
       - name: Determine browsers
         id: set-browsers
         run: |
@@ -82,12 +93,22 @@ jobs:
           PRESTASHOP_BASE_URL: ${{ github.event.inputs.prestashop_base_url || env.PRESTASHOP_BASE_URL }}
         run: |
           BROWSERS="${{ steps.set-browsers.outputs.browsers }}"
+          PROFILES="${{ steps.set-profiles.outputs.profiles }}"
           ARGS=""
+          PROFILE_ARGS=""
           for b in $BROWSERS; do
             ARGS="$ARGS --browser $b"
           done
+          for profile in $PROFILES; do
+            PROFILE_ARGS="$PROFILE_ARGS --profile=$profile"
+          done
           echo "Running pytest for browsers: $BROWSERS"
-          pytest $ARGS -n auto --alluredir=reports/allure-results
+          if [ -n "$PROFILES" ]; then
+            echo "Running pytest for profiles: $PROFILES"
+          else
+            echo "Running pytest with default profile selection"
+          fi
+          pytest $ARGS $PROFILE_ARGS -n auto --alluredir=reports/allure-results
 
       - name: Install Allure
         if: always()
