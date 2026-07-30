@@ -14,9 +14,9 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart).to_be_visible()
         return self
 
-    def check_structure(self, profile):
+    def check_structure(self):
         attach_screenshot(self.page, "Checking cart page structure")
-        super().check_structure(profile)
+        super().check_structure()
         expect(self.cart).to_be_visible()
         expect(self.page.locator(".cart-overview")).to_be_visible()
         expect(self.page.locator(".cart-detailed-totals")).to_be_visible()

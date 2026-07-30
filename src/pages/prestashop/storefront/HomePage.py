@@ -23,9 +23,9 @@ class HomePage(BaseStorefrontPage):
         self.featured_products.verify_loaded()
         return self
 
-    def check_structure(self, profile):
+    def check_structure(self):
         attach_screenshot(self.page, "Checking home page structure")
-        super().check_structure(profile)
+        super().check_structure()
         expect(self.carousel).to_be_visible()
         self.featured_products.check_structure()
         return self

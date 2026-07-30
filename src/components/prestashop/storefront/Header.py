@@ -2,6 +2,8 @@ from playwright.sync_api import expect
 
 from tests.config.profiles import is_phone
 from utils.allure_reporting import attach_screenshot
+from utils.responsive import BOOTSTRAP_MD
+from utils.snapshots import load_snapshot
 
 
 class Header:
@@ -22,9 +24,25 @@ class Header:
         attach_screenshot(self.container, "Checking header structure")
         expect(self.container).to_be_visible()
         expect(self.search_input).to_be_visible()
-        expect(self.menu_button).to_be_attached()
-        expect(self.desktop_cart).to_be_attached()
-        expect(self.mobile_cart).to_be_attached()
+
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            expect(self.menu_button).to_be_visible()
+            expect(self.mobile_cart).to_be_visible()
+            expect(self.desktop_cart).not_to_be_visible()
+        else:
+            expect(self.menu_button).not_to_be_visible()
+            expect(self.mobile_cart).not_to_be_visible()
+            expect(self.desktop_cart).to_be_visible()
+
+        # Not the best check - will break on adding categories, ignores many elements hard to verify. TODO: probably should be replaced with direct checks - will do later.
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            snapshot_name = "header_compact"
+        else:
+            snapshot_name = "header"
+        expect(self.container).to_match_aria_snapshot(
+            load_snapshot(snapshot_name, namespace="prestashop")
+        )
+
         return self
 
     def open_mobile_menu(self):

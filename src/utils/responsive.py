@@ -1,0 +1,6 @@
+# viewport thresholds
+
+BOOTSTRAP_SM = 576
+BOOTSTRAP_MD = 768
+BOOTSTRAP_LG = 992
+BOOTSTRAP_XL = 1200

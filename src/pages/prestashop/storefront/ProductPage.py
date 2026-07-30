@@ -17,9 +17,9 @@ class ProductPage(BaseStorefrontPage):
         expect(self.product).to_be_visible()
         return self
 
-    def check_structure(self, profile):
+    def check_structure(self):
         attach_screenshot(self.page, "Checking product page structure")
-        super().check_structure(profile)
+        super().check_structure()
         expect(self.product).to_be_visible()
         expect(self.page.locator(".product-information")).to_be_visible()
         expect(self.page.locator(".product-cover img").first).to_be_visible()
