@@ -17,6 +17,9 @@ on:
       browsers:
         description: 'Comma or space-separated list of browsers (e.g. firefox,chromium). If empty, defaults applied.'
         required: false
+      profiles:
+        description: 'Comma or space-separated list of profiles (e.g. desktop,mobile). If empty, defaults applied.'
+        required: false
 
 env:
   PRESTASHOP_BASE_URL: http://localhost:8090
@@ -41,7 +44,15 @@ jobs:
       - name: Determine profiles
         id: set-profiles
         run: |
-          if [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
+          # Normalize workflow_dispatch input (comma or space separated)
+          RAW_INPUT="${{ github.event.inputs.profiles || '' }}"
+          # replace commas with spaces and trim
+          RAW_INPUT=$(echo "$RAW_INPUT" | tr ',' ' ' | xargs)
+
+          if [ -n "$RAW_INPUT" ]; then
+            PROFILES="$RAW_INPUT"
+          # getting all profiles from tests.config.profiles.py for PRs and main branch pushes, otherwise default to empty
+          elif [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
             PROFILES=$(python -c "from tests.config.profiles import PROFILES; print(' '.join(PROFILES))")
           else
             PROFILES=""
