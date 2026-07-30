@@ -70,7 +70,7 @@ jobs:
 
           if [ -n "$RAW_INPUT" ]; then
             BROWSERS="$RAW_INPUT"
-          elif [ "${{ github.ref }}" = 'refs/heads/main' ]; then
+          elif [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
             # full set for main
             BROWSERS="firefox chromium webkit"
           else
