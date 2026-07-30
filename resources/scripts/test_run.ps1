@@ -5,7 +5,9 @@ Remove-Item reports/allure-report -Recurse -Force
 #pytest  --headed  -n auto --browser chromium
 #pytest  --headed  -n auto --browser chromium --profile=desktop
 #pytest  --headed  -n auto --browser chromium --profile=tablet_landscape --profile=mobile_landscape
-pytest  --headed  -n auto --browser chromium --profile=tablet_landscape
+#pytest  --headed  -n auto --browser chromium --profile=tablet --profile=mobile --profile=desktop
+pytest  --headed  -n auto --browser chromium --profile=tablet --profile=mobile --profile=desktop --profile=tablet_landscape --profile=mobile_landscape --profile=desktop_1920x1200
+#pytest  --headed  -n auto --browser chromium --profile=tablet_landscape
 #pytest  --headed  -n auto --browser chromium --profile=desktop_1920x1200
 #pytest  --headed  -n auto --browser chromium --profile=tablet --profile=desktop
 #pytest  --headed  -n auto --browser firefox --profile=tablet

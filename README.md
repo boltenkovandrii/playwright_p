@@ -1,12 +1,24 @@
 ## Overview
 - This project is created to demonstrate usage of pytest+playwright combination.
-- AUT: https://www.wikipedia.org/
+- AUT's: 
+  - https://www.wikipedia.org/ (will be remover in the future)
+  - Prestashop sandbox docker image  (WIP)
+  - MediaWiki sandbox docker image (WIP)
 - CI: GitHub Actions (runs on commits/PRs to main and feature/* branches)
 - Reporting: Allure
 - Tests themselves are not very meaningful and only serve for demonstrational purposes
 
 ## Run tests
+- Start required application(s) with docker-compose files from docker folder
 - Use resources/scripts/test_run.ps1 for local runs
+
+## Prestashop
+- Start application: **docker-compose -f docker/docker-compose-prestashop.yml up --build -d**
+- Set `PRESTASHOP_BASE_URL` in `.env` to configure the application root URL for tests.
+- Default URL: http://localhost:8090
+- Default Admin URL: http://localhost:8090/admin-dev/
+- Admin credentials: demo@prestashop.com/prestashop_demo
+- One employee per language is created with the same password (demo<iso_code>@prestashop.com) - i.e. demofr@prestashop.com
 
 ## Reporting
 - For local run reports are generated at reports directory. The easiest way to view allure report is to use "Open in -> Browser" on reports/allure-report/index.html
@@ -17,6 +29,4 @@
       ```
 
 ## Notes
-- Snapshot-based testing is not the best approach for wiki - multilingual application, 
-where the structure of components may be language-dependent. Only added here for the demonstration purposes.
 - It would be better to use dedicated test id instead of 'id' attribute. Working with what we have. 

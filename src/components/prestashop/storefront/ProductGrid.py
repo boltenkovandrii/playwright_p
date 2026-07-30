@@ -1,0 +1,24 @@
+from components.prestashop.storefront.ProductCard import ProductCard
+from playwright.sync_api import expect
+
+from utils.allure_reporting import attach_screenshot
+
+
+class ProductGrid:
+    def __init__(self, parent):
+        self.container = parent.locator(".products.row")
+        self.cards = self.container.locator(".product-miniature")
+
+    def verify_loaded(self):
+        expect(self.container).to_be_visible()
+        return self
+
+    def check_structure(self):
+        attach_screenshot(self.container, "Checking product grid structure")
+        expect(self.container).to_be_visible()
+        expect(self.cards.first).to_be_visible()
+        self.product_at(0).check_structure()
+        return self
+
+    def product_at(self, index):
+        return ProductCard(self.cards.nth(index))

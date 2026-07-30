@@ -1,3 +1,5 @@
+# Name convention: profile name should start from "desktop_", "tablet_", "mobile_"
+
 PROFILES = {
     "desktop": {
         "viewport": {
@@ -45,3 +47,12 @@ def get_profile(playwright, profile):
     return {
         **playwright.devices[device],
     }
+
+def is_tablet(profile):
+    return profile.startswith("tablet")
+
+def is_desktop(profile):
+    return profile.startswith("desktop")
+
+def is_phone(profile):
+    return not (is_tablet(profile) or is_desktop(profile))

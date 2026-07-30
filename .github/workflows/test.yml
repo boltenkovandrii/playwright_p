@@ -17,6 +17,12 @@ on:
       browsers:
         description: 'Comma or space-separated list of browsers (e.g. firefox,chromium). If empty, defaults applied.'
         required: false
+      profiles:
+        description: 'Comma or space-separated list of profiles (e.g. desktop,mobile). If empty, defaults applied.'
+        required: false
+
+env:
+  PRESTASHOP_BASE_URL: http://localhost:8090
 
 jobs:
   test:
@@ -28,12 +34,31 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e .
+
+      - name: Determine profiles
+        id: set-profiles
+        run: |
+          # Normalize workflow_dispatch input (comma or space separated)
+          RAW_INPUT="${{ github.event.inputs.profiles || '' }}"
+          # replace commas with spaces and trim
+          RAW_INPUT=$(echo "$RAW_INPUT" | tr ',' ' ' | xargs)
+
+          if [ -n "$RAW_INPUT" ]; then
+            PROFILES="$RAW_INPUT"
+          # getting all profiles from tests.config.profiles.py for PRs and main branch pushes, otherwise default to empty
+          elif [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
+            PROFILES=$(python -c "from tests.config.profiles import PROFILES; print(' '.join(PROFILES))")
+          else
+            PROFILES=""
+          fi
+
+          echo "profiles=$PROFILES" >> $GITHUB_OUTPUT
 
       - name: Determine browsers
         id: set-browsers
@@ -45,12 +70,12 @@ jobs:
 
           if [ -n "$RAW_INPUT" ]; then
             BROWSERS="$RAW_INPUT"
-          elif [ "${{ github.ref }}" = 'refs/heads/main' ]; then
+          elif [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
             # full set for main
             BROWSERS="firefox chromium webkit"
           else
             # default for feature branches / PRs
-            BROWSERS="firefox"
+            BROWSERS="chromium"
           fi
 
           echo "browsers=$BROWSERS" >> $GITHUB_OUTPUT
@@ -59,15 +84,42 @@ jobs:
         run: python -m playwright install --with-deps
 #        run: python -m playwright install --with-deps ${{ steps.set-browsers.outputs.browsers }}  ## providing user input directly to bash is not safe and just installing all the browsers does not consume a lot of resources
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y docker-compose
+
+      - name: Start app
+        env:
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          docker-compose -f docker/docker-compose-prestashop.yml up --build -d
+
       - name: Run tests
+        env:
+          PRESTASHOP_BASE_URL: ${{ github.event.inputs.prestashop_base_url || env.PRESTASHOP_BASE_URL }}
         run: |
           BROWSERS="${{ steps.set-browsers.outputs.browsers }}"
+          PROFILES="${{ steps.set-profiles.outputs.profiles }}"
           ARGS=""
+          PROFILE_ARGS=""
           for b in $BROWSERS; do
             ARGS="$ARGS --browser $b"
           done
+          for profile in $PROFILES; do
+            PROFILE_ARGS="$PROFILE_ARGS --profile=$profile"
+          done
           echo "Running pytest for browsers: $BROWSERS"
-          pytest $ARGS -n auto --alluredir=reports/allure-results
+          if [ -n "$PROFILES" ]; then
+            echo "Running pytest for profiles: $PROFILES"
+          else
+            echo "Running pytest with default profile selection"
+          fi
+          pytest $ARGS $PROFILE_ARGS -n auto --alluredir=reports/allure-results
 
       - name: Install Allure
         if: always()

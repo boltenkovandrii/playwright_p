@@ -2,4 +2,4 @@ import pytest
 
 @pytest.fixture
 def profile(request):
-    return request.param
+    return getattr(request, "param", "desktop")

@@ -5,9 +5,10 @@ from utils.allure_reporting import attach_screenshot, attach_playwright_artifact
 
 
 pytest_plugins = [
-    "tests.fixtures.pages",
-    "tests.fixtures.locale",
-    "tests.fixtures.profile",
+    "fixtures.pages",
+    "fixtures.locale",
+    "fixtures.profile",
+    "fixtures.prestashop.pages",
 ]
 
 
@@ -31,8 +32,6 @@ def pytest_generate_tests(metafunc):
 
 @pytest.fixture
 def browser_context_args(browser_context_args, playwright, profile, browser_name):
-    for name in sorted(playwright.devices):
-        print(name)
 
     if browser_name == "firefox" and profile != "desktop":
         pytest.skip("Firefox doesn't support mobile emulation")
@@ -63,7 +62,5 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and report.failed:
+    if report.when == "call" and report.failed and "output_path" in item.funcargs:
         attach_playwright_artifacts(item.funcargs["output_path"])
-
-

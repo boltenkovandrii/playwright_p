@@ -1,4 +1,5 @@
 import allure
+import pytest
 from playwright.sync_api import expect
 
 from resources.translations import TRANSLATIONS
@@ -6,6 +7,7 @@ from resources.translations import TRANSLATIONS
 
 @allure.suite("Home page")
 @allure.title("Search from home page")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_home_page_search(home_page):
     article_page = (home_page
      .open()
@@ -16,6 +18,7 @@ def test_home_page_search(home_page):
 
 @allure.suite("Home page")
 @allure.title("Navigate to the main page")
+@pytest.mark.skip(reason="Will be deleted later - only storing for the reference")
 def test_navigate_to_the_main_page(home_page, locale):
     main_page = (home_page
      .open()
