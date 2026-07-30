@@ -75,7 +75,7 @@ jobs:
             BROWSERS="firefox chromium webkit"
           else
             # default for feature branches / PRs
-            BROWSERS="firefox"
+            BROWSERS="chromium"
           fi
 
           echo "browsers=$BROWSERS" >> $GITHUB_OUTPUT
