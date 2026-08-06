@@ -1,13 +1,6 @@
 # Name convention: profile name should start from "desktop_", "tablet_", "mobile_"
 
 PROFILES = {
-    "desktop": {
-        "viewport": {
-            "width": 1920,
-            "height": 1080,
-        },
-    },
-
     "desktop_2560x1600": {
         "viewport": {
             "width": 2560,
@@ -37,7 +30,7 @@ PROFILES = {
 }
 
 def get_profile(playwright, profile):
-    if profile.startswith("desktop"):
+    if is_desktop(profile):
         return {
             **PROFILES[profile],
         }

@@ -1,7 +1,8 @@
 name: Tests
 
 on:
-  # having both 'push' and 'pull_request' is probably excessive but for a sample project it is ok
+  # Having both 'push' and 'pull_request' is probably excessive but for a sample project it is ok.
+  # Commit to existing PR will trigger both events, but the PR event will run on a temporary commit based on main and current branch, so both have value.
   # Runs on current branch
   push:
     branches:
@@ -29,10 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -135,7 +136,7 @@ jobs:
 
       - name: Upload report and other test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-artifacts
           path: reports/

@@ -1,6 +1,6 @@
 import pytest
 
-from tests.config.profiles import get_profile
+from tests.config.profiles import get_profile, is_desktop
 from utils.allure_reporting import attach_screenshot, attach_playwright_artifacts
 
 
@@ -26,15 +26,15 @@ def pytest_generate_tests(metafunc):
     profiles = metafunc.config.getoption("profile")
 
     if not profiles:
-        profiles = ["desktop"]
+        profiles = ["desktop_1920x1200"]
 
     metafunc.parametrize("profile", profiles)
 
 @pytest.fixture
 def browser_context_args(browser_context_args, playwright, profile, browser_name):
 
-    if browser_name == "firefox" and profile != "desktop":
-        pytest.skip("Firefox doesn't support mobile emulation")
+    if browser_name == "firefox" and not is_desktop(profile):
+        pytest.skip("Firefox doesn't support device emulation (non-desktop profiles)")
 
     return {
         **browser_context_args,
