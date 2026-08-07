@@ -4,6 +4,7 @@ from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from pages.prestashop.storefront.ProductPage import ProductPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
 from utils.allure_reporting import attach_screenshot
 
 
@@ -31,6 +32,10 @@ class HomePage(BaseStorefrontPage):
         expect(self.carousel).to_be_visible()
         self.featured_products.check_structure()
         return self
+
+    def search(self, query):
+        self.header.search(query)
+        return SearchResultsPage(self.page).verify_loaded()
 
     def open_category(self, profile, name):
         self.header.click_category(profile, name)

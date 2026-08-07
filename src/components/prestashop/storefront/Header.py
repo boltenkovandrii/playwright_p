@@ -5,13 +5,6 @@ from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
 
-
-def _get_search_results_page_class():
-    # Lazy import to avoid circular dependencies
-    from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
-    return SearchResultsPage
-
-
 class Header:
     def __init__(self, page):
         self.page = page
@@ -78,6 +71,3 @@ class Header:
         self.search_input.fill(query)
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.search_input.press("Enter")
-        SearchResultsPage = _get_search_results_page_class()
-        return SearchResultsPage(self.page).verify_loaded()
-
