@@ -15,8 +15,7 @@ class HomePage(BaseStorefrontPage):
         self.featured_products = ProductGrid(page.locator(".featured-products"))
 
     def open(self, path=""):
-        super().open()
-#        attach_screenshot(self.page, "Home page")
+        super().open(path)
         return self
 
     def verify_loaded(self):

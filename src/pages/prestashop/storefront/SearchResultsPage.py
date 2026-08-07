@@ -27,7 +27,7 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def check_displayed_results_count(self, count):
-        assert self.product_grid.cards.count() == count, f"Expected {count} products, but found {self.product_grid.cards.count()}"
+        expect(self.product_grid.cards).to_have_count(count)
         return self
 
     def verify_products_match(self, term):

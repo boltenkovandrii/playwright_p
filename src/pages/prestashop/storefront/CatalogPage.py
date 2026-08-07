@@ -38,7 +38,7 @@ class CatalogPage(BaseStorefrontPage):
         return self
 
     def check_subcategories_list(self, *names):
-        assert self.subcategory_links.count() == len(names), f"Expected {len(names)} subcategories, but found {self.subcategory_links.count()}"
+        expect(self.subcategory_links).to_have_count(len(names))
         for name in names:
             expect(self.subcategory_links.filter(has_text=re.compile(rf"^\s*{re.escape(name)}\s*$"))).to_be_visible()
         return self
