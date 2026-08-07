@@ -10,6 +10,7 @@ class CartPage(BaseStorefrontPage):
         self.cart = page.locator(".cart-grid")
 
     def verify_loaded(self):
+        attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
         expect(self.cart).to_be_visible()
         return self

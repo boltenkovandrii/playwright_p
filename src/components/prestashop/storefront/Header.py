@@ -5,7 +5,6 @@ from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
 
-
 class Header:
     def __init__(self, page):
         self.page = page
@@ -66,4 +65,10 @@ class Header:
     def click_cart(self):
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.desktop_cart.locator("a").click()
+        return self
+
+    def search(self, query):
+        self.search_input.fill(query)
+        with self.page.expect_navigation(wait_until="domcontentloaded"):
+            self.search_input.press("Enter")
         return self

@@ -1,3 +1,5 @@
+import re
+
 from pages.prestashop.storefront.CartPage import CartPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
@@ -9,10 +11,12 @@ class ProductPage(BaseStorefrontPage):
     def __init__(self, page):
         super().__init__(page)
         self.product = page.locator("#main")
+        self.product_name = page.locator("#main h1")
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
         self.cart_modal = page.locator("#blockcart-modal")
 
     def verify_loaded(self):
+        attach_screenshot(self.page, "Product page")
         super().verify_loaded()
         expect(self.product).to_be_visible()
         return self
@@ -24,6 +28,12 @@ class ProductPage(BaseStorefrontPage):
         expect(self.page.locator(".product-information")).to_be_visible()
         expect(self.page.locator(".product-cover img").first).to_be_visible()
         expect(self.add_to_cart_button).to_be_visible()
+        return self
+
+    def verify_product_name(self, expected_name):
+        expect(self.product_name).to_contain_text(
+            re.compile(re.escape(expected_name))
+        )
         return self
 
     def add_to_cart(self):

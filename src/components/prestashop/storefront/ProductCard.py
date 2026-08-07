@@ -9,6 +9,9 @@ class ProductCard:
         self.product_link = container.locator(".product-title a")
         self.price = container.locator(".price")
 
+    def get_name(self):
+        return self.product_link.inner_text().strip()
+
     def open_product(self):
         with self.container.page.expect_navigation(wait_until="domcontentloaded"):
             self.product_link.click()
