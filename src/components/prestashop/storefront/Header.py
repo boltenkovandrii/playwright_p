@@ -71,3 +71,4 @@ class Header:
         self.search_input.fill(query)
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.search_input.press("Enter")
+        return self
