@@ -26,15 +26,15 @@ class SearchResultsPage(BaseStorefrontPage):
         self.product_grid.check_structure()
         return self
 
-    def get_displayed_results_count(self):
-        return self.product_grid.cards.count()
+    def check_displayed_results_count(self, count):
+        assert self.product_grid.cards.count() == count, f"Expected {count} products, but found {self.product_grid.cards.count()}"
+        return self
 
-    def verify_products_contain(self, *terms):
-        for term in terms:
+    def verify_products_match(self, term):
+        for card in self.product_grid.cards.all():
             expect(
-                self.product_grid.cards
+                card
                 .locator(".product-title a")
-                .filter(has_text=re.compile(term, re.IGNORECASE))
-                .first
+                .filter(has_text=re.compile(re.escape(term), re.IGNORECASE))
             ).to_be_visible()
         return self

@@ -37,11 +37,12 @@ class CatalogPage(BaseStorefrontPage):
         expect(self.heading).to_contain_text(re.compile(re.escape(name), re.IGNORECASE))
         return self
 
-    def verify_has_subcategories(self, *names):
+    def check_subcategories_list(self, *names):
+        assert self.subcategory_links.count() == len(names), f"Expected {len(names)} subcategories, but found {self.subcategory_links.count()}"
         for name in names:
-            exact = re.compile(r'^\s*' + re.escape(name) + r'\s*$', re.IGNORECASE)
-            expect(self.subcategory_links.filter(has_text=exact)).to_be_visible()
+            expect(self.subcategory_links.filter(has_text=re.compile(rf"^\s*{re.escape(name)}\s*$"))).to_be_visible()
         return self
 
-    def get_displayed_results_count(self):
-        return self.product_grid.cards.count()
+    def check_displayed_results_count(self, count):
+        assert self.product_grid.cards.count() == count, f"Expected {count} products, but found {self.product_grid.cards.count()}"
+        return self

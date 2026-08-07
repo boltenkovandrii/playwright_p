@@ -32,7 +32,7 @@ class ProductPage(BaseStorefrontPage):
 
     def verify_product_name(self, expected_name):
         expect(self.product_name).to_contain_text(
-            re.compile(re.escape(expected_name), re.IGNORECASE)
+            re.compile(re.escape(expected_name))
         )
         return self
 
