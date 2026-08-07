@@ -22,3 +22,6 @@ class ProductGrid:
 
     def product_at(self, index):
         return ProductCard(self.cards.nth(index))
+
+    def open_product_by_name(self, name):
+        ProductCard(self.cards.filter(has_text=name).first).open_product()

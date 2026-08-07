@@ -7,7 +7,7 @@ class LoginPage(BaseBackofficePage):
         super().__init__(page)
         self.login_form = page.locator("form")
 
-    def open(self):
+    def open(self, path=""):
         return super().open()
 
     def verify_loaded(self):

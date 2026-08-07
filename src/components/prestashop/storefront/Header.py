@@ -6,6 +6,12 @@ from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
 
 
+def _get_search_results_page_class():
+    # Lazy import to avoid circular dependencies
+    from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
+    return SearchResultsPage
+
+
 class Header:
     def __init__(self, page):
         self.page = page
@@ -67,3 +73,11 @@ class Header:
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.desktop_cart.locator("a").click()
         return self
+
+    def search(self, query):
+        self.search_input.fill(query)
+        with self.page.expect_navigation(wait_until="domcontentloaded"):
+            self.search_input.press("Enter")
+        SearchResultsPage = _get_search_results_page_class()
+        return SearchResultsPage(self.page).verify_loaded()
+
