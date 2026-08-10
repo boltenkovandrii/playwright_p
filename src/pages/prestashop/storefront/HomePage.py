@@ -35,10 +35,12 @@ class HomePage(BaseStorefrontPage):
         return self
 
     def search(self, query):
+        attach_screenshot(self.page, f"Performing search by query: {query}")
         self.header.search(query)
         return SearchResultsPage(self.page).verify_loaded()
 
     def open_search_results(self, query, results_per_page=None, page=None):
+        attach_screenshot(self.page, f"Opening search results for query: {query} and results_per_page: {results_per_page} using direct URL")
         params = {"search_query": query}
         if results_per_page is not None:
             params["resultsPerPage"] = str(results_per_page)
@@ -49,17 +51,21 @@ class HomePage(BaseStorefrontPage):
         return SearchResultsPage(self.page).verify_loaded()
 
     def open_category(self, profile, name):
+        attach_screenshot(self.page, f"Opening category: {name} for profile: {profile}")
         self.header.click_category(profile, name)
         return CatalogPage(self.page).verify_loaded()
 
     def open_featured_product(self, index=0):
+        attach_screenshot(self.page, f"Opening featured product at index: {index}")
         self.featured_products.product_at(index).open_product()
         return ProductPage(self.page).verify_loaded()
 
     def get_featured_product_name(self, index=0):
+        attach_screenshot(self.page, f"Getting featured product name at index: {index}")
         return self.featured_products.product_at(index).get_name()
 
     def open_featured_product_by_name(self, name):
+        attach_screenshot(self.page, f"Opening featured product by name: {name}")
         self.featured_products.open_product_by_name(name)
         return ProductPage(self.page).verify_loaded()
 

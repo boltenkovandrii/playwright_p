@@ -79,8 +79,8 @@ def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
 def test_filter_products_by_price(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
     catalog_page.check_displayed_results_count(11)
-    catalog_page = catalog_page.apply_price_filter(22, 42)
-    catalog_page.check_displayed_results_count(4)
+    catalog_page = catalog_page.apply_price_filter(22, 38)
+    catalog_page.check_displayed_results_count(3)
     catalog_page.verify_active_filter_contains("Price")
 
 

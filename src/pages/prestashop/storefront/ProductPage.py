@@ -31,26 +31,29 @@ class ProductPage(BaseStorefrontPage):
         return self
 
     def verify_product_name(self, expected_name):
+        attach_screenshot(self.page, "Verifying product name")
         expect(self.product_name).to_contain_text(
             re.compile(re.escape(expected_name))
         )
         return self
 
     def add_to_cart(self):
+        attach_screenshot(self.page, "Adding product to cart")
         self.add_to_cart_button.click()
         expect(self.cart_modal).to_be_visible()
         attach_screenshot(self.page, "After adding item to a cart")
         return self
 
     def go_to_cart(self):
+        attach_screenshot(self.page, "Going to cart")
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.cart_modal.locator("a[href*='cart']").click()
         attach_screenshot(self.page, "After navigating to the cart")
         return CartPage(self.page).verify_loaded()
 
     def go_to_category_from_breadcrumb(self, category_name):
+        attach_screenshot(self.page, "Going to category from breadcrumb")
         from pages.prestashop.storefront.CatalogPage import CatalogPage
-
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.page.locator("nav.breadcrumb a").filter(has_text=category_name).click()
         return CatalogPage(self.page).verify_loaded()

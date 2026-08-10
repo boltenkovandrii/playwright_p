@@ -28,10 +28,12 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def check_displayed_results_count(self, count):
+        attach_screenshot(self.page, "Checking displayed results count")
         expect(self.product_grid.cards).to_have_count(count)
         return self
 
     def verify_products_match(self, term):
+        attach_screenshot(self.page, f"Verifying products match: {term}")
         for card in self.product_grid.cards.all():
             expect(
                 card
@@ -41,6 +43,7 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def check_pagination_visible(self, visible):
+        attach_screenshot(self.page, "Checking pagination visibility")
         if visible:
             expect(self.page_list).to_be_visible()
         else:
@@ -48,5 +51,6 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def go_to_page_number(self, index):
+        attach_screenshot(self.page, f"Going to page number: {index}")
         self.page_list.get_by_role("link", name=str(index), exact=True).click()
         return SearchResultsPage(self.page).verify_loaded()
