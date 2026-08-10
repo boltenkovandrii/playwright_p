@@ -1,6 +1,4 @@
 import allure
-
-from pages.prestashop.storefront.CatalogPage import CatalogPage
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("Check catalog page structure")
 def test_catalog_page_structure(prestashop_home_page, profile):
@@ -80,22 +78,18 @@ def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
 @allure.title("Filter products by price")
 def test_filter_products_by_price(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
-    catalog_page.page.goto(f"{prestashop_home_page.BASE_URL}6-accessories?q=Price-%E2%82%AC-22-42")
-    catalog_page = CatalogPage(catalog_page.page).verify_loaded()
-
+    catalog_page.check_displayed_results_count(11)
+    catalog_page = catalog_page.apply_price_filter(22, 42)
     catalog_page.check_displayed_results_count(4)
-    assert catalog_page.page.locator("#js-active-search-filters").is_visible()
-    assert "Price" in catalog_page.page.locator("#js-active-search-filters").inner_text()
+    catalog_page.verify_active_filter_contains("Price")
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("Filter products by manufacturer")
 def test_filter_products_by_manufacturer(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
-    catalog_page.page.goto(f"{prestashop_home_page.BASE_URL}6-accessories?q=Brand-Studio+Design")
-    catalog_page = CatalogPage(catalog_page.page).verify_loaded()
-
+    catalog_page.check_displayed_results_count(11)
+    catalog_page = catalog_page.apply_manufacturer_filter("Studio Design")
     catalog_page.check_displayed_results_count(7)
-    assert catalog_page.page.locator("#js-active-search-filters").is_visible()
-    assert "Studio Design" in catalog_page.page.locator("#js-active-search-filters").inner_text()
+    catalog_page.verify_active_filter_contains("Studio Design")
 
