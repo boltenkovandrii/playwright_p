@@ -12,6 +12,7 @@ class SearchResultsPage(BaseStorefrontPage):
         super().__init__(page)
         self.heading = page.locator("#js-product-list-header")
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
+        self.page_list = page.locator("nav.pagination ul.page-list")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Search results page")
@@ -38,3 +39,14 @@ class SearchResultsPage(BaseStorefrontPage):
                 .filter(has_text=re.compile(re.escape(term), re.IGNORECASE))
             ).to_be_visible()
         return self
+
+    def check_pagination_visible(self, visible):
+        if visible:
+            expect(self.page_list).to_be_visible()
+        else:
+            expect(self.page_list).not_to_be_visible()
+        return self
+
+    def go_to_page_number(self, index):
+        self.page_list.get_by_role("link", name=str(index), exact=True).click()
+        return SearchResultsPage(self.page).verify_loaded()

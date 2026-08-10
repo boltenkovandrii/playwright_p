@@ -23,5 +23,11 @@ class ProductGrid:
     def product_at(self, index):
         return ProductCard(self.cards.nth(index))
 
+    def get_names(self):
+        return [self.product_at(index).get_name() for index in range(self.cards.count())]
+
+    def get_prices(self):
+        return [self.product_at(index).get_price() for index in range(self.cards.count())]
+
     def open_product_by_name(self, name):
         ProductCard(self.cards.filter(has_text=name).first).open_product()

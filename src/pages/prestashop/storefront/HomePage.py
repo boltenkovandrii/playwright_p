@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from components.prestashop.storefront.ProductGrid import ProductGrid
 from pages.prestashop.storefront.CatalogPage import CatalogPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
@@ -36,6 +38,16 @@ class HomePage(BaseStorefrontPage):
         self.header.search(query)
         return SearchResultsPage(self.page).verify_loaded()
 
+    def open_search_results(self, query, results_per_page=None, page=None):
+        params = {"search_query": query}
+        if results_per_page is not None:
+            params["resultsPerPage"] = str(results_per_page)
+        if page is not None:
+            params["page"] = str(page)
+
+        self.page.goto(f"{self.BASE_URL}search?{urlencode(params)}")
+        return SearchResultsPage(self.page).verify_loaded()
+
     def open_category(self, profile, name):
         self.header.click_category(profile, name)
         return CatalogPage(self.page).verify_loaded()
@@ -50,3 +62,4 @@ class HomePage(BaseStorefrontPage):
     def open_featured_product_by_name(self, name):
         self.featured_products.open_product_by_name(name)
         return ProductPage(self.page).verify_loaded()
+

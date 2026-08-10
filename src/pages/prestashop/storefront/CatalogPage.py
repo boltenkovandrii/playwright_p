@@ -46,3 +46,11 @@ class CatalogPage(BaseStorefrontPage):
     def check_displayed_results_count(self, count):
         assert self.product_grid.cards.count() == count, f"Expected {count} products, but found {self.product_grid.cards.count()}"
         return self
+
+    def sort_by(self, criteria):
+        sort_link = self.page.locator(
+            ".products-sort-order .dropdown-menu a",
+            has_text=criteria,
+        ).first
+        self.page.goto(sort_link.get_attribute("href"))
+        return CatalogPage(self.page).verify_loaded()

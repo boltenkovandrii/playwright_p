@@ -1,3 +1,5 @@
+import re
+
 from playwright.sync_api import expect
 
 from utils.allure_reporting import attach_screenshot
@@ -11,6 +13,10 @@ class ProductCard:
 
     def get_name(self):
         return self.product_link.inner_text().strip()
+
+    def get_price(self):
+        price_text = self.price.inner_text().strip()
+        return float(re.sub(r"[^\d,.]", "", price_text).replace(",", "."))
 
     def open_product(self):
         with self.container.page.expect_navigation(wait_until="domcontentloaded"):

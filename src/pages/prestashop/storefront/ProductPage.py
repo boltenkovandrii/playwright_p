@@ -47,3 +47,11 @@ class ProductPage(BaseStorefrontPage):
             self.cart_modal.locator("a[href*='cart']").click()
         attach_screenshot(self.page, "After navigating to the cart")
         return CartPage(self.page).verify_loaded()
+
+    def go_to_category_from_breadcrumb(self, category_name):
+        from pages.prestashop.storefront.CatalogPage import CatalogPage
+
+        with self.page.expect_navigation(wait_until="domcontentloaded"):
+            self.page.locator("nav.breadcrumb a").filter(has_text=category_name).click()
+        return CatalogPage(self.page).verify_loaded()
+
