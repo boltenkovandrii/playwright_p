@@ -26,7 +26,7 @@ class Appearance:
 
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking structure: Appearance:")
+        attach_screenshot(self.container, "Checking structure: Appearance:", False)
         expect(self.container).to_be_visible()
         expect(self.text_size_selector).to_be_visible()
         expect(self.width_selector).to_be_visible()
@@ -34,13 +34,13 @@ class Appearance:
 
 
     def set_small_text_size(self):
-        attach_screenshot(self.container, "Selecting text size")
+        attach_screenshot(self.container, "Selecting text size", False)
         self.text_size_selector.locator("input").nth(0).click()
 
     def set_standard_text_size(self):
-        attach_screenshot(self.container, "Selecting text size")
+        attach_screenshot(self.container, "Selecting text size", False)
         self.text_size_selector.locator("input").nth(1).click()
 
     def set_large_text_size(self):
-        attach_screenshot(self.container, "Selecting text size")
+        attach_screenshot(self.container, "Selecting text size", False)
         self.text_size_selector.locator("input").nth(2).click()

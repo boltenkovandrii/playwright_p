@@ -52,5 +52,20 @@ class SearchResultsPage(BaseStorefrontPage):
 
     def go_to_page_number(self, index):
         attach_screenshot(self.page, f"Going to page number: {index}")
-        self.page_list.get_by_role("link", name=str(index), exact=True).click()
+
+        link = self.page_list.get_by_role("link", name=str(index), exact=True)
+        link.click()
+
+        # PrestaShop's pagination is configured using workaround - with resultsPerPage in the test URL to provide enough results for pagination testing.
+        # In headed mode, some viewport configurations occasionally require a second click before the pagination navigation takes effect.
+        # Retry only when the expected page state was not reached.
+        current_page = self.page.locator("nav.pagination ul.page-list li.current a")
+
+        try:
+            expect(current_page).to_have_text(str(index), timeout=1000)
+        except AssertionError:
+            attach_screenshot(self.page,f"Retrying click for page number: {index}")
+            link.click()
+
         return SearchResultsPage(self.page).verify_loaded()
+

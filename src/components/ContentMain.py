@@ -17,7 +17,7 @@ class ContentMain:
         self.appearance = Appearance(page, self.container, locale)
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking structure: ContentMain:")
+        attach_screenshot(self.container, "Checking structure: ContentMain:", False)
         expect(self.container).to_be_visible()
         expect(self.left_navigation).to_be_visible()
         expect(self.right_navigation).to_be_visible()

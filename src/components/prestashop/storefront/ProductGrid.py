@@ -14,7 +14,7 @@ class ProductGrid:
         return self
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking product grid structure")
+        attach_screenshot(self.container, "Checking product grid structure", False)
         expect(self.container).to_be_visible()
         expect(self.cards.first).to_be_visible()
         self.product_at(0).check_structure()

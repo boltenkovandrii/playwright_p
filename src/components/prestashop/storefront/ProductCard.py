@@ -24,7 +24,7 @@ class ProductCard:
         return self
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking product card structure")
+        attach_screenshot(self.container, "Checking product card structure", False)
         expect(self.container).to_be_visible()
         expect(self.product_link).to_be_visible()
         expect(self.price).to_be_visible()

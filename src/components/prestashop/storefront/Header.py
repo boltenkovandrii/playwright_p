@@ -20,7 +20,7 @@ class Header:
         return self
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking header structure")
+        attach_screenshot(self.container, "Checking header structure", False)
         expect(self.container).to_be_visible()
         expect(self.search_input).to_be_visible()
 
