@@ -16,15 +16,7 @@ class CatalogPage(BaseStorefrontPage):
         self.heading = page.locator("#js-product-list-header")
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.locator("#js-active-search-filters")
-        # no price filters for mobile
-        if self.page.viewport_size["width"] >= BOOTSTRAP_MD:
-            self.price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
-            self.slider_track = self.price_facet.locator(".ui-slider").first
-            slider_handles = self.price_facet.locator(".ui-slider-handle")
-            self.price_slider_handle_left = slider_handles.nth(0)
-            self.price_slider_handle_right = slider_handles.nth(1)
-            self.price_slider_min = float(self.price_facet.get_attribute("data-slider-min"))
-            self.price_slider_max = float(self.price_facet.get_attribute("data-slider-max"))
+
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Catalog page")
@@ -73,21 +65,23 @@ class CatalogPage(BaseStorefrontPage):
 
     def apply_price_filter(self, min_price, max_price):
         attach_screenshot(self.page, "Applying price filter")
-        expect(self.price_facet).to_be_visible()
-        self._drag_price_slider_handle(
-            self.price_slider_handle_left,
-            float(min_price),
-        )
-        self._drag_price_slider_handle(
-            self.price_slider_handle_right,
-            float(max_price),
-        )
+        self._open_mobile_filters_if_needed("Price")
+
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
+        expect(price_facet).to_be_visible()
+        slider_handles = price_facet.locator(".ui-slider-handle")
+        price_slider_handle_left = slider_handles.nth(0)
+        price_slider_handle_right = slider_handles.nth(1)
+
+        self._drag_price_slider_handle(price_slider_handle_left, float(min_price))
+        self._drag_price_slider_handle(price_slider_handle_right, float(max_price))
+        self._close_mobile_filters_if_needed()
         expect(self.active_filters).to_contain_text(re.compile(r"price", re.IGNORECASE))
         return CatalogPage(self.page).verify_loaded()
 
     def apply_manufacturer_filter(self, name):
         attach_screenshot(self.page, f"Applying manufacturer filter: {name}")
-        self._open_mobile_filters_if_needed()
+        self._open_mobile_filters_if_needed("Brand")
         manufacturer_link = self.page.locator(
             "#search_filters .facet[data-name='Brand'] a",
             has_text=name,
@@ -108,13 +102,18 @@ class CatalogPage(BaseStorefrontPage):
         return self
 
     def _drag_price_slider_handle(self, handle, target_value):
-        track_box = self.price_facet.locator(".ui-slider").first.bounding_box()
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
+        slider_track = price_facet.locator(".ui-slider").first
+
+        price_slider_min = float(price_facet.get_attribute("data-slider-min"))
+        price_slider_max = float(price_facet.get_attribute("data-slider-max"))
+        track_box = slider_track.bounding_box()
         handle_box = handle.bounding_box()
         if not track_box or not handle_box:
             raise AssertionError("Price slider is not ready for interaction")
 
-        bounded_target = max(self.price_slider_min, min(self.price_slider_max, target_value))
-        ratio = (bounded_target - self.price_slider_min) / (self.price_slider_max - self.price_slider_min)
+        bounded_target = max(price_slider_min, min(price_slider_max, target_value))
+        ratio = (bounded_target - price_slider_min) / (price_slider_max - price_slider_min)
         target_x = track_box["x"] + ratio * track_box["width"]
         target_y = handle_box["y"] + (handle_box["height"] / 2)
 
@@ -123,11 +122,11 @@ class CatalogPage(BaseStorefrontPage):
         self.page.mouse.move(target_x, target_y, steps=12)
         self.page.mouse.up()
 
-    def _open_mobile_filters_if_needed(self):
+    def _open_mobile_filters_if_needed(self, filter_name):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             attach_screenshot(self.page, "Opening filters for mobile")
             self.page.get_by_test_id("search_filter_toggler").click()
-            self.page.locator("#search_filters .facet[data-name='Brand']").click()
+            self.page.locator(f"#search_filters .facet[data-name='{filter_name}']").click()
 
     def _close_mobile_filters_if_needed(self):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:

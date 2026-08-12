@@ -114,37 +114,7 @@ Verify that sorting options change the order of products on the catalog page.
 - Sorting behavior
 - Product ordering
 
-### CAT-05 — Change products per page
-
-**Purpose**
-
-Verify that a user can change the number of products shown per catalog page.
-
-**Preconditions**
-
-- The category has more products than the default visible amount.
-- Products-per-page control is available.
-
-**Scenario**
-
-1. Open the Clothes category.
-2. Note the currently displayed products count.
-3. Change products-per-page value.
-4. Observe the updated number of visible product cards.
-
-**Expected result**
-
-- New products-per-page value is applied.
-- Visible product count changes according to selected value.
-- Catalog remains on the same category.
-
-**Coverage**
-
-- Catalog controls
-- Pagination size
-- Product list rendering
-
-### CAT-06 — Navigate through catalog pagination
+### CAT-05 — Navigate through catalog pagination
 
 **Purpose**
 
@@ -172,7 +142,7 @@ Verify that a user can navigate between catalog pages using pagination controls.
 - Catalog navigation
 - Multi-page product lists
 
-### CAT-07 — Navigate using breadcrumbs
+### CAT-06 — Navigate using breadcrumbs
 
 **Purpose**
 
@@ -200,7 +170,7 @@ the breadcrumb navigation.
 - Breadcrumbs
 - Product to category navigation
 
-### CAT-08 — Filter products by price
+### CAT-07 — Filter products by price
 
 **Purpose**
 
@@ -229,7 +199,7 @@ Verify that price filtering narrows product results according to selected range.
 - Price filtering
 - Result refinement
 
-### CAT-09 — Filter products by manufacturer
+### CAT-08 — Filter products by manufacturer
 
 **Purpose**
 
