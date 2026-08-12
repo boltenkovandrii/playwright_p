@@ -32,7 +32,7 @@ class Header:
 
     def check_structure(self):
         # using snapshots is not the best idea here, actually. Only added to demonstrate how does it work. Other components use another approach
-        attach_screenshot(self.component, "Checking structure: Header:")
+        attach_screenshot(self.component, "Checking structure: Header:", False)
         expect(self.component).to_match_aria_snapshot(
             load_snapshot("header", self.locale)
         )

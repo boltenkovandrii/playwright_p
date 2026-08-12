@@ -3,11 +3,16 @@ from pathlib import Path
 import allure
 
 
-def attach_screenshot(element, name):
+def attach_screenshot(target, name, full_page=True):
+    if full_page:
+        screenshot = target.screenshot(full_page=True)
+    else:
+        screenshot = target.screenshot()
+
     allure.attach(
-        element.screenshot(),
+        screenshot,
         name=name,
-        attachment_type=allure.attachment_type.PNG
+        attachment_type=allure.attachment_type.PNG,
     )
 
 def attach_playwright_artifacts(output_path):

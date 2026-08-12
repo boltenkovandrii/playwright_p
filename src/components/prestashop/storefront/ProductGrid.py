@@ -14,7 +14,7 @@ class ProductGrid:
         return self
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking product grid structure")
+        attach_screenshot(self.container, "Checking product grid structure", False)
         expect(self.container).to_be_visible()
         expect(self.cards.first).to_be_visible()
         self.product_at(0).check_structure()
@@ -22,6 +22,12 @@ class ProductGrid:
 
     def product_at(self, index):
         return ProductCard(self.cards.nth(index))
+
+    def get_names(self):
+        return [self.product_at(index).get_name() for index in range(self.cards.count())]
+
+    def get_prices(self):
+        return [self.product_at(index).get_price() for index in range(self.cards.count())]
 
     def open_product_by_name(self, name):
         ProductCard(self.cards.filter(has_text=name).first).open_product()

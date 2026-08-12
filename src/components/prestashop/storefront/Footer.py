@@ -15,7 +15,7 @@ class Footer:
         return self
 
     def check_structure(self):
-        attach_screenshot(self.container, "Checking footer structure")
+        attach_screenshot(self.container, "Checking footer structure", False)
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             snapshot_name = "footer_compact"
         else:
