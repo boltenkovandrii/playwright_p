@@ -217,3 +217,13 @@ pytest --browser firefox --browser chromium --profile=desktop
 - Test IDs use `id` attribute instead of the standard `data-testid` (working with what's available)
 - Allure report history is persisted in `reports/history/` for trend analysis
 - Windows developers: `playwright install` is usually sufficient; CI uses `--with-deps` for system dependencies
+
+
+Temporary artifacts:
+
+- Temporary scripts, files, logs, screenshots, dumps, and other artifacts
+  created solely for investigation must be removed before completing the task.
+- Do not add temporary investigation artifacts to the repository unless
+  they provide lasting project value.
+- Prefer existing project tooling for inspection when practical.
+- If a temporary artifact is intentionally retained, explain why.
