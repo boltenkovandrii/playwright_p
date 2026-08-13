@@ -29,7 +29,7 @@ correct change required to satisfy the request.
 - Do not introduce new abstractions unless there is a concrete reason.
 - Prefer existing reusable Page Objects and components over direct locator usage.
 - Use locators only in Page Objects or components, not in the test itself.
-- Prefer stable user-facing locators, especially test IDs when available.
+- Prefer stable user-facing locators, especially test IDs ('id' is default for the project) when available.
 - Use semantic or accessibility locators when test IDs are unavailable.
 - Use XPath only when there is a concrete reason and simpler locators are unsuitable.
 - Use Playwright auto-waiting and web-first assertions.

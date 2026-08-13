@@ -37,6 +37,11 @@ class CatalogPage(BaseStorefrontPage):
         self.product_grid.product_at(index).open_product()
         return ProductPage(self.page).verify_loaded()
 
+    def open_product_by_name(self, name):
+        attach_screenshot(self.page, f"Opening product by name: {name}")
+        self.product_grid.open_product_by_name(name)
+        return ProductPage(self.page).verify_loaded()
+
     def verify_category_name(self, name):
         attach_screenshot(self.page, "Verifying category name")
         expect(self.heading).to_contain_text(re.compile(re.escape(name), re.IGNORECASE))

@@ -28,7 +28,7 @@ pytest --browser firefox
 pytest --browser firefox --browser chromium --browser webkit
 
 # With specific profile (device emulation)
-pytest --browser chromium --profile=desktop
+pytest --browser chromium --profile=desktop_1920x1200
 pytest --browser chromium --profile=mobile
 pytest --browser chromium --profile=tablet_landscape
 ```
@@ -97,7 +97,7 @@ def test_example(main_page):
 
 #### Device Profiles
 Tests can run against multiple device profiles defined in `src/tests/config/profiles.py`:
-- **Desktop**: `desktop`, `desktop_1920x1200`, `desktop_2560x1600`
+- **Desktop**: `desktop_1920x1200`, `desktop_2560x1600`
 - **Mobile**: `mobile`, `mobile_landscape` (iPhone 13)
 - **Tablet**: `tablet`, `tablet_landscape` (iPad Mini)
 
@@ -134,7 +134,7 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 - `main_page`: MainPage fixture with locale support
 - `home_page`: HomePage fixture
 - `article_page`: ArticlePage fixture with locale support
-- `profile`: Device profile fixture (desktop, mobile, tablet)
+- `profile`: Device profile fixture (desktop_1920x1200, mobile, tablet, etc)
 - `locale`: Locale fixture (en, nl, uk)
 - `page`: Playwright page context with final screenshot attachment on teardown
 

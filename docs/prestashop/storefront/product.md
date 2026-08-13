@@ -45,7 +45,7 @@ Verify that a user can read all key product information on the product details p
 
 **Preconditions**
 
-- The product has a short description, price, and at least one tab (Description or Product Details).
+- The product has a short description, price, and data on Description tab and Product Details tab.
 
 **Scenario**
 

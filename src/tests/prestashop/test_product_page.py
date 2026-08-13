@@ -10,11 +10,21 @@ def test_product_page_structure(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("View product information")
-@pytest.mark.skip(reason="Work in progress")
+@allure.title("PDP-02 — View product information")
 def test_view_product_information(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed sweater"
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+
+    product_page.verify_product_name(product_name)
+    product_page.verify_regular_price(43.08)
+    product_page.verify_price(34.46)
+    product_page.verify_short_description("Regular fit, round neckline, long sleeves. 100% cotton, brushed inner side for extra comfort.")
+
+    product_page.verify_in_stock_count(1200)
+    product_page.verify_full_description("Studio Design' PolyFaune collection features classic products with colorful patterns, "
+                                         "inspired by the traditional japanese origamis. To wear with a chino or jeans. "
+                                         "The sublimation textile printing process provides an exceptional color rendering and a color, guaranteed overtime.")
 
 
 @allure.suite("PrestaShop storefront - Product Details")
