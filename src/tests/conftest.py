@@ -1,7 +1,7 @@
 import pytest
 
 from tests.config.profiles import get_profile, is_desktop
-from utils.allure_reporting import attach_screenshot, attach_playwright_artifacts
+from utils.allure_reporting import attach_screenshot, attach_playwright_artifacts, set_screenshot_context
 
 
 pytest_plugins = [
@@ -17,6 +17,13 @@ def pytest_addoption(parser):
         "--profile",
         action="append",
         help="Profile name",
+    )
+    parser.addoption(
+        "--allure-screenshots",
+        action="store",
+        default="off",
+        choices=["on", "off"],
+        help="Whether to attach screenshots to Allure report (default: off)",
     )
 
 def pytest_generate_tests(metafunc):
@@ -55,6 +62,13 @@ def page(context):
 @pytest.fixture(scope="session", autouse=True)
 def selectors(playwright):
     playwright.selectors.set_test_id_attribute("id")
+
+
+def pytest_runtest_setup(item):
+    """Set up screenshot context for the test before it runs."""
+    screenshots_enabled = item.config.getoption("--allure-screenshots") == "on"
+    is_retry = getattr(item, "execution_count", 1) > 1
+    set_screenshot_context(screenshots_enabled=screenshots_enabled, is_retry=is_retry)
 
 
 @pytest.hookimpl(hookwrapper=True)
