@@ -67,13 +67,15 @@ class CatalogPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Applying price filter")
         self._open_mobile_filters_if_needed("Price")
 
-        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']")
         expect(price_facet).to_be_visible()
-        slider_handles = price_facet.locator(".ui-slider-handle")
-        price_slider_handle_left = slider_handles.nth(0)
-        price_slider_handle_right = slider_handles.nth(1)
-
+        price_slider_handle_left =  price_facet.locator(".ui-slider-handle").nth(0)
         self._drag_price_slider_handle(price_slider_handle_left, float(min_price))
+
+        # retrieving handles again after update
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']")
+        expect(price_facet).to_be_visible()
+        price_slider_handle_right = price_facet.locator(".ui-slider-handle").nth(1)
         self._drag_price_slider_handle(price_slider_handle_right, float(max_price))
         self._close_mobile_filters_if_needed()
         expect(self.active_filters).to_contain_text(re.compile(r"price", re.IGNORECASE))
