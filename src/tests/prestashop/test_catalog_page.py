@@ -25,7 +25,7 @@ def test_browse_products_in_a_category(prestashop_home_page, profile):
 def test_open_product_details_page(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
     product_page = catalog_page.open_product(0)
-    product_page.verify_product_name("Hummingbird printed t-shirttt")
+    product_page.verify_product_name("Hummingbird printed t-shirt")
     product_page.check_structure()
 
 
