@@ -5,7 +5,9 @@ Remove-Item reports/allure-report -Recurse -Force
 #pytest  --headed  -n auto --browser chromium
 #pytest  -n auto --browser chromium --profile=desktop_1920x1200
 #pytest  --headed  -n auto --browser chromium --profile=desktop_2560x1600  --profile=tablet --profile=mobile src/tests/prestashop/test_product_page.py
-pytest  --headed  -n auto --browser chromium --profile=desktop_2560x1600 src/tests/prestashop/test_product_page.py
+#pytest  --headed  -n auto --browser chromium --profile=desktop_2560x1600 src/tests/prestashop/test_product_page.py
+pytest  --headed  -n auto --browser chromium --profile=desktop_2560x1600 src/tests/prestashop/test_catalog_page.py
+#pytest  --headed  -n auto --browser firefox --profile=desktop_2560x1600 src/tests/prestashop/test_catalog_page.py
 #pytest  --headed  -n auto --browser chromium --profile=desktop_1920x1200
 #pytest  --headed  -n auto --browser chromium --profile=tablet_landscape --profile=mobile_landscape
 #pytest  --headed  -n auto --browser chromium --profile=tablet --profile=mobile --profile=desktop_1920x1200
