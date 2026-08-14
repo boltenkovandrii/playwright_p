@@ -21,6 +21,14 @@ on:
       profiles:
         description: 'Comma or space-separated list of profiles (e.g. desktop,mobile). If empty, defaults applied.'
         required: false
+      allure-screenshots:
+        description: 'Whether to attach screenshots to Allure report (on/off). If empty, defaults to off.'
+        required: false
+        type: choice
+        options:
+          - ''
+          - 'on'
+          - 'off'
 
 env:
   PRESTASHOP_BASE_URL: http://localhost:8090
@@ -68,7 +76,7 @@ jobs:
           RAW_INPUT="${{ github.event.inputs.browsers || '' }}"
           # replace commas with spaces and trim
           RAW_INPUT=$(echo "$RAW_INPUT" | tr ',' ' ' | xargs)
-
+         
           if [ -n "$RAW_INPUT" ]; then
             BROWSERS="$RAW_INPUT"
           elif [ "${{ github.event_name }}" = 'pull_request' ] || { [ "${{ github.event_name }}" = 'push' ] && [ "${{ github.ref }}" = 'refs/heads/main' ]; }; then
@@ -80,6 +88,19 @@ jobs:
           fi
 
           echo "browsers=$BROWSERS" >> $GITHUB_OUTPUT
+
+      - name: Determine allure-screenshots
+        id: set-allure-screenshots
+        run: |
+           # Use workflow_dispatch input if provided, otherwise default to off
+           ALLURE_SCREENSHOTS="${{ github.event.inputs['allure-screenshots'] || 'off' }}"
+           
+           # If empty string (from empty option), default to off
+           if [ -z "$ALLURE_SCREENSHOTS" ]; then
+             ALLURE_SCREENSHOTS="off"
+           fi
+           
+           echo "allure_screenshots=$ALLURE_SCREENSHOTS" >> $GITHUB_OUTPUT
 
       - name: Install Playwright browsers
         run: python -m playwright install --with-deps
@@ -106,6 +127,7 @@ jobs:
         run: |
           BROWSERS="${{ steps.set-browsers.outputs.browsers }}"
           PROFILES="${{ steps.set-profiles.outputs.profiles }}"
+          ALLURE_SCREENSHOTS="${{ steps.set-allure-screenshots.outputs.allure_screenshots }}"
           ARGS=""
           PROFILE_ARGS=""
           for b in $BROWSERS; do
@@ -120,7 +142,8 @@ jobs:
           else
             echo "Running pytest with default profile selection"
           fi
-          pytest $ARGS $PROFILE_ARGS -n auto --alluredir=reports/allure-results
+          echo "Allure screenshots setting: $ALLURE_SCREENSHOTS"
+          pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n auto --alluredir=reports/allure-results
 
       - name: Install Allure
         if: always()
