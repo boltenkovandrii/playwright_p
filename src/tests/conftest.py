@@ -67,6 +67,8 @@ def selectors(playwright):
 def pytest_runtest_setup(item):
     """Set up screenshot context for the test before it runs."""
     screenshots_enabled = item.config.getoption("--allure-screenshots") == "on"
+    # pytest-rerunfailures execution_count is 1-based:
+    # 1 = initial execution, 2+ = reruns.
     is_retry = getattr(item, "execution_count", 1) > 1
     set_screenshot_context(screenshots_enabled=screenshots_enabled, is_retry=is_retry)
 

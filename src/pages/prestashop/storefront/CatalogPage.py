@@ -108,7 +108,7 @@ class CatalogPage(BaseStorefrontPage):
         track_box = slider_track.bounding_box()
         handle_box = handle.bounding_box()
         if not track_box or not handle_box:
-            raise AssertionError("Price slider is not ready for interaction")
+            raise AssertionError(f"Price slider is not ready for interaction. Track_box: {track_box}, handle_box: {handle_box}.")
 
         bounded_target = max(price_slider_min, min(price_slider_max, target_value))
         ratio = (bounded_target - price_slider_min) / (price_slider_max - price_slider_min)

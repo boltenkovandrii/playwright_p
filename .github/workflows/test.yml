@@ -93,7 +93,7 @@ jobs:
         id: set-allure-screenshots
         run: |
            # Use workflow_dispatch input if provided, otherwise default to off
-           ALLURE_SCREENSHOTS="${{ github.event.inputs.allure-screenshots || 'off' }}"
+           ALLURE_SCREENSHOTS="${{ github.event.inputs['allure-screenshots'] || 'off' }}"
            
            # If empty string (from empty option), default to off
            if [ -z "$ALLURE_SCREENSHOTS" ]; then
