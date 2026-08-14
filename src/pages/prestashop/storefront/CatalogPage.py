@@ -61,10 +61,7 @@ class CatalogPage(BaseStorefrontPage):
 
     def sort_by(self, criteria):
         attach_screenshot(self.page, f"Sorting by {criteria}")
-        sort_link = self.page.locator(
-            ".products-sort-order .dropdown-menu a",
-            has_text=criteria,
-        ).first
+        sort_link = self.page.locator(".products-sort-order .dropdown-menu a", has_text=criteria)
         self.page.goto(sort_link.get_attribute("href"))
         return CatalogPage(self.page).verify_loaded()
 
@@ -72,25 +69,26 @@ class CatalogPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Applying price filter")
         self._open_mobile_filters_if_needed("Price")
 
-        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
-        expect(price_facet).to_be_visible()
-        slider_handles = price_facet.locator(".ui-slider-handle")
-        price_slider_handle_left = slider_handles.nth(0)
-        price_slider_handle_right = slider_handles.nth(1)
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']")
 
+        expect(price_facet).to_be_visible()
+        price_slider_handle_left =  price_facet.locator(".ui-slider-handle").nth(0)
         self._drag_price_slider_handle(price_slider_handle_left, float(min_price))
+
+        # The first drag may trigger an AJAX update/re-render.
+        expect(price_facet).to_be_visible()
+        price_slider_handle_right = price_facet.locator(".ui-slider-handle").nth(1)
         self._drag_price_slider_handle(price_slider_handle_right, float(max_price))
+
         self._close_mobile_filters_if_needed()
+
         expect(self.active_filters).to_contain_text(re.compile(r"price", re.IGNORECASE))
         return CatalogPage(self.page).verify_loaded()
 
     def apply_manufacturer_filter(self, name):
         attach_screenshot(self.page, f"Applying manufacturer filter: {name}")
         self._open_mobile_filters_if_needed("Brand")
-        manufacturer_link = self.page.locator(
-            "#search_filters .facet[data-name='Brand'] a",
-            has_text=name,
-        ).first
+        manufacturer_link = self.page.locator("#search_filters .facet[data-name='Brand'] a", has_text=name)
         expect(manufacturer_link).to_be_visible()
         manufacturer_link.click()
         self._close_mobile_filters_if_needed()
@@ -107,15 +105,15 @@ class CatalogPage(BaseStorefrontPage):
         return self
 
     def _drag_price_slider_handle(self, handle, target_value):
-        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").first
-        slider_track = price_facet.locator(".ui-slider").first
+        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']")
+        slider_track = price_facet.locator(".ui-slider")
 
         price_slider_min = float(price_facet.get_attribute("data-slider-min"))
         price_slider_max = float(price_facet.get_attribute("data-slider-max"))
         track_box = slider_track.bounding_box()
         handle_box = handle.bounding_box()
         if not track_box or not handle_box:
-            raise AssertionError("Price slider is not ready for interaction")
+            raise AssertionError(f"Price slider is not ready for interaction. Track_box: {track_box}, handle_box: {handle_box}.")
 
         bounded_target = max(price_slider_min, min(price_slider_max, target_value))
         ratio = (bounded_target - price_slider_min) / (price_slider_max - price_slider_min)
