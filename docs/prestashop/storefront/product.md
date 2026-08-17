@@ -78,44 +78,6 @@ Verify that a user can read all key product information on the product details p
 
 ---
 
-### PDP-03 — Browse product images
-
-**Purpose**
-
-Verify that a user can browse through product images using the image gallery thumbnails.
-
-**Preconditions**
-
-- The selected product has more than one image (at least two thumbnails).
-
-**Scenario**
-
-1. Open a product from the Clothes category that has multiple images.
-2. Observe the main product cover image.
-3. Observe the thumbnail strip.
-4. Click on a thumbnail that is not currently selected.
-5. Observe the main product cover image.
-
-**Expected result**
-
-- The main product cover image is visible on page load.
-- Multiple thumbnails are visible.
-- After clicking a different thumbnail, the main cover image updates to the selected image.
-- The clicked thumbnail is visually marked as selected.
-
-**Coverage**
-
-- Product image gallery
-- Thumbnail interaction
-- Main image update on selection
-
-**Notes**
-
-- Image switching is JavaScript-driven. This scenario may be unstable under slow network conditions.
-- Use a product confirmed to have multiple images (the "Hummingbird printed t-shirt" has at least two thumbnails in the current dataset).
-
----
-
 ### PDP-04 — Change product quantity
 
 **Purpose**
@@ -130,10 +92,16 @@ Verify that a user can change the product quantity before adding to cart.
 
 1. Open a product from the Clothes category.
 2. Observe the quantity input field (default value: 1).
-3. Increase the quantity to 2.
+3. Increase the quantity to 2 using arrows.
 4. Observe the quantity field.
-5. Decrease the quantity back to 1.
+5. Decrease the quantity back to 1 using arrows.
 6. Observe the quantity field.
+7. Attempt to decrease the quantity below 1 (e.g., to 0 or negative) using arrows
+8. Observe the quantity field.
+9. Attempt to manually enter a value below 1 using direct input.
+10. Observe the quantity field.
+11. Attempt to manually enter a value of greater than 1 using direct input.
+12. Observe the quantity field.
 
 **Expected result**
 
@@ -207,8 +175,9 @@ Verify that a user can add a product to the cart and receive a visual confirmati
 
 1. Open a product from the Clothes category.
 2. Note the product name and price.
-3. Click "Add to Cart".
-4. Observe the confirmation dialog/modal.
+3. Update item quantity 
+4. Click "Add to Cart".
+5. Observe the confirmation dialog/modal.
 
 **Expected result**
 
@@ -245,8 +214,9 @@ Verify that a user can dismiss the cart confirmation dialog and continue browsin
 1. Open a product from the Clothes category.
 2. Click "Add to Cart".
 3. Wait for the cart confirmation modal to appear.
-4. Click "Continue Shopping" (or dismiss the modal).
+4. Click "Continue Shopping" (dismiss the modal).
 5. Observe the current page.
+6. Add another product to the cart and repeat the process to ensure user can add more items to the cart.
 
 **Expected result**
 
@@ -254,6 +224,7 @@ Verify that a user can dismiss the cart confirmation dialog and continue browsin
 - The user remains on the product details page (or is returned to it).
 - The product information and "Add to Cart" button are still visible.
 - The cart item count in the header reflects the added item.
+- New items could be added to a cart after dismissing the modal.
 
 **Coverage**
 
@@ -278,7 +249,7 @@ Verify that a user can proceed from the cart confirmation dialog directly to the
 1. Open a product from the Clothes category.
 2. Click "Add to Cart".
 3. Wait for the cart confirmation modal to appear.
-4. Click "Proceed to Checkout" (or the "Go to Cart" action) in the modal.
+4. Click "Proceed to Checkout" in the modal.
 5. Observe the resulting page.
 
 **Expected result**
