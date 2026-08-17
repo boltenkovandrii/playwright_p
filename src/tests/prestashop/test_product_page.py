@@ -68,11 +68,27 @@ def test_change_product_quantity(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("Select product combination")
-@pytest.mark.skip(reason="Work in progress")
+@allure.title("PDP-05 — Select product combination")
 def test_select_product_combination(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed t-shirt"
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+
+    product_page.verify_size_options("S", "M", "L", "XL")
+    product_page.verify_color_options_count_equals(2)
+    product_page.verify_selected_size("S")
+    product_page.verify_selected_color("White")
+
+    product_page = product_page.select_size("M")
+    product_page.verify_selected_size("M")
+    product_page.verify_product_context_visible()
+
+    original_image  = product_page.get_image_source()
+    product_page = product_page.select_color("Black")
+    product_page.verify_selected_color("Black")
+    product_page.verify_product_context_visible()
+    new_image = product_page.get_image_source()
+    assert original_image != new_image, "The product image did not change after selecting a different color."
 
 
 @allure.suite("PrestaShop storefront - Product Details")

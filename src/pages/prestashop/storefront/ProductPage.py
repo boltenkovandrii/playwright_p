@@ -34,6 +34,10 @@ class ProductPage(BaseStorefrontPage):
         self.quantity_input = page.get_by_test_id("quantity_wanted")
         self.quantity_increase_button = page.locator(".bootstrap-touchspin-up")
         self.quantity_decrease_button = page.locator(".bootstrap-touchspin-down")
+        self.size_select = page.locator("#group_1")
+        self.size_options = self.size_select.locator("option")
+        self.selected_size_option = self.size_select.locator("option:checked")
+        self.color_options = page.locator(".input-color")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Product page")
@@ -122,6 +126,54 @@ class ProductPage(BaseStorefrontPage):
             )
         return self
 
+    def verify_size_options(self, *expected_sizes):
+        expect(self.size_select).to_be_visible()
+        expect(self.size_options).to_have_count(len(expected_sizes))
+        expect(self.size_options).to_have_text(list(expected_sizes))
+        return self
+
+    def verify_color_options_count_equals(self, expected_count):
+        expect(self.color_options.first).to_be_visible()
+        actual_count = self.color_options.count()
+        if actual_count != expected_count:
+            raise AssertionError(
+                f"Expected {expected_count} color options, but found {actual_count}."
+            )
+        return self
+
+    def verify_selected_size(self, expected_size):
+        expect(self.selected_size_option).to_have_text(expected_size)
+        return self
+
+    def select_size(self, size):
+        attach_screenshot(self.page, f"Selecting size: {size}")
+        self.size_select.select_option(label=size)
+        expect(self.selected_size_option).to_have_text(size)
+        return self
+
+    def verify_selected_color(self, expected_color):
+        expect(self._color_option(expected_color)).to_be_checked()
+        return self
+
+    def select_color(self, color):
+        if not self._color_option(color).is_checked():
+            attach_screenshot(self.page, f"Selecting color: {color}")
+            original_image = self.get_image_source()
+            self._color_option(color).check(force=True)
+            expect(self._color_option(color)).to_be_checked()
+            expect(self.cover_image).not_to_have_attribute("src", original_image)
+        else :
+            attach_screenshot(self.page, f"Color: {color} is already selected")
+        return self
+
+    def verify_product_context_visible(self):
+        expect(self.product_name).to_be_visible()
+        expect(self.add_to_cart_button).to_be_visible()
+        return self
+
+    def get_image_source(self):
+        return self.cover_image.get_attribute("src")
+
     def go_to_cart(self):
         attach_screenshot(self.page, "Going to cart")
         with self.page.expect_navigation(wait_until="domcontentloaded"):
@@ -136,3 +188,7 @@ class ProductPage(BaseStorefrontPage):
             self.page.locator("nav.breadcrumb a").filter(has_text=category_name).click()
         return CatalogPage(self.page).verify_loaded()
 
+    def _color_option(self, color):
+        return self.page.locator(
+            f".input-color[title='{color}'], .input-color[aria-label='{color}']"
+        ).first
