@@ -36,11 +36,35 @@ def test_browse_product_images(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("Change product quantity")
-@pytest.mark.skip(reason="Work in progress")
+@allure.title("PDP-04 — Change product quantity")
 def test_change_product_quantity(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed t-shirt"
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+
+    # Check default quantity
+    product_page.verify_quantity_is_equal(1)
+
+    # Increase the quantity to 2 using arrows.
+    product_page.increase_quantity()
+    product_page.verify_quantity_is_equal(2)
+
+    # Decrease the quantity back to 1 using arrows.
+    product_page.decrease_quantity()
+    product_page.verify_quantity_is_equal(1)
+
+    # Attempt to decrease the quantity below 1 (e.g., to 0 or negative) using arrows
+    product_page.decrease_quantity()
+    product_page.verify_quantity_is_equal(1)
+
+    # Attempt to manually enter a value below 1 using direct input.
+    product_page.set_quantity(0)
+    product_page.verify_quantity_is_equal(1)
+
+    # Attempt to manually enter a value of greater than 1 using direct input.
+    product_page.set_quantity(3)
+    product_page.verify_quantity_is_equal(3)
+
 
 
 @allure.suite("PrestaShop storefront - Product Details")

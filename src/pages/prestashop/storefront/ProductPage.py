@@ -27,14 +27,13 @@ class ProductPage(BaseStorefrontPage):
         self.product_details_tab_panel = page.get_by_test_id("product-details")
         self.in_stock = page.locator(".product-quantities span")
 
-
-
-
         self.short_description = self.product_information.locator("p").filter(has_text=re.compile(r"\S")).first
-
 
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
         self.cart_modal = page.locator("#blockcart-modal")
+        self.quantity_input = page.get_by_test_id("quantity_wanted")
+        self.quantity_increase_button = page.locator(".bootstrap-touchspin-up")
+        self.quantity_decrease_button = page.locator(".bootstrap-touchspin-down")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Product page")
@@ -100,6 +99,27 @@ class ProductPage(BaseStorefrontPage):
         self.add_to_cart_button.click()
         expect(self.cart_modal).to_be_visible()
         attach_screenshot(self.page, "After adding item to a cart")
+        return self
+
+    def increase_quantity(self):
+        self.quantity_increase_button.click()
+        return self
+
+    def decrease_quantity(self):
+        self.quantity_decrease_button.click()
+        return self
+
+    def set_quantity(self, value):
+        self.quantity_input.fill(str(value))
+        self.quantity_input.press("Tab")
+        return self
+
+    def verify_quantity_is_equal(self, expected_quantity):
+        current_value = int(self.quantity_input.input_value())
+        if current_value != expected_quantity:
+            raise AssertionError(
+                f"Quantity must be equal to {expected_quantity}. Current value: {current_value}."
+            )
         return self
 
     def go_to_cart(self):
