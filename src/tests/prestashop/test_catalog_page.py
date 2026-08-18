@@ -23,17 +23,19 @@ def test_browse_products_in_a_category(prestashop_home_page, profile):
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-03 — Open product details page")
 def test_open_product_details_page(prestashop_home_page, profile):
+    product_name = "Hummingbird printed t-shirt"
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
-    product_page = catalog_page.open_product(0)
-    product_page.verify_product_name("Hummingbird printed t-shirt")
+    product_page = catalog_page.open_product_by_name(product_name)
+    product_page.verify_product_name(product_name)
     product_page.check_structure()
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-04 — Navigate using breadcrumbs")
 def test_navigate_using_breadcrumbs(prestashop_home_page, profile):
+    product_name = "Hummingbird printed sweater"
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
-    product_page = catalog_page.open_product(0)
+    product_page = catalog_page.open_product_by_name(product_name)
     catalog_page = product_page.go_to_category_from_breadcrumb("Clothes")
     catalog_page.verify_category_name("Clothes")
 

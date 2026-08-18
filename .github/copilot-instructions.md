@@ -28,7 +28,7 @@ pytest --browser firefox
 pytest --browser firefox --browser chromium --browser webkit
 
 # With specific profile (device emulation)
-pytest --browser chromium --profile=desktop
+pytest --browser chromium --profile=desktop_1920x1200
 pytest --browser chromium --profile=mobile
 pytest --browser chromium --profile=tablet_landscape
 ```
@@ -97,7 +97,7 @@ def test_example(main_page):
 
 #### Device Profiles
 Tests can run against multiple device profiles defined in `src/tests/config/profiles.py`:
-- **Desktop**: `desktop`, `desktop_1920x1200`, `desktop_2560x1600`
+- **Desktop**: `desktop_1920x1200`, `desktop_2560x1600`
 - **Mobile**: `mobile`, `mobile_landscape` (iPhone 13)
 - **Tablet**: `tablet`, `tablet_landscape` (iPad Mini)
 
@@ -134,7 +134,7 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 - `main_page`: MainPage fixture with locale support
 - `home_page`: HomePage fixture
 - `article_page`: ArticlePage fixture with locale support
-- `profile`: Device profile fixture (desktop, mobile, tablet)
+- `profile`: Device profile fixture (desktop_1920x1200, mobile, tablet, etc)
 - `locale`: Locale fixture (en, nl, uk)
 - `page`: Playwright page context with final screenshot attachment on teardown
 
@@ -217,3 +217,13 @@ pytest --browser firefox --browser chromium --profile=desktop
 - Test IDs use `id` attribute instead of the standard `data-testid` (working with what's available)
 - Allure report history is persisted in `reports/history/` for trend analysis
 - Windows developers: `playwright install` is usually sufficient; CI uses `--with-deps` for system dependencies
+
+
+Temporary artifacts:
+
+- Temporary scripts, files, logs, screenshots, dumps, and other artifacts
+  created solely for investigation must be removed before completing the task.
+- Do not add temporary investigation artifacts to the repository unless
+  they provide lasting project value.
+- Prefer existing project tooling for inspection when practical.
+- If a temporary artifact is intentionally retained, explain why.
