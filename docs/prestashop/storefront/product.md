@@ -173,7 +173,7 @@ Verify that a user can add a product to the cart and receive a visual confirmati
 
 **Scenario**
 
-1. Open a product from the Clothes category.
+1. Open a product.
 2. Note the product name and price.
 3. Update item quantity 
 4. Click "Add to Cart".
@@ -183,7 +183,7 @@ Verify that a user can add a product to the cart and receive a visual confirmati
 
 - The cart confirmation modal (or overlay) appears.
 - The modal shows the product name that was added.
-- The modal shows the cart total or subtotal.
+- The modal shows the cart total and subtotal.
 - The cart item count in the header updates to reflect the added item.
 
 **Coverage**

@@ -30,11 +30,20 @@ class ProductPage(BaseStorefrontPage):
         self.short_description = self.product_information.locator("p").filter(has_text=re.compile(r"\S")).first
 
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
+
+
         self.cart_modal = page.locator("#blockcart-modal")
+        self.cart_modal_product_name = self.cart_modal.locator(".product-name")
+        self.cart_modal_item_count = self.cart_modal.locator(".cart-products-count")
+        self.cart_modal_total_value = self.cart_modal.locator(".product-total .value")
+        self.cart_modal_subtotal_value = self.cart_modal.locator(".subtotal")
+        self.modal_continue_shopping_button = page.get_by_role("button", name="Continue shopping")
+        self.modal_proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
+
         self.quantity_input = page.get_by_test_id("quantity_wanted")
         self.quantity_increase_button = page.locator(".bootstrap-touchspin-up")
         self.quantity_decrease_button = page.locator(".bootstrap-touchspin-down")
-        self.size_select = page.locator("#group_1")
+        self.size_select = page.get_by_label("Size")
         self.size_options = self.size_select.locator("option")
         self.selected_size_option = self.size_select.locator("option:checked")
         self.color_options = page.locator(".input-color")
@@ -103,6 +112,22 @@ class ProductPage(BaseStorefrontPage):
         self.add_to_cart_button.click()
         expect(self.cart_modal).to_be_visible()
         attach_screenshot(self.page, "After adding item to a cart")
+        return self
+
+    def verify_add_to_cart_confirmation(self, expected_product_name, expected_quantity, expected_total, expected_subtotal):
+        expect(self.cart_modal).to_be_visible()
+        expect(self.cart_modal_product_name).to_have_text(expected_product_name)
+        expect(self.cart_modal_item_count).to_have_text(f"There are {expected_quantity} items in your cart.")
+        expect(self.cart_modal_total_value).to_be_visible()
+        expect(self.cart_modal_total_value).to_have_text(f"€{expected_total}")
+        expect(self.cart_modal_subtotal_value).to_be_visible()
+        expect(self.cart_modal_subtotal_value).to_have_text(f"€{expected_subtotal}")
+        expect(self.modal_continue_shopping_button).to_be_visible()
+        expect(self.modal_proceed_to_checkout_link).to_be_visible()
+        return self
+
+    def verify_header_cart_count(self, expected_count):
+        self.header.verify_cart_count(expected_count)
         return self
 
     def increase_quantity(self):
