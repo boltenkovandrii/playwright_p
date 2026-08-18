@@ -159,11 +159,7 @@ class ProductPage(BaseStorefrontPage):
         return self
 
     def verify_quantity_is_equal(self, expected_quantity):
-        current_value = int(self.quantity_input.input_value())
-        if current_value != expected_quantity:
-            raise AssertionError(
-                f"Quantity must be equal to {expected_quantity}. Current value: {current_value}."
-            )
+        expect(self.quantity_input).to_have_value(str(expected_quantity))
         return self
 
     def verify_size_options(self, *expected_sizes):
@@ -174,11 +170,7 @@ class ProductPage(BaseStorefrontPage):
 
     def verify_color_options_count_equals(self, expected_count):
         expect(self.color_options.first).to_be_visible()
-        actual_count = self.color_options.count()
-        if actual_count != expected_count:
-            raise AssertionError(
-                f"Expected {expected_count} color options, but found {actual_count}."
-            )
+        expect(self.color_options).to_have_count(expected_count)
         return self
 
     def verify_selected_size(self, expected_size):

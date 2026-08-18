@@ -1,4 +1,3 @@
-import json
 import re
 
 from components.prestashop.storefront.ProductGrid import ProductGrid

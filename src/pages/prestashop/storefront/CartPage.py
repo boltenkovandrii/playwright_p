@@ -34,17 +34,19 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart_items).to_have_count(expected_count)
         return self
 
-    def verify_product_name(self, expected_name):
+    def verify_product_with_name_present(self, expected_name, expected_count=1):
         product_name = self.cart_item_product_names.filter(
             has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$")
         )
-        expect(product_name).to_have_count(1)
+        expect(product_name).to_have_count(expected_count)
         expect(product_name.first).to_be_visible()
         return self
 
-    def verify_product_price(self, expected_price):
-        expect(self.cart_item_product_prices.first).to_be_visible()
-        expect(self.cart_item_product_prices.first).to_have_text(f"€{expected_price}")
+    def verify_product_price(self, product, expected_price):
+        for item in self.cart_items.filter(has_text=product).all():
+            price = item.locator(".current-price .price")
+            expect(price).to_be_visible()
+            expect(price).to_have_text(f"€{expected_price}")
         return self
 
     def verify_products_subtotal(self, expected_subtotal):

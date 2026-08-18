@@ -7,7 +7,7 @@ Verify that the product details page opens correctly and all key UI blocks are p
 **Preconditions**
 
 - Storefront is available.
-- The category what contains at least one product.
+- The category that contains at least one product.
 
 **Scenario**
 

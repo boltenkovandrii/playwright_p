@@ -143,7 +143,7 @@ def test_navigate_to_cart_from_confirmation_dialog(prestashop_home_page, profile
 
     cart_page = product_page.proceed_to_checkout()
     cart_page.verify_product_count(1)
-    cart_page.verify_product_name(product_name)
-    cart_page.verify_product_price(22.94)
+    cart_page.verify_product_with_name_present(product_name, 1)
+    cart_page.verify_product_price(product_name, 22.94)
     cart_page.verify_products_subtotal(22.94)
     cart_page.verify_total(22.94)
