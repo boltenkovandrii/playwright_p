@@ -14,7 +14,8 @@ class Header:
         self.search_input = page.locator("#search_widget input[type='text']")
         self.desktop_cart = page.locator("#_desktop_cart")
         self.mobile_cart = page.locator("#_mobile_cart")
-        self.cart_products_count = page.locator(".modal-content .cart-products-count")
+        self.desktop_cart_products_count = self.desktop_cart.locator(".cart-products-count")
+        self.mobile_cart_products_count = self.mobile_cart.locator(".cart-products-count")
 
     def verify_loaded(self):
         expect(self.container).to_be_visible()
@@ -69,8 +70,15 @@ class Header:
         return self
 
     def verify_cart_count(self, expected_count):
-        expect(self.cart_products_count).to_be_visible()
-        expect(self.cart_products_count).to_contain_text(str(expected_count))
+        expected_text = f"({expected_count})"
+
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            cart_products_count = self.mobile_cart_products_count
+        else:
+            cart_products_count = self.desktop_cart_products_count
+
+        expect(cart_products_count).to_be_visible()
+        expect(cart_products_count).to_have_text(expected_text)
         return self
 
     def search(self, query):

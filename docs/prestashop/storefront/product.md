@@ -7,12 +7,12 @@ Verify that the product details page opens correctly and all key UI blocks are p
 **Preconditions**
 
 - Storefront is available.
-- The "Clothes" category contains at least one product.
+- The category what contains at least one product.
 
 **Scenario**
 
 1. Open the storefront home page.
-2. Open the Clothes category.
+2. Open a category.
 3. Open the first product from the listing.
 4. Validate the product page structure.
 
@@ -49,7 +49,7 @@ Verify that a user can read all key product information on the product details p
 
 **Scenario**
 
-1. Open a product from the Clothes category.
+1. Open a product from a category.
 2. Observe the product name.
 3. Observe the short description in the product information block.
 4. Observe the price.
@@ -90,7 +90,7 @@ Verify that a user can change the product quantity before adding to cart.
 
 **Scenario**
 
-1. Open a product from the Clothes category.
+1. Open a product from a category.
 2. Observe the quantity input field (default value: 1).
 3. Increase the quantity to 2 using arrows.
 4. Observe the quantity field.
@@ -211,7 +211,7 @@ Verify that a user can dismiss the cart confirmation dialog and continue browsin
 
 **Scenario**
 
-1. Open a product from the Clothes category.
+1. Open a product from a category.
 2. Click "Add to Cart".
 3. Wait for the cart confirmation modal to appear.
 4. Click "Continue Shopping" (dismiss the modal).
@@ -246,7 +246,7 @@ Verify that a user can proceed from the cart confirmation dialog directly to the
 
 **Scenario**
 
-1. Open a product from the Clothes category.
+1. Open a product from a category.
 2. Click "Add to Cart".
 3. Wait for the cart confirmation modal to appear.
 4. Click "Proceed to Checkout" in the modal.

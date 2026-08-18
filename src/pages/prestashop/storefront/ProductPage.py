@@ -33,10 +33,12 @@ class ProductPage(BaseStorefrontPage):
 
 
         self.cart_modal = page.locator("#blockcart-modal")
+        self.cart_modal_title = self.cart_modal.locator(".modal-title")
         self.cart_modal_product_name = self.cart_modal.locator(".product-name")
+        self.cart_modal_product_quantity = self.cart_modal.locator(".product-quantity strong")
         self.cart_modal_item_count = self.cart_modal.locator(".cart-products-count")
         self.cart_modal_total_value = self.cart_modal.locator(".product-total .value")
-        self.cart_modal_subtotal_value = self.cart_modal.locator(".subtotal")
+        self.cart_modal_subtotal_value = self.cart_modal.locator(".subtotal.value")
         self.modal_continue_shopping_button = page.get_by_role("button", name="Continue shopping")
         self.modal_proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
 
@@ -116,14 +118,27 @@ class ProductPage(BaseStorefrontPage):
 
     def verify_add_to_cart_confirmation(self, expected_product_name, expected_quantity, expected_total, expected_subtotal):
         expect(self.cart_modal).to_be_visible()
+        expect(self.cart_modal_title).to_contain_text("Product successfully added to your shopping cart")
         expect(self.cart_modal_product_name).to_have_text(expected_product_name)
-        expect(self.cart_modal_item_count).to_have_text(f"There are {expected_quantity} items in your cart.")
+        expect(self.cart_modal_product_quantity).to_have_text(str(expected_quantity))
+        expect(self.cart_modal_item_count).to_have_text(self._cart_items_count_text(expected_quantity))
         expect(self.cart_modal_total_value).to_be_visible()
         expect(self.cart_modal_total_value).to_have_text(f"€{expected_total}")
         expect(self.cart_modal_subtotal_value).to_be_visible()
         expect(self.cart_modal_subtotal_value).to_have_text(f"€{expected_subtotal}")
         expect(self.modal_continue_shopping_button).to_be_visible()
         expect(self.modal_proceed_to_checkout_link).to_be_visible()
+        return self
+
+    def continue_shopping(self):
+        attach_screenshot(self.page, "Continuing shopping from cart confirmation")
+        expect(self.cart_modal).to_be_visible()
+        self.modal_continue_shopping_button.click()
+        expect(self.cart_modal).to_be_hidden()
+        return self
+
+    def verify_add_to_cart_confirmation_closed(self):
+        expect(self.cart_modal).to_be_hidden()
         return self
 
     def verify_header_cart_count(self, expected_count):
@@ -200,9 +215,12 @@ class ProductPage(BaseStorefrontPage):
         return self.cover_image.get_attribute("src")
 
     def go_to_cart(self):
+        return self.proceed_to_checkout()
+
+    def proceed_to_checkout(self):
         attach_screenshot(self.page, "Going to cart")
         with self.page.expect_navigation(wait_until="domcontentloaded"):
-            self.cart_modal.locator("a[href*='cart']").click()
+            self.modal_proceed_to_checkout_link.click()
         attach_screenshot(self.page, "After navigating to the cart")
         return CartPage(self.page).verify_loaded()
 
@@ -217,3 +235,8 @@ class ProductPage(BaseStorefrontPage):
         return self.page.locator(
             f".input-color[title='{color}'], .input-color[aria-label='{color}']"
         ).first
+
+    def _cart_items_count_text(self, count):
+        if count == 1:
+            return "There is 1 item in your cart."
+        return f"There are {count} items in your cart."

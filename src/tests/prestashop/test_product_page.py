@@ -2,7 +2,7 @@ import allure
 import pytest
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("Check product page structure")
+@allure.title("PDP-01 — Check product page structure")
 def test_product_page_structure(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
     product_page = catalog_page.open_product(0)
@@ -95,28 +95,55 @@ def test_select_product_combination(prestashop_home_page, profile):
 @allure.title("PDP-06 — Add product to cart")
 def test_add_product_to_cart(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
-    quantity = 2
 
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
-    product_page.set_quantity(quantity)
+    product_page.set_quantity(2)
     product_page.add_to_cart()
-    product_page.verify_add_to_cart_confirmation(product_name, quantity, 45.89, 45.89)
-    product_page.verify_header_cart_count(quantity)
+    product_page.verify_add_to_cart_confirmation(product_name, 2, 45.89, 45.89)
+    product_page.verify_header_cart_count(2)
 
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-07 — Continue shopping after adding a product")
-@pytest.mark.skip(reason="Work in progress")
 def test_continue_shopping_after_adding_a_product(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed t-shirt"
+
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+
+    product_page.add_to_cart()
+    product_page.verify_add_to_cart_confirmation(product_name, 1, 22.94, 22.94)
+    product_page.continue_shopping()
+    product_page.verify_add_to_cart_confirmation_closed()
+    product_page.verify_product_name(product_name)
+    product_page.verify_product_context_visible()
+    product_page.verify_header_cart_count(1)
+
+    product_page.add_to_cart()
+    product_page.verify_add_to_cart_confirmation(product_name, 2, 45.89, 45.89)
+    product_page.continue_shopping()
+    product_page.verify_add_to_cart_confirmation_closed()
+    product_page.verify_product_name(product_name)
+    product_page.verify_product_context_visible()
+    product_page.verify_header_cart_count(2)
 
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-08 — Navigate to cart from the confirmation dialog")
-@pytest.mark.skip(reason="Work in progress")
 def test_navigate_to_cart_from_confirmation_dialog(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed t-shirt"
+
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+
+    product_page.add_to_cart()
+    product_page.verify_add_to_cart_confirmation(product_name, 1, 22.94, 22.94)
+
+    cart_page = product_page.proceed_to_checkout()
+    cart_page.verify_product_count(1)
+    cart_page.verify_product_name(product_name)
+    cart_page.verify_product_price(22.94)
+    cart_page.verify_products_subtotal(22.94)
+    cart_page.verify_total(22.94)
