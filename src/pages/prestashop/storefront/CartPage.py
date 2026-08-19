@@ -1,5 +1,6 @@
 import re
 
+from helpers.prestashop.ProductSpec import ProductSpec
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
@@ -15,11 +16,13 @@ class CartPage(BaseStorefrontPage):
         self.cart_item_product_prices = self.cart_items.locator(".current-price .price")
         self.cart_products_subtotal_value = page.locator("#cart-subtotal-products .value")
         self.cart_total_value = page.locator(".cart-summary-line.cart-total .value")
+        self.empty_cart_message = page.locator(".no-items")
+        self.continue_shopping_link = page.get_by_role("link", name="Continue shopping")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
-        expect(self.cart).to_be_visible()
+        expect(self.page.locator("#cart")).to_be_visible()
         return self
 
     def check_structure(self):
@@ -28,6 +31,13 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart).to_be_visible()
         expect(self.page.locator(".cart-overview")).to_be_visible()
         expect(self.page.locator(".cart-detailed-totals")).to_be_visible()
+        return self
+
+    def check_empty_structure(self):
+        attach_screenshot(self.page, "Checking empty cart structure")
+        super().check_structure()
+        expect(self.empty_cart_message).to_be_visible()
+        expect(self.empty_cart_message).to_contain_text("There are no more items in your cart")
         return self
 
     def verify_product_count(self, expected_count):
@@ -49,6 +59,35 @@ class CartPage(BaseStorefrontPage):
             expect(price).to_have_text(f"€{expected_price}")
         return self
 
+    def set_product_quantity(self, product, quantity):
+        attach_screenshot(self.page, f"Updating quantity for {product} to {quantity}")
+        quantity_input = self._cart_item_by_product(product).locator("input.js-cart-line-product-quantity")
+        expect(quantity_input).to_be_visible()
+        quantity_input.fill(str(quantity))
+        quantity_input.press("Tab")
+        expect(quantity_input).to_have_value(str(quantity))
+        return self
+
+    def verify_product_quantity(self, product, expected_quantity):
+        quantity_input = self._cart_item_by_product(product).locator("input.js-cart-line-product-quantity")
+        expect(quantity_input).to_have_value(str(expected_quantity))
+        return self
+
+    def remove_product(self, product):
+        attach_screenshot(self.page, f"Removing product from cart: {product}")
+        product_item = self._cart_item_by_product(product)
+        expect(product_item).to_be_visible()
+        product_item.locator(".remove-from-cart").click()
+        expect(self.cart_items.filter(has_text=product.name)).to_have_count(0)
+        return self
+
+    def continue_shopping(self):
+        attach_screenshot(self.page, "Continuing shopping from cart page")
+        with self.page.expect_navigation(wait_until="domcontentloaded"):
+            self.continue_shopping_link.click()
+        # returning generic page to avoid circular links
+        return BaseStorefrontPage(self.page).verify_loaded()
+
     def verify_products_subtotal(self, expected_subtotal):
         expect(self.cart_products_subtotal_value).to_have_text(f"€{expected_subtotal}")
         return self
@@ -57,3 +96,13 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart_total_value).to_have_text(f"€{expected_total}")
         return self
 
+
+    def _cart_item_by_product(self, product: ProductSpec):
+        candidates = self.cart_items.filter(
+            has=self.page.locator(".product-line-info a.label", has_text=re.compile(rf"^\s*{re.escape(product.name)}\s*$"))
+        )
+
+        for attribute, value in product.attributes.items():
+            candidates = candidates.filter(has=self.page.locator( f".{attribute} .value", has_text=value))
+
+        return candidates.first
