@@ -78,7 +78,7 @@ class CartPage(BaseStorefrontPage):
         product_item = self._cart_item_by_product(product)
         expect(product_item).to_be_visible()
         product_item.locator(".remove-from-cart").click()
-        expect(self.cart_items.filter(has_text=product.name)).to_have_count(0)
+        expect(self._cart_item_by_product(product)).to_have_count(0)
         return self
 
     def continue_shopping(self):
