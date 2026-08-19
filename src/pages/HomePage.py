@@ -50,3 +50,4 @@ class HomePage(BasePage):
             self.page.get_by_role("link", name=TRANSLATIONS[locale]["language"]).click()
         attach_screenshot(self.page, "After navigation to the Home Page")
         return MainPage(self.page, locale).verify_loaded()
+

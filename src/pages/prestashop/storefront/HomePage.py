@@ -69,3 +69,7 @@ class HomePage(BaseStorefrontPage):
         self.featured_products.open_product_by_name(name)
         return ProductPage(self.page).verify_loaded()
 
+
+    def verify_header_cart_count(self, expected_count):
+        self.header.verify_cart_count(expected_count)
+        return self
