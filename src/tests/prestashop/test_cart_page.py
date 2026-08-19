@@ -4,7 +4,7 @@ from helpers.prestashop.ProductSpec import ProductSpec
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Check cart page structure")
+@allure.title("CART-01 — Check cart page structure")
 def test_cart_page_structure(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
     product_page = catalog_page.open_product(0)
@@ -13,7 +13,7 @@ def test_cart_page_structure(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Add single product to cart")
+@allure.title("CART-02 — Add single product to cart")
 def test_add_single_product_to_cart(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -26,7 +26,7 @@ def test_add_single_product_to_cart(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Add multiple quantities")
+@allure.title("CART-03 — Add multiple quantities from Product Page")
 def test_add_multiple_quantities(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -43,7 +43,7 @@ def test_add_multiple_quantities(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Remove product from cart")
+@allure.title("CART-04 — Remove product from cart")
 def test_remove_product_from_cart(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -56,7 +56,7 @@ def test_remove_product_from_cart(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Update product quantity")
+@allure.title("CART-05 — Update product quantity in cart")
 def test_update_product_quantity(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -77,7 +77,7 @@ def test_update_product_quantity(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Continue shopping from cart")
+@allure.title("CART-06 — Continue shopping from cart")
 def test_continue_shopping_from_cart(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -88,9 +88,16 @@ def test_continue_shopping_from_cart(prestashop_home_page, profile):
     home_page = cart_page.continue_shopping()
     home_page.verify_header_cart_count(1)
 
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+    cart_page = product_page.add_to_cart().go_to_cart()
+
+    home_page = cart_page.continue_shopping()
+    home_page.verify_header_cart_count(2)
+
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
-@allure.title("Verify cart totals")
+@allure.title("CART-07 — Verify cart totals for multiple variants")
 def test_verify_cart_totals(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 

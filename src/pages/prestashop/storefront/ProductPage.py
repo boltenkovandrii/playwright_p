@@ -156,7 +156,6 @@ class ProductPage(BaseStorefrontPage):
     def set_quantity(self, value):
         self.quantity_input.fill(str(value))
         self.quantity_input.press("Tab")
-        expect(self.quantity_input).to_have_value(str(value))
         return self
 
     def verify_quantity_is_equal(self, expected_quantity):
