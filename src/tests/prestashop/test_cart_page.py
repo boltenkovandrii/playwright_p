@@ -1,7 +1,6 @@
 import allure
 
 from helpers.prestashop.ProductSpec import ProductSpec
-from pages.prestashop.storefront.HomePage import HomePage
 
 
 @allure.suite("PrestaShop storefront - Shopping Cart")
@@ -86,8 +85,7 @@ def test_continue_shopping_from_cart(prestashop_home_page, profile):
     product_page = catalog_page.open_product_by_name(product_name)
     cart_page = product_page.add_to_cart().go_to_cart()
 
-    #!!!!!!!!!!!!!!! -TODO: fix ?
-    home_page = HomePage(cart_page.continue_shopping().page)
+    home_page = cart_page.continue_shopping()
     home_page.verify_header_cart_count(1)
 
 

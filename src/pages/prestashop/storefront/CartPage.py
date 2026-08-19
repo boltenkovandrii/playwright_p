@@ -85,8 +85,8 @@ class CartPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Continuing shopping from cart page")
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.continue_shopping_link.click()
-        # returning generic page to avoid circular links
-        return BaseStorefrontPage(self.page).verify_loaded()
+        # avoiding circular imports
+        return self.as_home_page()
 
     def verify_products_subtotal(self, expected_subtotal):
         expect(self.cart_products_subtotal_value).to_have_text(f"€{expected_subtotal}")

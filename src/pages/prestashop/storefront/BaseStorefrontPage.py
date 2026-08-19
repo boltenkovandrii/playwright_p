@@ -37,3 +37,9 @@ class BaseStorefrontPage(BasePage):
         self.notifications.check_structure()
         self.footer.check_structure()
         return self
+
+
+    def as_home_page(self):
+        # Lazy import to avoid circular import from page
+        from pages.prestashop.storefront.HomePage import HomePage
+        return HomePage(self.page).verify_loaded()
