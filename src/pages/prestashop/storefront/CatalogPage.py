@@ -82,7 +82,6 @@ class CatalogPage(BaseStorefrontPage):
         # In headed mode, some viewport configurations occasionally require a second click before the pagination navigation takes effect.
         # Retry only when the expected page state was not reached.
         current_page = self.page.locator("nav.pagination ul.page-list li.current a")
-
         try:
             expect(current_page).to_have_text(str(index), timeout=1000)
         except AssertionError:
