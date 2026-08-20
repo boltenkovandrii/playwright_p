@@ -122,19 +122,27 @@ Verify that a user can navigate between catalog pages using pagination controls.
 
 **Preconditions**
 
-- The category has enough products to produce multiple catalog pages.
+- Storefront is available.
+- The "Accessories" category is accessible.
+- Category contains more products than the per-page limit when configured.
 
 **Scenario**
 
-1. Open the Clothes category.
-2. Go to the next catalog page via pagination.
-3. Optionally return to the previous page.
+1. Open the storefront home page.
+2. Open the Accessories category.
+3. Verify that pagination is not visible if results fit on a single page.
+4. Set the per-page result limit to 8 products to trigger pagination.
+5. Verify that pagination controls are now visible.
+6. Navigate to page 2 using pagination controls.
+7. Observe the results on the new page.
 
 **Expected result**
 
-- Pagination controls are visible.
-- Next/previous page navigation works.
-- Product list updates for the selected page.
+- Initially, pagination controls are hidden when all results fit on one page.
+- When results exceed the per-page limit, pagination controls become visible.
+- Navigating to another page displays the correct set of results for that page.
+- The page counter or pagination indicators reflect the current page.
+- Results are properly scoped to the selected page.
 
 **Coverage**
 

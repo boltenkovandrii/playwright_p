@@ -171,7 +171,7 @@ Verify that a user can navigate through multiple pages of search results when th
 3. Verify that pagination is not visible if results fit on a single page.
 4. Adjust the results per page to trigger pagination (e.g., display 8 results per page).
 5. Verify that pagination controls are now visible.
-6. Navigate to the next page using pagination controls.
+6. Navigate to the page 2 using pagination controls.
 7. Observe the results on the new page.
 
 **Expected result**
