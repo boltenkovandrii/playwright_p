@@ -11,7 +11,7 @@ class Header:
         self.container = page.locator("#header")
         self.menu_button = page.locator("#menu-icon")
         self.mobile_menu = page.locator("#mobile_top_menu_wrapper")
-        self.search_input = page.locator("#search_widget input[type='text']")
+        self.search_input = self.container.locator("#search_widget input[type='text']")
         self.desktop_cart = page.locator("#_desktop_cart")
         self.mobile_cart = page.locator("#_mobile_cart")
         self.desktop_cart_products_count = self.desktop_cart.locator(".cart-products-count")

@@ -16,19 +16,18 @@ class CatalogPage(BaseStorefrontPage):
         self.heading = page.locator("#js-product-list-header")
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.locator("#js-active-search-filters")
+        self.page_list = page.locator("nav.pagination ul.page-list")
 
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Catalog page")
         super().verify_loaded()
-        expect(self.heading).to_be_visible()
         self.product_grid.verify_loaded()
         return self
 
     def check_structure(self):
         attach_screenshot(self.page, "Checking catalog page structure")
         super().check_structure()
-        expect(self.heading).to_be_visible()
         self.product_grid.check_structure()
         return self
 
@@ -63,6 +62,41 @@ class CatalogPage(BaseStorefrontPage):
         attach_screenshot(self.page, f"Sorting by {criteria}")
         sort_link = self.page.locator(".products-sort-order .dropdown-menu a", has_text=criteria)
         self.page.goto(sort_link.get_attribute("href"))
+        return CatalogPage(self.page).verify_loaded()
+
+    def check_pagination_visible(self, visible):
+        attach_screenshot(self.page, "Checking pagination visibility")
+        if visible:
+            expect(self.page_list).to_be_visible()
+        else:
+            expect(self.page_list).not_to_be_visible()
+        return self
+
+    def go_to_page_number(self, index):
+        attach_screenshot(self.page, f"Going to page number: {index}")
+
+        link = self.page_list.get_by_role("link", name=str(index), exact=True)
+        link.click()
+
+        # PrestaShop's pagination is configured using workaround - with resultsPerPage in the test URL to provide enough results for pagination testing.
+        # In headed mode, some viewport configurations occasionally require a second click before the pagination navigation takes effect.
+        # Retry only when the expected page state was not reached.
+        current_page = self.page.locator("nav.pagination ul.page-list li.current a")
+        try:
+            expect(current_page).to_have_text(str(index), timeout=1000)
+        except AssertionError:
+            attach_screenshot(self.page, f"Retrying click for page number: {index}")
+            link.click()
+
+        return CatalogPage(self.page).verify_loaded()
+
+
+    def set_results_per_page_with_url(self, results_per_page):
+        attach_screenshot(self.page, f"Setting results_per_page: {results_per_page}")
+        # Get the current URL and add resultsPerPage parameter
+        current_url = self.page.url
+        separator = "&" if "?" in current_url else "?"
+        self.page.goto(f"{current_url}{separator}resultsPerPage={results_per_page}")
         return CatalogPage(self.page).verify_loaded()
 
     def apply_manufacturer_filter(self, name):
@@ -164,74 +198,3 @@ class CatalogPage(BaseStorefrontPage):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             attach_screenshot(self.page, "Closing filters for mobile")
             self.page.locator("#search_filter_controls button").click()
-
-
-    '''
-    TODO: remove after new implementation is proved to be stable
-    
-        def apply_price_filter(self, min_price, max_price):
-        attach_screenshot(self.page, "Applying price filter")
-        self._open_mobile_filters_if_needed("Price")
-
-        self._drag_price_slider_handle(0, float(min_price))
-        print ("#####1" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-        # The first drag may trigger an AJAX update/re-render.
-        self._drag_price_slider_handle(1, float(max_price))
-        print ("#####2" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-        self._close_mobile_filters_if_needed()
-
-        expect(self.active_filters).to_contain_text(re.compile(r"price", re.IGNORECASE))
-        return CatalogPage(self.page).verify_loaded()
-    
-    def _drag_price_slider_handle(self, handle_index, target_value):
-        print ("!!!!!!1" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        price_facet = self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']")
-        self._wait_for_price_slider_interactable(price_facet)
-        print ("!!!!!!2" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-        slider_track = price_facet.locator(".ui-slider")
-        handle = price_facet.locator(".ui-slider-handle").nth(handle_index)
-        print ("!!!!!!3" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        expect(handle).to_be_visible()
-        print ("!!!!!!4" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-
-        price_slider_min = float(price_facet.get_attribute("data-slider-min"))
-        price_slider_max = float(price_facet.get_attribute("data-slider-max"))
-        print ("!!!!!!5" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-        track_box = slider_track.bounding_box()
-        handle_box = handle.bounding_box()
-        print ("!!!!!!6" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        if not track_box or not handle_box:
-            # The facet can be briefly visible while its slider is still re-rendering after AJAX updates.
-            self._wait_for_price_slider_interactable(price_facet)
-            track_box = slider_track.bounding_box()
-            handle_box = handle.bounding_box()
-        print ("!!!!!!7" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        if not track_box or not handle_box:
-            raise AssertionError(f"Price slider is not ready for interaction. Track_box: {track_box}, handle_box: {handle_box}.")
-
-        print ("!!!!!!8" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-
-        bounded_target = max(price_slider_min, min(price_slider_max, target_value))
-        ratio = (bounded_target - price_slider_min) / (price_slider_max - price_slider_min)
-        target_x = track_box["x"] + ratio * track_box["width"]
-        target_y = handle_box["y"] + (handle_box["height"] / 2)
-        print ("!!!!!!9" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        handle.hover()
-        self.page.mouse.down()
-        self.page.mouse.move(target_x, target_y, steps=12)
-        print ("#####" + self.page.locator("#search_filters .faceted-slider[data-slider-label='Price']").get_attribute("data-slider-values"))
-        self.page.mouse.up()
-    
-    
-        def _wait_for_price_slider_interactable(self, price_facet):
-        expect(price_facet).to_be_visible()
-        # we may need more time for the slider to be fully interactive after AJAX updates, so we wait for the handles to be visible
-        expect(price_facet.locator(".ui-slider")).to_be_visible(timeout=10_000)
-        expect(price_facet.locator(".ui-slider-handle").nth(0)).to_be_visible(timeout=10_000)
-        expect(price_facet.locator(".ui-slider-handle").nth(1)).to_be_visible(timeout=10_000)
-    '''

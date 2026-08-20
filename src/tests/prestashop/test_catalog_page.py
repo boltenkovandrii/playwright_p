@@ -31,17 +31,7 @@ def test_open_product_details_page(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
-@allure.title("CAT-04 — Navigate using breadcrumbs")
-def test_navigate_using_breadcrumbs(prestashop_home_page, profile):
-    product_name = "Hummingbird printed sweater"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
-    product_page = catalog_page.open_product_by_name(product_name)
-    catalog_page = product_page.go_to_category_from_breadcrumb("Clothes")
-    catalog_page.verify_category_name("Clothes")
-
-
-@allure.suite("PrestaShop storefront - Navigation & catalog")
-@allure.title("CAT-05 — Change product sorting")
+@allure.title("CAT-04 — Change product sorting")
 def test_change_product_sorting(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
     initial_prices = catalog_page.product_grid.get_prices()
@@ -52,16 +42,29 @@ def test_change_product_sorting(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
-@allure.title("CAT-06 — Navigate through catalog pagination")
+@allure.title("CAT-05 — Navigate through catalog pagination")
 def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
     # don't have enough products, so using workaround to check pagination
-    search_results = prestashop_home_page.open_search_results("home")
-    search_results.check_pagination_visible(False)
-    search_results = prestashop_home_page.open_search_results("home", results_per_page=8)
-    search_results.check_displayed_results_count(8)
-    search_results = search_results.go_to_page_number(2)
-    search_results.check_displayed_results_count(3)
-    search_results.check_pagination_visible(True)
+    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+    catalog_page.check_pagination_visible(False)
+
+    catalog_page = catalog_page.set_results_per_page_with_url(8)
+    catalog_page.check_displayed_results_count(8)
+    catalog_page.check_pagination_visible(True)
+
+    catalog_page = catalog_page.go_to_page_number(2)
+    catalog_page.check_displayed_results_count(3)
+    catalog_page.check_pagination_visible(True)
+
+
+@allure.suite("PrestaShop storefront - Navigation & catalog")
+@allure.title("CAT-06 — Navigate using breadcrumbs")
+def test_navigate_using_breadcrumbs(prestashop_home_page, profile):
+    product_name = "Hummingbird printed sweater"
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+    catalog_page = product_page.go_to_category_from_breadcrumb("Clothes")
+    catalog_page.verify_category_name("Clothes")
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")

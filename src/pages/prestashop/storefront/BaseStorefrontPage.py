@@ -4,6 +4,7 @@ from components.prestashop.storefront.Header import Header
 from pages.BasePage import BasePage
 from playwright.sync_api import expect
 
+from utils.allure_reporting import attach_screenshot
 from utils.environment import get_env_variable
 
 
@@ -37,6 +38,13 @@ class BaseStorefrontPage(BasePage):
         self.notifications.check_structure()
         self.footer.check_structure()
         return self
+
+    def search(self, query):
+        from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
+
+        attach_screenshot(self.page, f"Performing search by query: {query}")
+        self.header.search(query)
+        return SearchResultsPage(self.page).verify_loaded()
 
 
     def as_home_page(self):
