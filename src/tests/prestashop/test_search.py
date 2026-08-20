@@ -38,3 +38,17 @@ def test_search_from_catalog_page(prestashop_home_page, profile):
     search_results.check_structure()
     search_results.verify_products_match("Hummingbird")
     search_results.check_displayed_results_count(5)
+
+
+@allure.suite("PrestaShop storefront - Search")
+@allure.title("SRCH-05 — Navigate through search pagination")
+def test_navigate_through_search_pagination(prestashop_home_page, profile):
+    # don't have enough products, so using workaround to check pagination
+    search_results = prestashop_home_page.open_search_results("home")
+    search_results.check_pagination_visible(False)
+    search_results = prestashop_home_page.open_search_results("home", results_per_page=8)
+    search_results.check_displayed_results_count(8)
+    search_results.check_pagination_visible(True)
+    search_results = search_results.go_to_page_number(2)
+    search_results.check_displayed_results_count(3)
+    search_results.check_pagination_visible(True)

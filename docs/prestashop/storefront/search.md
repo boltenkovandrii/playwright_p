@@ -149,3 +149,48 @@ Verify that a user can start a search while browsing a catalog page and receive 
 **Notes**
 
 - This scenario helps verify that search is available consistently across storefront pages, not only on the home page.
+
+---
+
+### SRCH-05 — Navigate through search pagination
+
+**Purpose**
+
+Verify that a user can navigate through multiple pages of search results when the result set exceeds the per-page limit.
+
+**Preconditions**
+
+- Storefront is available.
+- Search results contain more products than the per-page limit.
+- Pagination controls are available when results span multiple pages.
+
+**Scenario**
+
+1. Open the storefront home page.
+2. Perform a search that returns multiple results.
+3. Verify that pagination is not visible if results fit on a single page.
+4. Adjust the results per page to trigger pagination (e.g., display 8 results per page).
+5. Verify that pagination controls are now visible.
+6. Navigate to the next page using pagination controls.
+7. Observe the results on the new page.
+
+**Expected result**
+
+- Initially, pagination controls are hidden when all results fit on one page.
+- When results exceed the per-page limit, pagination controls become visible.
+- Navigating to another page displays the correct set of results for that page.
+- The page counter or pagination indicators reflect the current page.
+- Results are properly scoped to the selected page.
+
+**Coverage**
+
+- Search result pagination
+- Multi-page result navigation
+- Pagination visibility logic
+- Per-page result configuration
+
+**Notes**
+
+- The number of available products and per-page result limit affect pagination visibility; this scenario may be sensitive to catalog data changes.
+- The exact pagination UI (e.g., page numbers, next/previous buttons) may vary by storefront theme.
+
