@@ -54,6 +54,7 @@ def test_change_product_sorting(prestashop_home_page, profile):
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-06 — Navigate through catalog pagination")
 def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
+    # TODO: it is not catalog pagination, but search page pagination. Need to move to correct place and implement test for catalog
     # don't have enough products, so using workaround to check pagination
     search_results = prestashop_home_page.open_search_results("home")
     search_results.check_pagination_visible(False)

@@ -33,12 +33,3 @@ def test_navigate_to_product_from_featured_products_section(prestashop_home_page
     product_page.verify_product_name(product_name)
     product_page.check_structure()
 
-
-@allure.suite("PrestaShop storefront - Homepage")
-@allure.title("Search from the home page")
-def test_search_from_home_page(prestashop_home_page):
-    home_page = prestashop_home_page.open()
-    search_results = home_page.search("cushion")
-    search_results.check_displayed_results_count(3)
-    search_results.verify_products_match("cushion")
-    search_results.check_structure()

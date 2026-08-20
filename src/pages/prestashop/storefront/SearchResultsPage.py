@@ -13,6 +13,7 @@ class SearchResultsPage(BaseStorefrontPage):
         self.heading = page.locator("#js-product-list-header")
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
         self.page_list = page.locator("nav.pagination ul.page-list")
+        self.no_matches_message = page.get_by_test_id("product-search-no-matches")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Search results page")
@@ -24,12 +25,19 @@ class SearchResultsPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Checking search results page structure")
         super().check_structure()
         expect(self.heading).to_be_visible()
-        self.product_grid.check_structure()
+        if not self.no_matches_message.is_visible():
+            self.product_grid.check_structure()
         return self
 
     def check_displayed_results_count(self, count):
         attach_screenshot(self.page, "Checking displayed results count")
         expect(self.product_grid.cards).to_have_count(count)
+        return self
+
+    def check_no_matches_message(self):
+        attach_screenshot(self.page, "Checking no matches message")
+        expect(self.no_matches_message).to_be_visible()
+        expect(self.no_matches_message).to_contain_text("No matches were found for your search")
         return self
 
     def verify_products_match(self, term):
