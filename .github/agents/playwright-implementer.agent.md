@@ -29,8 +29,9 @@ correct change required to satisfy the request.
 - Do not introduce new abstractions unless there is a concrete reason.
 - Prefer existing reusable Page Objects and components over direct locator usage.
 - Use locators only in Page Objects or components, not in the test itself.
-- Prefer stable user-facing locators, especially test IDs ('id' is default for the project) when available.
+- Prefer using id and get_by_test_id() for locating the elements ('id' is default test identification for the project)
 - Use semantic or accessibility locators when test IDs are unavailable.
+- Prefer stable user-facing locators, when available.
 - Use XPath only when there is a concrete reason and simpler locators are unsuitable.
 - Use Playwright auto-waiting and web-first assertions.
 - Do not add explicit navigation waits around ordinary link/button clicks unless there is a concrete reason.
@@ -51,6 +52,7 @@ correct change required to satisfy the request.
 - duplicating existing component functionality
 - passing profile information through every component unless it genuinely needs it
 - XPath unless there is a concrete reason
+- Usage of force=True when interacting with elements unless there is a concrete reason - don't just use it as a workaround for flaky/not working tests
 - assertions of implementation details when user-facing behavior can be asserted
 - modifying fixtures or configuration solely for an individual test
 - introducing a workflow or service abstraction for a single simple interaction

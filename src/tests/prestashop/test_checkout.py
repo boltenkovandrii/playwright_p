@@ -1,43 +1,35 @@
 import allure
-import pytest
 
 
 @allure.suite("PrestaShop storefront - Checkout (Guest)")
-@allure.title("Guest checkout page structure")
-@pytest.mark.skip(reason="Work in progress")
+@allure.title("CHK-01 — Guest checkout page structure and checkout flow")
 def test_guest_checkout_page_structure(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    product_name = "Hummingbird printed t-shirt"
+    first_name = "Jane"
+    last_name = "Doe"
+    email = "jane.doe.chk01@example.com"
+    address_line_1 = "221B Baker Street"
+    city = "Paris"
+    postal_code = "75001"
+    country = "France"
+    phone = "5551234567"
+
+    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    product_page = catalog_page.open_product_by_name(product_name)
+    cart_page = product_page.add_to_cart().go_to_cart()
+
+    checkout_page = cart_page.proceed_to_checkout()
+    checkout_page.check_structure()
+
+    checkout_page.check_personal_info_structure()
+    checkout_page.fill_personal_info(first_name=first_name, last_name=last_name, email=email)
+
+    checkout_page.check_addresses_structure()
+    checkout_page.fill_address(address_line_1=address_line_1, city=city, postal_code=postal_code, country=country, phone=phone, state=None)
+
+    checkout_page.check_shipping_method_structure()
+    checkout_page.fill_shipping_method(name="My carrier")
 
 
-@allure.suite("PrestaShop storefront - Checkout (Guest)")
-@allure.title("Enter shipping information")
-@pytest.mark.skip(reason="Work in progress")
-def test_enter_shipping_information(prestashop_home_page, profile):
-    # Work in progress
-    pass
-
-
-@allure.suite("PrestaShop storefront - Checkout (Guest)")
-@allure.title("Select shipping method")
-@pytest.mark.skip(reason="Work in progress")
-def test_select_shipping_method(prestashop_home_page, profile):
-    # Work in progress
-    pass
-
-
-@allure.suite("PrestaShop storefront - Checkout (Guest)")
-@allure.title("Select payment method")
-@pytest.mark.skip(reason="Work in progress")
-def test_select_payment_method(prestashop_home_page, profile):
-    # Work in progress
-    pass
-
-
-@allure.suite("PrestaShop storefront - Checkout (Guest)")
-@allure.title("Review order summary")
-@pytest.mark.skip(reason="Work in progress")
-def test_review_order_summary(prestashop_home_page, profile):
-    # Work in progress
-    pass
+    checkout_page.check_payment_structure()
 
