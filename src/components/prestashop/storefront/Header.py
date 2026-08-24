@@ -61,7 +61,7 @@ class Header:
             category_links = self.page.locator("#top-menu .category > a")
 
         with self.page.expect_navigation(wait_until="domcontentloaded"):
-            category_links.filter(has_text=name).click()
+            category_links.filter(has_text=name).first.click()
         return self
 
     def click_cart(self):
