@@ -1,6 +1,7 @@
 import re
 
 from helpers.prestashop.ProductSpec import ProductSpec
+from pages.prestashop.storefront.CheckoutPage import CheckoutPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
@@ -18,6 +19,7 @@ class CartPage(BaseStorefrontPage):
         self.cart_total_value = page.locator(".cart-summary-line.cart-total .value")
         self.empty_cart_message = page.locator(".no-items")
         self.continue_shopping_link = page.get_by_role("link", name="Continue shopping")
+        self.proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
@@ -83,10 +85,14 @@ class CartPage(BaseStorefrontPage):
 
     def continue_shopping(self):
         attach_screenshot(self.page, "Continuing shopping from cart page")
-        with self.page.expect_navigation(wait_until="domcontentloaded"):
-            self.continue_shopping_link.click()
+        self.continue_shopping_link.click()
         # avoiding circular imports
         return self.as_home_page()
+
+    def proceed_to_checkout(self):
+        attach_screenshot(self.page, "Proceeding from cart to checkout")
+        self.proceed_to_checkout_link.click()
+        return CheckoutPage(self.page).verify_loaded()
 
     def verify_products_subtotal(self, expected_subtotal):
         expect(self.cart_products_subtotal_value).to_have_text(f"€{expected_subtotal}")
