@@ -144,7 +144,7 @@ class CheckoutPage(BaseStorefrontPage):
 
     def fill_shipping_method(self, name):
         attach_screenshot(self.page, "Selecting shipping method")
-        shipping_option = self.delivery_options.filter(has=self.page.get_by_text(name)).first
+        shipping_option = self.delivery_options.filter(has=self.page.get_by_text(name))
 
         # waiting for ajax request to be finished before clicking 'continue'
         with expect_response(self.page, "action=selectDeliveryOption"):
@@ -162,7 +162,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.place_order_button).to_be_visible()
         return self
 
-    def select_payment_method(self, method_name=None):
+    def select_payment_method(self, method_name):
         attach_screenshot(self.page, "Selecting payment method")
 
         method = self.payment_options.filter(has=self.page.get_by_text(method_name))

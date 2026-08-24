@@ -63,8 +63,8 @@ class OrderConfirmationPage(BaseStorefrontPage):
         return self
 
     def _verify_summary_row_amount(self, row_label, expected_amount):
-        row = self.order_summary_table.locator("tr", has_text=row_label).first
-        amount = row.locator("td").last.inner_text().replace("€", "")
+        row = self.order_summary_table.locator("tr", has_text=row_label)
+        amount = row.locator("td").last.inner_text().replace("€", "").replace("\u00a0", "").strip()
         if not abs(float(amount) - float(expected_amount)) < 0.01:
             raise AssertionError(
                 f"Expected amount {expected_amount} was not found in row '{row_label}'. "

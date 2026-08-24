@@ -27,7 +27,7 @@ class ProductPage(BaseStorefrontPage):
         self.product_details_tab_panel = page.get_by_test_id("product-details")
         self.in_stock = page.locator(".product-quantities span")
 
-        self.short_description = self.product_information.locator("p").filter(has_text=re.compile(r"\S")).first
+        self.short_description = self.product_information.locator("p").filter(has_text=re.compile(r"\S"))
 
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
 
@@ -224,9 +224,7 @@ class ProductPage(BaseStorefrontPage):
         return CatalogPage(self.page).verify_loaded()
 
     def _color_option(self, color):
-        return self.page.locator(
-            f".input-color[title='{color}'], .input-color[aria-label='{color}']"
-        ).first
+        return self.page.locator(f".input-color[title='{color}'], .input-color[aria-label='{color}']")
 
     def _cart_items_count_text(self, count):
         if count == 1:

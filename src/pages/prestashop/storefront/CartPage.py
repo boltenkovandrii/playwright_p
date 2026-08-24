@@ -19,7 +19,7 @@ class CartPage(BaseStorefrontPage):
         self.cart_total_value = page.locator(".cart-summary-line.cart-total .value")
         self.empty_cart_message = page.locator(".no-items")
         self.continue_shopping_link = page.get_by_role("link", name="Continue shopping")
-        self.proceed_to_checkout_link = self.page.locator(".checkout a, .checkout button").first
+        self.proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
