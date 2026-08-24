@@ -29,10 +29,7 @@ correct change required to satisfy the request.
 - Do not introduce new abstractions unless there is a concrete reason.
 - Prefer existing reusable Page Objects and components over direct locator usage.
 - Use locators only in Page Objects or components, not in the test itself.
-- Prefer using id and get_by_test_id() for locating the elements ('id' is default test identification for the project)
-- Use semantic or accessibility locators when test IDs are unavailable.
-- Prefer stable user-facing locators, when available.
-- Use XPath only when there is a concrete reason and simpler locators are unsuitable.
+
 - Use Playwright auto-waiting and web-first assertions.
 - Do not add explicit navigation waits around ordinary link/button clicks unless there is a concrete reason.
 - Do not use deprecated Playwright APIs.
@@ -42,6 +39,21 @@ correct change required to satisfy the request.
 - Prefer user-facing behavior and meaningful acceptance criteria over implementation-detail assertions.
 - Keep tests independent and avoid relying on state created by other tests.
 - Use existing utilities for screenshots, reporting, and common functionality rather than duplicating them.
+
+### Locator decision rule
+
+- When adding or modifying a locator:
+1. Inspect the relevant HTML and accessibility structure.
+2. Look for an existing `data-testid`.
+3. Look for a meaningful accessible role/name/label.
+4. Look for a stable HTML `id`.
+5. Look for another stable user-facing attribute.
+6. Only then use a CSS selector.
+7. Use XPath only if none of the above can reliably identify the element.
+
+- Do not create broad fallback selectors to accommodate uncertainty.
+- Do not use `.first`, `.last`, or `.nth()` merely to resolve strict-mode  violations.
+- If multiple DOM variants are genuinely supported, make that variation explicit and explain why the locator needs to handle it.
 
 ## Avoid
 

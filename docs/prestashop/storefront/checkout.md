@@ -25,13 +25,16 @@ Verify that a guest user can open the checkout flow and go through it without be
 11. Validate shipping method section structure
 12. Fill shipping method section with valid data and continue to the next step.
 13. Validate payment section structure
+14. Select a payment method and finish placing order.
+15. Validate order confirmation page structure and content.
 
 **Expected result**
 
 - The checkout page is displayed.
 - The checkout flow steps show the expected guest-checkout context.
 - Core checkout blocks are present, such as personal information, address/shipping section and shipping method section.
-- The page is usable for continuing the guest checkout flow.
+- The page is usable for the guest checkout flow.
+- After placing the order, the order confirmation page is displayed with the correct information.
 
 **Coverage**
 
