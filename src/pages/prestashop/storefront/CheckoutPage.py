@@ -1,9 +1,11 @@
 import re
 
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage
 from playwright.sync_api import expect
 
 from utils.allure_reporting import attach_screenshot
+from utils.network_helper import expect_response
 
 
 class CheckoutPage(BaseStorefrontPage):
@@ -44,6 +46,12 @@ class CheckoutPage(BaseStorefrontPage):
         self.delivery_options = self.shipping_step.locator(".js-delivery-option")
         self.shipping_option_radios = self.shipping_step.locator("input[type='radio'][name^='delivery_option']")
         self.shipping_continue_button = self.shipping_step.get_by_role("button", name="Continue")
+
+        self.payment_options = self.payment_step.locator(".payment-option")
+        self.payment_option_radios = self.payment_step.locator("input[name='payment-option']")
+        self.terms_checkbox = self.payment_step.locator("input[id='conditions_to_approve[terms-and-conditions]']")
+        self.place_order_button = self.payment_step.get_by_role("button", name="Place order")
+
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Checkout page")
@@ -139,12 +147,9 @@ class CheckoutPage(BaseStorefrontPage):
         shipping_option = self.delivery_options.filter(has=self.page.get_by_text(name)).first
 
         # waiting for ajax request to be finished before clicking 'continue'
-        with self.page.expect_response(
-                lambda response:
-                "action=selectDeliveryOption" in response.url
-                and response.ok
-        ):
+        with expect_response(self.page, "action=selectDeliveryOption"):
             shipping_option.locator("input[type='radio']").check()
+
         self.shipping_continue_button.click()
         return self
 
@@ -152,7 +157,31 @@ class CheckoutPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Checking payment step structure")
         expect(self.payment_step).to_be_visible()
         expect(self.payment_heading).to_be_visible()
+        expect(self.payment_option_radios.first).to_be_visible()
+        expect(self.terms_checkbox).to_be_visible()
+        expect(self.place_order_button).to_be_visible()
         return self
+
+    def select_payment_method(self, method_name=None):
+        attach_screenshot(self.page, "Selecting payment method")
+
+        method = self.payment_options.filter(has=self.page.get_by_text(method_name))
+        payment_radio = method.locator("input[type='radio'][name='payment-option']")
+        payment_radio.check()
+        expect(payment_radio).to_be_checked()
+        return self
+
+    def accept_terms(self):
+        attach_screenshot(self.page, "Accepting terms and conditions")
+        if not self.terms_checkbox.is_checked():
+            self.terms_checkbox.check()
+        expect(self.terms_checkbox).to_be_checked()
+        return self
+
+    def place_order(self):
+        attach_screenshot(self.page, "Placing order")
+        self.place_order_button.click()
+        return OrderConfirmationPage(self.page).verify_loaded()
 
 
 
