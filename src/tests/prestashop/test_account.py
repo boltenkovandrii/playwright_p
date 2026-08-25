@@ -3,7 +3,7 @@ import pytest
 
 
 @allure.suite("PrestaShop storefront - Customer Account")
-@allure.title("Open login page")
+@allure.title("Login page structure")
 @pytest.mark.skip(reason="Work in progress")
 def test_open_login_page(prestashop_home_page):
     # Work in progress
@@ -11,7 +11,7 @@ def test_open_login_page(prestashop_home_page):
 
 
 @allure.suite("PrestaShop storefront - Customer Account")
-@allure.title("Open registration page")
+@allure.title("Registration page structure")
 @pytest.mark.skip(reason="Work in progress")
 def test_open_registration_page(prestashop_home_page):
     # Work in progress
