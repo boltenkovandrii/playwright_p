@@ -9,6 +9,8 @@ class Footer:
     def __init__(self, page):
         self.page = page
         self.container = page.locator("#footer")
+        self.account_infos = self.page.get_by_test_id("block_myaccount_infos")
+        self.sign_out_link = self.account_infos.get_by_role("link", name="Sign out")
 
     def verify_loaded(self):
         expect(self.container).to_be_visible()
@@ -23,4 +25,10 @@ class Footer:
         expect(self.container).to_match_aria_snapshot(
             load_snapshot(snapshot_name, namespace="prestashop")
         )
+        return self
+
+    def sign_out(self):
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            self.account_infos.click()
+        self.sign_out_link.click()
         return self
