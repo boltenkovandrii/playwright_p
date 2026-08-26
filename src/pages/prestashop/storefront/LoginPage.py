@@ -64,8 +64,3 @@ class LoginPage(BaseStorefrontPage):
         expect(self.login_error_message).to_be_visible()
         expect(self.login_error_message).to_have_text(message)
         return self
-
-
-
-
-
