@@ -88,6 +88,11 @@ class BaseStorefrontPage(BasePage):
         # could be redirected to various pages, so returning generic object
         return BaseStorefrontPage(self.page).verify_loaded()
 
+    def navigate_to_account_dashboard_directly(self):
+        """Navigate directly to the account dashboard URL to test redirect behaviour for unauthenticated users."""
+        self.page.goto(f"{self.BASE_URL}my-account")
+        return BaseStorefrontPage(self.page).verify_loaded()
+
     def as_home_page(self):
         # Lazy import to avoid circular import from page
         from pages.prestashop.storefront.HomePage import HomePage
@@ -98,7 +103,7 @@ class BaseStorefrontPage(BasePage):
         from pages.prestashop.storefront.LoginPage import LoginPage
         return LoginPage(self.page).verify_loaded()
 
-    def navigate_to_account_dashboard_directly(self):
-        """Navigate directly to the account dashboard URL to test redirect behaviour for unauthenticated users."""
-        self.page.goto(f"{self.BASE_URL}my-account")
-        return BaseStorefrontPage(self.page).verify_loaded()
+    def as_registration_page(self):
+        # Lazy import to avoid circular import from page
+        from pages.prestashop.storefront.RegistrationPage import RegistrationPage
+        return RegistrationPage(self.page).verify_loaded()

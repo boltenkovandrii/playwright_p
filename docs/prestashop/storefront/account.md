@@ -12,7 +12,7 @@ Verify that the login page opens correctly and all key UI elements are present.
 **Scenario**
 
 1. Open the storefront home page.
-2. Navigate to the login page via the account menu.
+2. Navigate to the login page via the header menu.
 3. Inspect the login page structure.
 
 **Expected result**
@@ -51,13 +51,14 @@ Verify that the account registration page opens correctly and all key UI element
 **Scenario**
 
 1. Open the storefront home page.
-2. Navigate to the registration page via the account menu.
-3. Inspect the registration page structure.
+2. Navigate to the login page via the header menu.
+3. Navigate to the registration page.
+4. Inspect the registration page structure.
 
 **Expected result**
 
 - The registration page is displayed.
-- The page heading "Registration" is visible.
+- The page heading "Create an account" is visible.
 - Input fields for first name, last name, email, password and birthday are present as well as social title radio buttons and checkboxes for offers\privacy policy\newsletter\data privacy.
 - A submit button to create the account is visible.
 - The header and footer are present.
@@ -97,13 +98,16 @@ Verify that the login form correctly handles invalid credentials and allows a su
 7. Observe the error message.
 8. Enter the correct credentials (`pub@prestashop.com` / `123456789`) and submit.
 9. Observe the resulting page.
+10. Attempt to navigate to an authenticated page (e.g., account dashboard) and confirm access.
+11. Check that the header or account menu reflects the logged-in state (e.g., customer name is visible).
 
 **Expected result**
 
 - Submitting with empty fields shows required-field validation messages (inline or summary).
 - Using a non-existent email shows an authentication error.
 - Using the correct email with a wrong password shows an authentication error.
-- Using valid credentials successfully logs in and redirects to the account dashboard or home page.
+- Using valid credentials successfully logs in and redirects to the home page.
+- User can navigate to the authenticated pages - i.e. account dashboard.
 - After login, the account menu or header reflects the logged-in state (e.g., customer name is visible).
 
 **Coverage**
@@ -136,12 +140,13 @@ Verify that the registration form correctly validates required fields and input 
 1. Open the registration page.
 2. Submit the form with all fields empty.
 3. Observe validation feedback.
-4. Enter an invalid email format and a short/invalid password, then submit.
+4. Enter an invalid email format then submit.
 5. Observe the validation messages.
 6. Enter an email address that is already registered (e.g., `pub@prestashop.com`), fill in remaining fields with valid data, and submit.
 7. Observe the error message.
 8. Fill in all fields with valid, unique data and submit.
 9. Observe the resulting page.
+10. Try to navigate to the authenticated pages - i.e. account dashboard.
 
 **Expected result**
 
@@ -149,7 +154,8 @@ Verify that the registration form correctly validates required fields and input 
 - An invalid email format triggers an email validation error.
 - A password that does not meet the minimum requirements triggers a password validation error.
 - Using an already-registered email address shows an error indicating the account already exists.
-- Submitting valid unique data creates the account and redirects to the account area or home page.
+- Submitting valid unique data creates the account and redirects to the home page.
+- User can navigate to the authenticated pages - i.e. account dashboard.
 
 **Coverage**
 
@@ -188,7 +194,7 @@ Verify that a logged-in user can successfully sign out and is returned to an una
 
 **Expected result**
 
-- After clicking "Sign out", the user is redirected to the home page or login page.
+- After clicking "Sign out", the user is logged out
 - The header no longer shows the logged-in customer name.
 - The sign-in link is visible again in the header or account menu.
 - Navigating directly to the account dashboard URL redirects the user to the login page (access is protected).
