@@ -62,6 +62,12 @@ class BaseStorefrontPage(BasePage):
         from pages.prestashop.storefront.LoginPage import LoginPage
         return LoginPage(self.page).verify_loaded()
 
+    def open_account_page(self):
+        attach_screenshot(self.page, "Opening to account page")
+        self.header.open_account_page()
+        from pages.prestashop.storefront.AccountDashboardPage import AccountDashboardPage
+        return AccountDashboardPage(self.page).verify_loaded()
+
     def sign_out(self):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             return self.sign_out_with_footer_link()
