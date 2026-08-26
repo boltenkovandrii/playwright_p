@@ -80,13 +80,13 @@ class BaseStorefrontPage(BasePage):
             raise ValueError("Signing out with header link is not possible for the current screen width. Use footer menu instead.")
         self.header.sign_out()
         # could be redirected to various pages, so returning generic object
-        return BaseStorefrontPage(self.page)
+        return BaseStorefrontPage(self.page).verify_loaded()
 
     def sign_out_with_footer_link(self):
         attach_screenshot(self.page, "Signing out with footer link")
         self.footer.sign_out()
         # could be redirected to various pages, so returning generic object
-        return BaseStorefrontPage(self.page)
+        return BaseStorefrontPage(self.page).verify_loaded()
 
     def as_home_page(self):
         # Lazy import to avoid circular import from page
@@ -97,3 +97,8 @@ class BaseStorefrontPage(BasePage):
         # Lazy import to avoid circular import from page
         from pages.prestashop.storefront.LoginPage import LoginPage
         return LoginPage(self.page).verify_loaded()
+
+    def navigate_to_account_dashboard_directly(self):
+        """Navigate directly to the account dashboard URL to test redirect behaviour for unauthenticated users."""
+        self.page.goto(f"{self.BASE_URL}my-account")
+        return BaseStorefrontPage(self.page).verify_loaded()
