@@ -27,7 +27,7 @@ def test_login_validation(prestashop_home_page):
     login_page = prestashop_home_page.open().open_login_page()
 
     login_page.login_with_invalid("", "")
-    login_page.verify_email_error("Please fill out this field.")
+    login_page.verify_email_error()
 
     login_page.login_with_invalid("nonexistent.user@example.com", "anypassword")
     login_page.verify_error_message("Authentication failed.")
@@ -48,7 +48,7 @@ def test_registration_validation(prestashop_home_page):
 
     # Submit the form with all fields empty.
     registration_page = registration_page.submit().as_registration_page()
-    registration_page.verify_first_name_error("Please fill out this field.")
+    registration_page.verify_first_name_error()
 
     # Enter an invalid email format then submit.
     registration_page =registration_page.fill_with(
@@ -57,7 +57,7 @@ def test_registration_validation(prestashop_home_page):
         email="not-an-email",
         password="x",
     ).submit().as_registration_page()
-    login_page.verify_email_error("Please include an '@' in the email address. 'not-an-email' is missing an '@'.")
+    login_page.verify_email_error()
 
     # Entering an email address that is already registered
     registration_page = registration_page.fill_with(

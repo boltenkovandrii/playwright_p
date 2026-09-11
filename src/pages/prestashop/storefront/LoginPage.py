@@ -55,9 +55,9 @@ class LoginPage(BaseStorefrontPage):
         self.submit_button.click()
         return self
 
-    def verify_email_error(self, message):
+    def verify_email_error(self):
+        # Don't check error message itself - it is browser-dependent and de-facto is not prestashop functionality
         expect(self.email_input).to_have_js_property("validity.valid", False)
-        expect(self.email_input).to_have_js_property("validationMessage", message)
         return self
 
     def verify_error_message(self, message):
