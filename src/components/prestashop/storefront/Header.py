@@ -16,6 +16,9 @@ class Header:
         self.mobile_cart = page.locator("#_mobile_cart")
         self.desktop_cart_products_count = self.desktop_cart.locator(".cart-products-count")
         self.mobile_cart_products_count = self.mobile_cart.locator(".cart-products-count")
+        self.account_link = self.page.locator(".account")
+        self.desktop_user_info = page.locator("#_desktop_user_info")
+        self.mobile_user_info = page.locator("#_mobile_user_info")
 
     def verify_loaded(self):
         expect(self.container).to_be_visible()
@@ -60,13 +63,11 @@ class Header:
         else:
             category_links = self.page.locator("#top-menu .category > a")
 
-        with self.page.expect_navigation(wait_until="domcontentloaded"):
-            category_links.filter(has_text=name).first.click()
+        category_links.filter(has_text=name).first.click()
         return self
 
     def click_cart(self):
-        with self.page.expect_navigation(wait_until="domcontentloaded"):
-            self.desktop_cart.locator("a").click()
+        self.desktop_cart.locator("a").click()
         return self
 
     def verify_cart_count(self, expected_count):
@@ -83,6 +84,33 @@ class Header:
 
     def search(self, query):
         self.search_input.fill(query)
-        with self.page.expect_navigation(wait_until="domcontentloaded"):
-            self.search_input.press("Enter")
+        self.search_input.press("Enter")
         return self
+
+    def open_account_page(self):
+        self._active_user_info().locator(".account").click()
+        return self
+
+    def verify_logged_in(self):
+        expect(self._active_user_info().locator(".account")).to_be_visible()
+        return self
+
+    def verify_not_logged_in(self):
+        expect(self._active_user_info().locator(".account")).not_to_be_visible()
+        return self
+
+    def get_account_name(self):
+        return self._active_user_info().locator(".account span").text_content().strip()
+
+    def open_login_page(self):
+        self._active_user_info().locator("a").first.click()
+        return self
+
+    def sign_out(self):
+        self._active_user_info().locator(".logout").click()
+        return self
+
+    def _active_user_info(self):
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            return self.mobile_user_info
+        return self.desktop_user_info
