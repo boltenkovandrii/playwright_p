@@ -142,11 +142,13 @@ Verify that the registration form correctly validates required fields and input 
 3. Observe validation feedback.
 4. Enter an invalid email format then submit.
 5. Observe the validation messages.
-6. Enter an email address that is already registered (e.g., `pub@prestashop.com`), fill in remaining fields with valid data, and submit.
-7. Observe the error message.
-8. Fill in all fields with valid, unique data and submit.
-9. Observe the resulting page.
-10. Try to navigate to the authenticated pages - i.e. account dashboard.
+6. Enter valid email, but a password that does not meet the minimum requirements (e.g., too short), and submit.
+7. Observe the validation messages.
+8. Enter an email address that is already registered (e.g., `pub@prestashop.com`), fill in remaining fields with valid data, and submit.
+9. Observe the error message.
+10. Fill in all fields with valid, unique data and submit.
+11. Observe the resulting page.
+12. Try to navigate to the authenticated pages - i.e. account dashboard.
 
 **Expected result**
 

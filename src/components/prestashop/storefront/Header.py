@@ -88,7 +88,7 @@ class Header:
         return self
 
     def open_account_page(self):
-        self.account_link.click()
+        self._active_user_info().locator(".account").click()
         return self
 
     def verify_logged_in(self):

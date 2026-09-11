@@ -60,6 +60,11 @@ class LoginPage(BaseStorefrontPage):
         expect(self.email_input).to_have_js_property("validity.valid", False)
         return self
 
+    def verify_password_error(self):
+        # Don't check error message itself - it is browser-dependent and de-facto is not prestashop functionality
+        expect(self.password_input).to_have_js_property("validity.valid", False)
+        return self
+
     def verify_error_message(self, message):
         expect(self.login_error_message).to_be_visible()
         expect(self.login_error_message).to_have_text(message)

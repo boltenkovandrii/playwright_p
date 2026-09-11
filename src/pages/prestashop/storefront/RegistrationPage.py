@@ -60,7 +60,7 @@ class RegistrationPage(BaseStorefrontPage):
 
 
     def fill_with(self, first_name="", last_name="", email="", password="", birthday=""):
-        """Fill the specified fields and submit. Checks required consent checkboxes when present.
+        """Fill the specified fields and check required consent checkboxes when present.
         Returns self for error-assertion chaining."""
         attach_screenshot(self.page, "Submitting registration form with partial data")
         if first_name:
