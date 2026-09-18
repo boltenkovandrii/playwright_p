@@ -10,8 +10,8 @@ from utils.responsive import BOOTSTRAP_MD
 
 
 class CatalogPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
         self.heading = page.locator("#js-product-list-header")
         self.subcategory_links = page.locator(".subcategory-name")
@@ -34,12 +34,12 @@ class CatalogPage(BaseStorefrontPage):
     def open_product(self, index):
         attach_screenshot(self.page, "Opening product")
         self.product_grid.product_at(index).open_product()
-        return ProductPage(self.page).verify_loaded()
+        return ProductPage(self.page, self.locale).verify_loaded()
 
     def open_product_by_name(self, name):
         attach_screenshot(self.page, f"Opening product by name: {name}")
         self.product_grid.open_product_by_name(name)
-        return ProductPage(self.page).verify_loaded()
+        return ProductPage(self.page, self.locale).verify_loaded()
 
     def verify_category_name(self, name):
         attach_screenshot(self.page, "Verifying category name")
@@ -62,7 +62,7 @@ class CatalogPage(BaseStorefrontPage):
         attach_screenshot(self.page, f"Sorting by {criteria}")
         sort_link = self.page.locator(".products-sort-order .dropdown-menu a", has_text=criteria)
         self.page.goto(sort_link.get_attribute("href"))
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
     def check_pagination_visible(self, visible):
         attach_screenshot(self.page, "Checking pagination visibility")
@@ -88,7 +88,7 @@ class CatalogPage(BaseStorefrontPage):
             attach_screenshot(self.page, f"Retrying click for page number: {index}")
             link.click()
 
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
 
     def set_results_per_page_with_url(self, results_per_page):
@@ -97,7 +97,7 @@ class CatalogPage(BaseStorefrontPage):
         current_url = self.page.url
         separator = "&" if "?" in current_url else "?"
         self.page.goto(f"{current_url}{separator}resultsPerPage={results_per_page}")
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
     def apply_manufacturer_filter(self, name):
         attach_screenshot(self.page, f"Applying manufacturer filter: {name}")
@@ -106,7 +106,7 @@ class CatalogPage(BaseStorefrontPage):
         expect(manufacturer_link).to_be_visible()
         manufacturer_link.click()
         self._close_mobile_filters_if_needed()
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
     def verify_active_filter_contains(self, text):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
@@ -133,7 +133,7 @@ class CatalogPage(BaseStorefrontPage):
         self._close_mobile_filters_if_needed()
 
         expect(self.active_filters).to_contain_text(re.compile(r"price", re.IGNORECASE))
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
     def _drag_price_slider_handle(self, handle_index, target_value):
         price_facet = self.page.locator(".faceted-slider[data-slider-label='Price']")

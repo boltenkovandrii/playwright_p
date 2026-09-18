@@ -1,5 +1,6 @@
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from tests.config.profiles import is_phone
 from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
@@ -9,6 +10,7 @@ class Header:
     def __init__(self, page):
         self.page = page
         self.container = page.locator("#header")
+        self.language_selector = page.locator("#_desktop_language_selector, #_mobile_language_selector, #language_selector, .language-selector")
         self.menu_button = page.locator("#menu-icon")
         self.mobile_menu = page.locator("#mobile_top_menu_wrapper")
         self.search_input = self.container.locator("#search_widget input[type='text']")
@@ -24,10 +26,39 @@ class Header:
         expect(self.container).to_be_visible()
         return self
 
-    def check_structure(self):
+    def verify_current_language(self, locale):
+        language_toggle = self._language_selector_toggle()
+        expect(language_toggle).to_be_visible()
+        expect(language_toggle).to_contain_text(UI_TEXT[locale]["language"])
+        return self
+
+    def verify_search_placeholder(self, locale):
+        expect(self.search_input).to_have_attribute("placeholder", UI_TEXT[locale]["search_placeholder"])
+        return self
+
+    def open_language_selector(self, _current_locale):
+        attach_screenshot(self.page, "Opening language selector")
+        language_toggle = self._language_selector_toggle()
+        expect(language_toggle).to_be_visible()
+        language_toggle.click()
+        return self
+
+    def select_language(self, current_locale, target_locale):
+        if current_locale == target_locale:
+            return self
+
+        attach_screenshot(self.page, f"Selecting storefront language: {target_locale}")
+        self.open_language_selector(current_locale)
+        target_language = UI_TEXT[target_locale]["language"]
+        with self.page.expect_navigation(wait_until="domcontentloaded"):
+            self.page.get_by_role("link", name=target_language, exact=True).click()
+        return self
+
+    def check_structure(self, locale="en"):
         attach_screenshot(self.container, "Checking header structure", False)
         expect(self.container).to_be_visible()
         expect(self.search_input).to_be_visible()
+        expect(self._language_selector_toggle()).to_be_visible()
 
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             expect(self.menu_button).to_be_visible()
@@ -38,16 +69,25 @@ class Header:
             expect(self.mobile_cart).not_to_be_visible()
             expect(self.desktop_cart).to_be_visible()
 
-        # Not the best check - will break on adding categories, ignores many elements hard to verify. TODO: probably should be replaced with direct checks - will do later.
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
-            snapshot_name = "header_compact"
-        else:
-            snapshot_name = "header"
-        expect(self.container).to_match_aria_snapshot(
-            load_snapshot(snapshot_name, namespace="prestashop")
-        )
+        if locale == "en":
+            # Not the best check - will break on adding categories, ignores many elements hard to verify. TODO: probably should be replaced with direct checks - will do later.
+            if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+                snapshot_name = "header_compact"
+            else:
+                snapshot_name = "header"
+            expect(self.container).to_match_aria_snapshot(
+                load_snapshot(snapshot_name, namespace="prestashop")
+            )
 
         return self
+
+    def _active_language_selector(self):
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            return self.page.locator("#_mobile_language_selector, #language_selector, .language-selector")
+        return self.page.locator("#_desktop_language_selector, #language_selector, .language-selector")
+
+    def _language_selector_toggle(self):
+        return self._active_language_selector().locator(".expand-more, .dropdown-toggle, button, a, .current").first
 
     def open_mobile_menu(self):
         self.menu_button.click()

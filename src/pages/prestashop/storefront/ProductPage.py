@@ -4,12 +4,13 @@ from pages.prestashop.storefront.CartPage import CartPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class ProductPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
         self.product = page.locator("#main")
         self.product_name = page.locator("#main h1")
         self.product_information = page.locator(".product-information")
@@ -19,11 +20,11 @@ class ProductPage(BaseStorefrontPage):
         self.regular_price = page.locator(".product-discount .regular-price")
         self.description_short = page.locator("div[id*='product-description-short-'] p")
 
-        self.description_tab = page.get_by_role("tab", name="Description")
+        self.description_tab = page.get_by_role("tab", name=UI_TEXT[self.locale]["product_description_tab"])
         self.description_tab_panel = page.get_by_test_id("description")
         self.description_full = page.locator(".tab-content .product-description")
 
-        self.product_details_tab = page.get_by_role("tab", name="Product Details")
+        self.product_details_tab = page.get_by_role("tab", name=UI_TEXT[self.locale]["product_details_tab"])
         self.product_details_tab_panel = page.get_by_test_id("product-details")
         self.in_stock = page.locator(".product-quantities span")
 
@@ -39,13 +40,13 @@ class ProductPage(BaseStorefrontPage):
         self.cart_modal_item_count = self.cart_modal.locator(".cart-products-count")
         self.cart_modal_total_value = self.cart_modal.locator(".product-total .value")
         self.cart_modal_subtotal_value = self.cart_modal.locator(".subtotal.value")
-        self.modal_continue_shopping_button = page.get_by_role("button", name="Continue shopping")
-        self.modal_proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
+        self.modal_continue_shopping_button = page.get_by_role("button", name=UI_TEXT[self.locale]["continue_shopping_link"])
+        self.modal_proceed_to_checkout_link = page.get_by_role("link", name=UI_TEXT[self.locale]["proceed_to_checkout_link"])
 
         self.quantity_input = page.get_by_test_id("quantity_wanted")
         self.quantity_increase_button = page.locator(".bootstrap-touchspin-up")
         self.quantity_decrease_button = page.locator(".bootstrap-touchspin-down")
-        self.size_select = page.get_by_label("Size")
+        self.size_select = page.get_by_label(UI_TEXT[self.locale]["product_size_label"])
         self.size_options = self.size_select.locator("option")
         self.selected_size_option = self.size_select.locator("option:checked")
         self.color_options = page.locator(".input-color")
@@ -118,7 +119,7 @@ class ProductPage(BaseStorefrontPage):
 
     def verify_add_to_cart_confirmation(self, expected_product_name, expected_quantity, expected_total, expected_subtotal):
         expect(self.cart_modal).to_be_visible()
-        expect(self.cart_modal_title).to_contain_text("Product successfully added to your shopping cart")
+        expect(self.cart_modal_title).to_contain_text(UI_TEXT[self.locale]["product_added_confirmation"])
         expect(self.cart_modal_product_name).to_have_text(expected_product_name)
         expect(self.cart_modal_product_quantity).to_have_text(str(expected_quantity))
         expect(self.cart_modal_item_count).to_have_text(self._cart_items_count_text(expected_quantity))
@@ -214,19 +215,19 @@ class ProductPage(BaseStorefrontPage):
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.modal_proceed_to_checkout_link.click()
         attach_screenshot(self.page, "After navigating to the cart")
-        return CartPage(self.page).verify_loaded()
+        return CartPage(self.page, self.locale).verify_loaded()
 
     def go_to_category_from_breadcrumb(self, category_name):
         attach_screenshot(self.page, "Going to category from breadcrumb")
         from pages.prestashop.storefront.CatalogPage import CatalogPage
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.page.locator("nav.breadcrumb a").filter(has_text=category_name).click()
-        return CatalogPage(self.page).verify_loaded()
+        return CatalogPage(self.page, self.locale).verify_loaded()
 
     def _color_option(self, color):
         return self.page.locator(f".input-color[title='{color}'], .input-color[aria-label='{color}']")
 
     def _cart_items_count_text(self, count):
         if count == 1:
-            return "There is 1 item in your cart."
-        return f"There are {count} items in your cart."
+            return UI_TEXT[self.locale]["product_added_items_singular"]
+        return UI_TEXT[self.locale]["product_added_items_plural"].format(count=count)

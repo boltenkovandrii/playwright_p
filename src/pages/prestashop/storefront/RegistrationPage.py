@@ -1,13 +1,14 @@
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class RegistrationPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
-        self.heading = page.get_by_role("heading", name="Create an account")
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
+        self.heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["registration_heading"])
         self.social_title_mr = page.get_by_test_id("field-id_gender-1")
         self.social_title_mrs = page.get_by_test_id("field-id_gender-2")
         self.first_name_input = page.get_by_test_id("field-firstname")
@@ -19,7 +20,7 @@ class RegistrationPage(BaseStorefrontPage):
         self.offers_checkbox = page.locator("input[name='optin']")
         self.privacy_checkbox = page.locator("input[name='customer_privacy']")
         self.psgdpr_checkbox = page.locator("input[name='psgdpr']")
-        self.submit_button = page.get_by_role("button", name="Save")
+        self.submit_button = page.get_by_role("button", name=UI_TEXT[self.locale]["registration_submit_button"])
         self.error_alert = page.locator("#notifications .alert-danger")
         self.field_errors = page.locator(".form-group.has-error")
         self.error_message = page.locator(".alert-danger")
@@ -56,7 +57,7 @@ class RegistrationPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Submitting the registration form")
         self.submit_button.click()
         # depending on the input, this may lead to either an error or a successful registration (so we will either stay on current page, or will be redirected to the HomePage)
-        return BaseStorefrontPage(self.page).verify_loaded()
+        return BaseStorefrontPage(self.page, self.locale).verify_loaded()
 
 
     def fill_with(self, first_name="", last_name="", email="", password="", birthday=""):

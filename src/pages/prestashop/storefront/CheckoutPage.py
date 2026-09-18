@@ -4,13 +4,14 @@ from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 from utils.network_helper import expect_response
 
 
 class CheckoutPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
         self.checkout = page.locator("#checkout")
 
         self.subtotal_products = page.get_by_test_id("cart-subtotal-products")
@@ -22,10 +23,10 @@ class CheckoutPage(BaseStorefrontPage):
         self.shipping_step = page.get_by_test_id("checkout-delivery-step")
         self.payment_step = page.get_by_test_id("checkout-payment-step")
 
-        self.personal_info_heading = page.get_by_role("heading", name="Personal Information")
-        self.addresses_heading = page.get_by_role("heading", name="Addresses")
-        self.shipping_heading = page.get_by_role("heading", name="Shipping")
-        self.payment_heading = page.get_by_role("heading", name="Payment")
+        self.personal_info_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_personal_information_heading"])
+        self.addresses_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_addresses_heading"])
+        self.shipping_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_shipping_heading"])
+        self.payment_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_payment_heading"])
 
         self.personal_info_form = self.personal_info_step.locator("#customer-form")
         self.first_name_input = self.personal_info_form.get_by_test_id("field-firstname")
@@ -33,7 +34,7 @@ class CheckoutPage(BaseStorefrontPage):
         self.email_input = self.personal_info_form.get_by_test_id("field-email")
         self.customer_privacy_checkbox = self.personal_info_form.locator("input[name='customer_privacy']")
         self.psgdpr_checkbox = self.personal_info_form.locator("input[name='psgdpr']")
-        self.personal_info_continue_button = self.personal_info_form.get_by_role("button", name="Continue")
+        self.personal_info_continue_button = self.personal_info_form.get_by_role("button", name=UI_TEXT[self.locale]["checkout_continue_button"])
 
         self.address_input = self.addresses_step.get_by_test_id("field-address1")
         self.city_input = self.addresses_step.get_by_test_id("field-city")
@@ -41,16 +42,16 @@ class CheckoutPage(BaseStorefrontPage):
         self.country_select = self.addresses_step.get_by_test_id("field-id_country")
         self.state_select = self.addresses_step.get_by_test_id("field-id_state")
         self.phone_input = self.addresses_step.get_by_test_id("field-phone")
-        self.address_continue_button = self.addresses_step.get_by_role("button", name="Continue")
+        self.address_continue_button = self.addresses_step.get_by_role("button", name=UI_TEXT[self.locale]["checkout_continue_button"])
 
         self.delivery_options = self.shipping_step.locator(".js-delivery-option")
         self.shipping_option_radios = self.shipping_step.locator("input[type='radio'][name^='delivery_option']")
-        self.shipping_continue_button = self.shipping_step.get_by_role("button", name="Continue")
+        self.shipping_continue_button = self.shipping_step.get_by_role("button", name=UI_TEXT[self.locale]["checkout_continue_button"])
 
         self.payment_options = self.payment_step.locator(".payment-option")
         self.payment_option_radios = self.payment_step.locator("input[name='payment-option']")
         self.terms_checkbox = self.payment_step.locator("input[id='conditions_to_approve[terms-and-conditions]']")
-        self.place_order_button = self.payment_step.get_by_role("button", name="Place order")
+        self.place_order_button = self.payment_step.get_by_role("button", name=UI_TEXT[self.locale]["checkout_place_order_button"])
 
 
     def verify_loaded(self):
@@ -181,7 +182,7 @@ class CheckoutPage(BaseStorefrontPage):
     def place_order(self):
         attach_screenshot(self.page, "Placing order")
         self.place_order_button.click()
-        return OrderConfirmationPage(self.page).verify_loaded()
+        return OrderConfirmationPage(self.page, self.locale).verify_loaded()
 
 
 

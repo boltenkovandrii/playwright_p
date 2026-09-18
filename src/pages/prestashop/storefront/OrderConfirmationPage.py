@@ -3,14 +3,15 @@ import re
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class OrderConfirmationPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
         self.confirmation_block = page.get_by_test_id("content-hook_order_confirmation")
-        self.confirmation_heading = self.confirmation_block.get_by_role("heading", name="Your order is confirmed")
+        self.confirmation_heading = self.confirmation_block.get_by_role("heading", name=UI_TEXT[self.locale]["order_confirmation_heading"])
         self.order_items_section = page.get_by_test_id("order-items")
         self.order_items = self.order_items_section.locator(".order-line")
         self.order_summary_table = page.locator(".order-confirmation-table table")
