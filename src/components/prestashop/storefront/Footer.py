@@ -1,4 +1,3 @@
-import pytest
 from playwright.sync_api import expect
 
 from resources.translations import UI_TEXT
@@ -21,16 +20,14 @@ class Footer:
 
     def check_structure(self, locale="en"):
         attach_screenshot(self.container, "Checking footer structure", False)
-        if locale == "en":
-            if self.page.viewport_size["width"] < BOOTSTRAP_MD:
-                snapshot_name = "footer_compact"
-            else:
-                snapshot_name = "footer"
-            expect(self.container).to_match_aria_snapshot(
-                load_snapshot(snapshot_name, namespace="prestashop")
-            )
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            snapshot_name = "footer_compact"
         else:
-            pytest.fail(f"No footer snapshots implemented for language: {locale}")
+            snapshot_name = "footer"
+        # Actual links in the footer could depend on the fact if user is logged in. So snapshots perform only partial (but still substantial) assertion to not make it overcomplicated.
+        expect(self.container).to_match_aria_snapshot(
+            load_snapshot(snapshot_name, locale=locale, namespace="prestashop")
+        )
         return self
 
     def sign_out(self):

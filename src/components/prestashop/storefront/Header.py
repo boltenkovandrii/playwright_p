@@ -69,17 +69,16 @@ class Header:
             expect(self.mobile_cart).not_to_be_visible()
             expect(self.desktop_cart).to_be_visible()
 
-        if locale == "en":
-            # Not the best check - will break on adding categories, ignores many elements hard to verify. TODO: probably should be replaced with direct checks - will do later.
-            if self.page.viewport_size["width"] < BOOTSTRAP_MD:
-                snapshot_name = "header_compact"
-            else:
-                snapshot_name = "header"
-            expect(self.container).to_match_aria_snapshot(
-                load_snapshot(snapshot_name, namespace="prestashop")
-            )
+        # Not the best check - will break on adding categories, ignores many elements hard to verify.
+        # Probably direct checks of the elements would be better. Left as is to demonstrate usage of snapshots
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+            snapshot_name = "header_compact"
+        else:
+            snapshot_name = "header"
+        expect(self.container).to_match_aria_snapshot(
+            load_snapshot(snapshot_name, locale=locale, namespace="prestashop")
+        )
 
-        return self
 
     def _active_language_selector(self):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
