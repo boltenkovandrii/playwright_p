@@ -42,8 +42,8 @@ class BaseStorefrontPage(BasePage):
         self.notifications.verify_loaded()
         return self
 
-    def verify_current_language(self):
-        self.header.verify_current_language(self.locale)
+    def verify_current_language(self, locale):
+        self.header.verify_current_language(locale)
         return self
 
     def verify_search_placeholder(self):

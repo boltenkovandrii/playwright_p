@@ -7,6 +7,7 @@ from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
+# Page object is (almost) not localized. Since existing tests only use english version of the page - consider it is OK. May need to change English strings with UI_TEXT values.
 class OrderConfirmationPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
