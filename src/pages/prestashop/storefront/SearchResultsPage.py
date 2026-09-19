@@ -22,6 +22,14 @@ class SearchResultsPage(BaseStorefrontPage):
         expect(self.heading).to_be_visible()
         return self
 
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+        if self.no_matches_message.is_visible():
+            expect(self.no_matches_message).to_contain_text(UI_TEXT[self.locale]["search_no_matches_message"])
+        else:
+            expect(self.heading).to_be_visible()
+        return self
+
     def check_structure(self):
         attach_screenshot(self.page, "Checking search results page structure")
         super().check_structure()

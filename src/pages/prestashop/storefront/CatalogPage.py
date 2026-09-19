@@ -5,6 +5,7 @@ from pages.prestashop.storefront.ProductPage import ProductPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 
@@ -14,6 +15,12 @@ class CatalogPage(BaseStorefrontPage):
         super().__init__(page, locale)
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
         self.heading = page.locator("#js-product-list-header")
+        self.brand_facet = page.locator(".facet .h6").filter(
+            has_text=re.compile(re.escape(UI_TEXT[self.locale]["catalog_brand_filter_label"]), re.IGNORECASE)
+        )
+        self.supplier_facet = page.locator(".facet .h6").filter(
+            has_text=re.compile(re.escape(UI_TEXT[self.locale]["catalog_supplier_filter_label"]), re.IGNORECASE)
+        )
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.locator("#js-active-search-filters")
         self.page_list = page.locator("nav.pagination ul.page-list")
@@ -23,6 +30,26 @@ class CatalogPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Catalog page")
         super().verify_loaded()
         self.product_grid.verify_loaded()
+        return self
+
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+
+        if self.brand_facet.is_visible():
+            expect(self.brand_facet).to_contain_text(
+                re.compile(re.escape(UI_TEXT[self.locale]["catalog_brand_filter_label"]), re.IGNORECASE)
+            )
+        elif self.supplier_facet.is_visible():
+            expect(self.supplier_facet).to_contain_text(
+                re.compile(re.escape(UI_TEXT[self.locale]["catalog_supplier_filter_label"]), re.IGNORECASE)
+            )
+        else:
+            sort_option = self.page.locator(
+                ".products-sort-order .dropdown-menu a",
+                has_text=UI_TEXT[self.locale]["catalog_sort_sales_desc"],
+            )
+            expect(sort_option).to_have_count(1)
+
         return self
 
     def check_structure(self):

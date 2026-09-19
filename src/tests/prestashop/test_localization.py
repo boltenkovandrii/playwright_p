@@ -41,7 +41,7 @@ def test_preserve_storefront_language_across_core_pages(prestashop_home_page, pr
 
     checkout_page = cart_page.proceed_to_checkout()
     checkout_page.check_structure()
-#    checkout_page.verify_current_language("nl") #checkout page does not have language selector
+    checkout_page.verify_current_language("nl")
 
 
 @allure.suite("PrestaShop storefront - Localization")
@@ -67,7 +67,7 @@ def test_verify_translated_ui(prestashop_home_page, profile):
     cart_page.check_structure()
 
     checkout_page = cart_page.proceed_to_checkout()
-#    checkout_page.verify_current_language("nl") #checkout page does not have language selector
+    checkout_page.verify_current_language("nl")
     checkout_page.check_structure()
 
     login_page = prestashop_home_page.open().switch_language("nl").open_login_page()

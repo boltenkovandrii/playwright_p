@@ -35,6 +35,11 @@ class RegistrationPage(BaseStorefrontPage):
         expect(self.heading).to_be_visible()
         return self
 
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+        expect(self.heading).to_be_visible()
+        return self
+
     def check_structure(self):
         attach_screenshot(self.page, "Checking registration page structure")
         super().check_structure()

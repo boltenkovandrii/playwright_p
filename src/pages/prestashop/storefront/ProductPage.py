@@ -57,6 +57,13 @@ class ProductPage(BaseStorefrontPage):
         expect(self.product).to_be_visible()
         return self
 
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+        expect(self.description_tab).to_be_visible()
+        expect(self.product_details_tab).to_be_visible()
+        expect(self.size_select).to_be_visible()
+        return self
+
     def check_structure(self):
         attach_screenshot(self.page, "Checking product page structure")
         super().check_structure()

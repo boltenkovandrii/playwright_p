@@ -62,6 +62,14 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.personal_info_step).to_be_visible()
         return self
 
+    def verify_current_language(self, locale):
+        expect(self.personal_info_heading).to_be_visible()
+        expect(self.addresses_heading).to_be_visible()
+        expect(self.shipping_heading).to_be_visible()
+        expect(self.payment_heading).to_be_visible()
+        expect(self.personal_info_continue_button).to_be_visible()
+        return self
+
     def check_structure(self):
         attach_screenshot(self.page, "Checking checkout page structure")
         self.header.verify_loaded()

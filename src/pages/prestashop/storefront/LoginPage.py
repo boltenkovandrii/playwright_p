@@ -1,5 +1,3 @@
-import re
-
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
@@ -25,6 +23,11 @@ class LoginPage(BaseStorefrontPage):
     def verify_loaded(self):
         attach_screenshot(self.page, "Login page")
         super().verify_loaded()
+        expect(self.heading).to_be_visible()
+        return self
+
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
         expect(self.heading).to_be_visible()
         return self
 

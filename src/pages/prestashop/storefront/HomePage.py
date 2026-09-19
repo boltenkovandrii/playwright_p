@@ -7,6 +7,7 @@ from pages.prestashop.storefront.ProductPage import ProductPage
 from playwright.sync_api import expect
 
 from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
@@ -14,6 +15,7 @@ class HomePage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
         self.carousel = page.locator("#carousel")
+        self.featured_products_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["featured_products_heading"])
         self.featured_products = ProductGrid(page.locator(".featured-products"))
 
     def open(self, path=""):
@@ -25,6 +27,11 @@ class HomePage(BaseStorefrontPage):
         super().verify_loaded()
         expect(self.carousel).to_be_visible()
         self.featured_products.verify_loaded()
+        return self
+
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+        expect(self.featured_products_heading).to_be_visible()
         return self
 
     def check_structure(self):
