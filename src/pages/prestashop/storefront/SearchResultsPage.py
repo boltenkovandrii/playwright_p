@@ -15,6 +15,7 @@ class SearchResultsPage(BaseStorefrontPage):
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
         self.page_list = page.locator("nav.pagination ul.page-list")
         self.no_matches_message = page.get_by_test_id("product-search-no-matches")
+        self.search_results_header = page.get_by_test_id("js-product-list-header")
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Search results page")
@@ -24,10 +25,7 @@ class SearchResultsPage(BaseStorefrontPage):
 
     def verify_current_language(self, locale):
         super().verify_current_language(locale)
-        if self.no_matches_message.is_visible():
-            expect(self.no_matches_message).to_contain_text(UI_TEXT[self.locale]["search_no_matches_message"])
-        else:
-            expect(self.heading).to_be_visible()
+        expect(self.search_results_header).to_contain_text(UI_TEXT[self.locale]["search_results_header"])
         return self
 
     def check_structure(self):

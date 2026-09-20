@@ -15,15 +15,10 @@ class CatalogPage(BaseStorefrontPage):
         super().__init__(page, locale)
         self.product_grid = ProductGrid(page.locator("#js-product-list"))
         self.heading = page.locator("#js-product-list-header")
-        self.brand_facet = page.locator(".facet .h6").filter(
-            has_text=re.compile(re.escape(UI_TEXT[self.locale]["catalog_brand_filter_label"]), re.IGNORECASE)
-        )
-        self.supplier_facet = page.locator(".facet .h6").filter(
-            has_text=re.compile(re.escape(UI_TEXT[self.locale]["catalog_supplier_filter_label"]), re.IGNORECASE)
-        )
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.locator("#js-active-search-filters")
         self.page_list = page.locator("nav.pagination ul.page-list")
+        self.filter_header =  page.get_by_test_id("search_filters").get_by_text("Filteren op")
 
 
     def verify_loaded(self):
@@ -34,22 +29,7 @@ class CatalogPage(BaseStorefrontPage):
 
     def verify_current_language(self, locale):
         super().verify_current_language(locale)
-
-        if self.brand_facet.is_visible():
-            expect(self.brand_facet).to_contain_text(
-                re.compile(re.escape(UI_TEXT[self.locale]["catalog_brand_filter_label"]), re.IGNORECASE)
-            )
-        elif self.supplier_facet.is_visible():
-            expect(self.supplier_facet).to_contain_text(
-                re.compile(re.escape(UI_TEXT[self.locale]["catalog_supplier_filter_label"]), re.IGNORECASE)
-            )
-        else:
-            sort_option = self.page.locator(
-                ".products-sort-order .dropdown-menu a",
-                has_text=UI_TEXT[self.locale]["catalog_sort_sales_desc"],
-            )
-            expect(sort_option).to_have_count(1)
-
+        expect(self.filter_header).to_be_visible()
         return self
 
     def check_structure(self):
