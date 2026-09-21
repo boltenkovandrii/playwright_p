@@ -30,4 +30,4 @@ class ProductGrid:
         return [self.product_at(index).get_price() for index in range(self.cards.count())]
 
     def open_product_by_name(self, name):
-        ProductCard(self.cards.filter(has_text=name)).open_product()
+        ProductCard(self.cards.filter(has_text=name).first).open_product()
