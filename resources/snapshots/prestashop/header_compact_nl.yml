@@ -1,7 +1,5 @@
 - navigation:
   - text: /( \(\d\))?/
-  - link "":
-    - /url: /.*/nl/aanmelden\?back=.*/
 - status
 - textbox "Zoeken":
   - /placeholder: Doorzoek onze catalogus

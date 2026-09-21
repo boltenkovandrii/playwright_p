@@ -18,7 +18,7 @@ class CatalogPage(BaseStorefrontPage):
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.locator("#js-active-search-filters")
         self.page_list = page.locator("nav.pagination ul.page-list")
-        self.filter_header =  page.get_by_test_id("search_filters").get_by_text("Filteren op")
+        self.brands_header =  page.get_by_role("link", name=UI_TEXT[locale]["catalog_brands_header"])
 
 
     def verify_loaded(self):
@@ -29,7 +29,7 @@ class CatalogPage(BaseStorefrontPage):
 
     def verify_current_language(self, locale):
         super().verify_current_language(locale)
-        expect(self.filter_header).to_be_visible()
+        expect(self.brands_header).to_be_visible()
         return self
 
     def check_structure(self):
