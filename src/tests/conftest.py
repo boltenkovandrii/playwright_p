@@ -5,7 +5,6 @@ from utils.allure_reporting import attach_screenshot, attach_playwright_artifact
 
 
 pytest_plugins = [
-    "fixtures.pages",
     "fixtures.locale",
     "fixtures.profile",
     "fixtures.prestashop.pages",
