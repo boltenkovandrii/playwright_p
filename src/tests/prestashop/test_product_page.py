@@ -27,16 +27,9 @@ def test_view_product_information(prestashop_home_page, profile):
                                          "The sublimation textile printing process provides an exceptional color rendering and a color, guaranteed overtime.")
 
 
-@allure.suite("PrestaShop storefront - Product Details")
-@allure.title("Browse product images")
-@pytest.mark.skip(reason="Work in progress")
-def test_browse_product_images(prestashop_home_page, profile):
-    # Work in progress
-    pass
-
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("PDP-04 — Change product quantity")
+@allure.title("PDP-03 — Change product quantity")
 def test_change_product_quantity(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
@@ -68,7 +61,7 @@ def test_change_product_quantity(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("PDP-05 — Select product combination")
+@allure.title("PDP-04 — Select product combination")
 def test_select_product_combination(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
@@ -92,7 +85,7 @@ def test_select_product_combination(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("PDP-06 — Add product to cart")
+@allure.title("PDP-05 — Add product to cart")
 def test_add_product_to_cart(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -106,7 +99,7 @@ def test_add_product_to_cart(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("PDP-07 — Continue shopping after adding a product")
+@allure.title("PDP-06 — Continue shopping after adding a product")
 def test_continue_shopping_after_adding_a_product(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 
@@ -131,7 +124,7 @@ def test_continue_shopping_after_adding_a_product(prestashop_home_page, profile)
 
 
 @allure.suite("PrestaShop storefront - Product Details")
-@allure.title("PDP-08 — Navigate to cart from the confirmation dialog")
+@allure.title("PDP-07 — Navigate to cart from the confirmation dialog")
 def test_navigate_to_cart_from_confirmation_dialog(prestashop_home_page, profile):
     product_name = "Hummingbird printed t-shirt"
 

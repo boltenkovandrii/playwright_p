@@ -5,8 +5,8 @@ from pages.prestashop.storefront.HomePage import HomePage
 
 
 @pytest.fixture
-def prestashop_home_page(page):
-    return HomePage(page)
+def prestashop_home_page(page, locale):
+    return HomePage(page, locale)
 
 
 @pytest.fixture

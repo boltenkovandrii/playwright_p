@@ -5,12 +5,13 @@ from pages.prestashop.storefront.CheckoutPage import CheckoutPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class CartPage(BaseStorefrontPage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, locale="en"):
+        super().__init__(page, locale)
         self.cart = page.locator(".cart-grid")
         self.cart_items = page.locator(".cart-items .cart-item")
         self.cart_item_product_names = self.cart_items.locator(".product-line-info a.label")
@@ -18,13 +19,19 @@ class CartPage(BaseStorefrontPage):
         self.cart_products_subtotal_value = page.locator("#cart-subtotal-products .value")
         self.cart_total_value = page.locator(".cart-summary-line.cart-total .value")
         self.empty_cart_message = page.locator(".no-items")
-        self.continue_shopping_link = page.get_by_role("link", name="Continue shopping")
-        self.proceed_to_checkout_link = page.get_by_role("link", name="Proceed to checkout")
+        self.continue_shopping_link = page.get_by_role("link", name=UI_TEXT[self.locale]["continue_shopping_link"])
+        self.proceed_to_checkout_link = page.get_by_role("link", name=UI_TEXT[self.locale]["proceed_to_checkout_link"])
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
         expect(self.page.locator("#cart")).to_be_visible()
+        return self
+
+    def verify_current_language(self, locale):
+        super().verify_current_language(locale)
+        expect(self.continue_shopping_link).to_be_visible()
+        expect(self.proceed_to_checkout_link).to_be_visible()
         return self
 
     def check_structure(self):
@@ -33,13 +40,15 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart).to_be_visible()
         expect(self.page.locator(".cart-overview")).to_be_visible()
         expect(self.page.locator(".cart-detailed-totals")).to_be_visible()
+        expect(self.continue_shopping_link).to_be_visible()
+        expect(self.proceed_to_checkout_link).to_be_visible()
         return self
 
     def check_empty_structure(self):
         attach_screenshot(self.page, "Checking empty cart structure")
         super().check_structure()
         expect(self.empty_cart_message).to_be_visible()
-        expect(self.empty_cart_message).to_contain_text("There are no more items in your cart")
+        expect(self.empty_cart_message).to_contain_text(UI_TEXT[self.locale]["cart_empty_message"])
         return self
 
     def verify_product_count(self, expected_count):
@@ -92,7 +101,7 @@ class CartPage(BaseStorefrontPage):
     def proceed_to_checkout(self):
         attach_screenshot(self.page, "Proceeding from cart to checkout")
         self.proceed_to_checkout_link.click()
-        return CheckoutPage(self.page).verify_loaded()
+        return CheckoutPage(self.page, self.locale).verify_loaded()
 
     def verify_products_subtotal(self, expected_subtotal):
         expect(self.cart_products_subtotal_value).to_have_text(f"€{expected_subtotal}")

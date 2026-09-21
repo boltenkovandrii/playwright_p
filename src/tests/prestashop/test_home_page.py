@@ -2,20 +2,20 @@ import allure
 
 
 @allure.suite("PrestaShop storefront - Homepage")
-@allure.title("Home page structure")
+@allure.title("HOME-01 — Check home page structure")
 def test_home_page_structure(prestashop_home_page):
     prestashop_home_page.open().check_structure()
 
 
 @allure.suite("PrestaShop storefront - Homepage")
-@allure.title("Featured products are displayed")
+@allure.title("HOME-02 — Check featured products block structure")
 def test_featured_products_displayed(prestashop_home_page, profile):
     home_page = prestashop_home_page.open()
     home_page.featured_products.check_structure()
 
 
 @allure.suite("PrestaShop storefront - Homepage")
-@allure.title("Navigate to a category from the main menu")
+@allure.title("HOME-03 — Navigate to category from main menu")
 def test_navigate_to_category_from_main_menu(prestashop_home_page, profile):
     catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
     catalog_page.verify_category_name("Clothes")
@@ -25,7 +25,7 @@ def test_navigate_to_category_from_main_menu(prestashop_home_page, profile):
 
 
 @allure.suite("PrestaShop storefront - Homepage")
-@allure.title("Navigate to a product from the featured products section")
+@allure.title("HOME-04 — Open featured product details page")
 def test_navigate_to_product_from_featured_products_section(prestashop_home_page, profile):
     home_page = prestashop_home_page.open()
     product_name = "Hummingbird printed t-shirt"
