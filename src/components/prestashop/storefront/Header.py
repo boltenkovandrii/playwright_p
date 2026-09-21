@@ -30,7 +30,7 @@ class Header:
     def verify_current_language(self, locale):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             self.open_mobile_menu()
-            expect(self.mobile_language_selector).to_contain_text(UI_TEXT[locale]["language"])
+            expect(self.mobile_language_selector.locator("option:checked")).to_have_text(UI_TEXT[locale]["language"])
             self.close_mobile_menu()
         else:
             expect(self.desktop_language_selector).to_contain_text(UI_TEXT[locale]["language"])

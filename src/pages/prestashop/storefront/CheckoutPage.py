@@ -62,6 +62,7 @@ class CheckoutPage(BaseStorefrontPage):
         return self
 
     def verify_current_language(self, locale):
+        # don't use super().verify_current_language(locale) like on other pages, because checkout page does not have header with language selector
         expect(self.personal_info_heading).to_be_visible()
         expect(self.addresses_heading).to_be_visible()
         expect(self.shipping_heading).to_be_visible()
