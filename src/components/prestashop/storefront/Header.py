@@ -85,14 +85,6 @@ class Header:
         )
 
 
-    def _active_language_selector(self):
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
-            return self.page.locator("#_mobile_language_selector, #language_selector, .language-selector")
-        return self.page.locator("#_desktop_language_selector, #language_selector, .language-selector")
-
-    def _language_selector_toggle(self):
-        return self._active_language_selector().locator(".expand-more, .dropdown-toggle, button, a, .current").first
-
     def open_mobile_menu(self):
         self.menu_button.click()
         expect(self.mobile_menu).to_be_visible()
@@ -103,12 +95,10 @@ class Header:
         expect(self.mobile_menu).not_to_be_visible()
         return self
 
-    def click_category(self ,profile,  name):
+    def click_category(self ,profile, name):
         if is_phone(profile):
             self.open_mobile_menu()
-            category_links = self.page.locator(
-                "#mobile_top_menu_wrapper .category > a"
-            )
+            category_links = self.page.locator("#mobile_top_menu_wrapper .category > a")
         else:
             category_links = self.page.locator("#top-menu .category > a")
 
@@ -152,7 +142,7 @@ class Header:
         return self._active_user_info().locator(".account span").text_content().strip()
 
     def open_login_page(self):
-        self._active_user_info().locator("a").first.click()
+        self._active_user_info().locator("a").click()
         return self
 
     def sign_out(self):

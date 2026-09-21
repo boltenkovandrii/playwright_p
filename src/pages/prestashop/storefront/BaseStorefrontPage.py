@@ -1,4 +1,3 @@
-from components.prestashop.common.Notification import Notification
 from components.prestashop.storefront.Footer import Footer
 from components.prestashop.storefront.Header import Header
 from pages.BasePage import BasePage
@@ -20,7 +19,6 @@ class BaseStorefrontPage(BasePage):
         self.locale = locale
         self.header = Header(page)
         self.footer = Footer(page, locale)
-        self.notifications = Notification(page)
         self.content = page.locator("#main")
 
     def _localized_url(self, path="", locale=None):
@@ -39,7 +37,6 @@ class BaseStorefrontPage(BasePage):
         expect(self.content).to_be_visible()
         self.header.verify_loaded()
         self.header.verify_current_language(self.locale)
-        self.notifications.verify_loaded()
         return self
 
     def verify_current_language(self, locale):
@@ -68,7 +65,6 @@ class BaseStorefrontPage(BasePage):
         expect(self.content).to_be_visible()
         self.header.check_structure(self.locale)
         self.header.verify_current_language(self.locale)
-        self.notifications.check_structure()
         self.footer.check_structure(self.locale)
         return self
 

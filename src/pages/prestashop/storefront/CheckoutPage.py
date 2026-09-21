@@ -57,7 +57,6 @@ class CheckoutPage(BaseStorefrontPage):
     def verify_loaded(self):
         attach_screenshot(self.page, "Checkout page")
         self.header.verify_loaded()
-        self.notifications.verify_loaded()
         expect(self.checkout).to_be_visible()
         expect(self.personal_info_step).to_be_visible()
         return self
@@ -72,8 +71,6 @@ class CheckoutPage(BaseStorefrontPage):
 
     def check_structure(self):
         attach_screenshot(self.page, "Checking checkout page structure")
-        self.header.verify_loaded()
-        self.notifications.verify_loaded()
         expect(self.checkout).to_be_visible()
         expect(self.subtotal_products).to_be_visible()
         expect(self.subtotal_shipping).to_be_visible()

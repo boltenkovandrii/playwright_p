@@ -60,7 +60,7 @@ class CartPage(BaseStorefrontPage):
             has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$")
         )
         expect(product_name).to_have_count(expected_count)
-        expect(product_name.first).to_be_visible()
+        expect(product_name).to_be_visible()
         return self
 
     def verify_product_price(self, product, expected_price):

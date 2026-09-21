@@ -78,7 +78,7 @@ Verify that a user can read all key product information on the product details p
 
 ---
 
-### PDP-04 — Change product quantity
+### PDP-03 — Change product quantity
 
 **Purpose**
 
@@ -121,7 +121,7 @@ Verify that a user can change the product quantity before adding to cart.
 
 ---
 
-### PDP-05 — Select product combination
+### PDP-04 — Select product combination
 
 **Purpose**
 
@@ -161,7 +161,7 @@ Verify that a user can select a different size and color combination and the pag
 
 ---
 
-### PDP-06 — Add product to cart
+### PDP-05 — Add product to cart
 
 **Purpose**
 
@@ -199,7 +199,7 @@ Verify that a user can add a product to the cart and receive a visual confirmati
 
 ---
 
-### PDP-07 — Continue shopping after adding a product
+### PDP-06 — Continue shopping after adding a product
 
 **Purpose**
 
@@ -234,7 +234,7 @@ Verify that a user can dismiss the cart confirmation dialog and continue browsin
 
 ---
 
-### PDP-08 — Navigate to cart from the confirmation dialog
+### PDP-07 — Navigate to cart from the confirmation dialog
 
 **Purpose**
 
