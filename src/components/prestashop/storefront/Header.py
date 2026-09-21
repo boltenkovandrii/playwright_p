@@ -1,7 +1,6 @@
 from playwright.sync_api import expect
 
 from resources.translations import UI_TEXT
-from tests.config.profiles import is_phone
 from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
@@ -95,8 +94,8 @@ class Header:
         expect(self.mobile_menu).not_to_be_visible()
         return self
 
-    def click_category(self ,profile, name):
-        if is_phone(profile):
+    def click_category(self, name):
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             self.open_mobile_menu()
             category_links = self.page.locator("#mobile_top_menu_wrapper .category > a")
         else:

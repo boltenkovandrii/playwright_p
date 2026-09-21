@@ -3,17 +3,17 @@ import pytest
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-01 — Check product page structure")
-def test_product_page_structure(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+def test_product_page_structure(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product(0)
     product_page.check_structure()
 
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-02 — View product information")
-def test_view_product_information(prestashop_home_page, profile):
+def test_view_product_information(prestashop_home_page):
     product_name = "Hummingbird printed sweater"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     product_page.verify_product_name(product_name)
@@ -30,9 +30,9 @@ def test_view_product_information(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-03 — Change product quantity")
-def test_change_product_quantity(prestashop_home_page, profile):
+def test_change_product_quantity(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     # Check default quantity
@@ -62,9 +62,9 @@ def test_change_product_quantity(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-04 — Select product combination")
-def test_select_product_combination(prestashop_home_page, profile):
+def test_select_product_combination(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     product_page.verify_size_options("S", "M", "L", "XL")
@@ -86,10 +86,10 @@ def test_select_product_combination(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-05 — Add product to cart")
-def test_add_product_to_cart(prestashop_home_page, profile):
+def test_add_product_to_cart(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
 
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     product_page.set_quantity(2)
@@ -100,10 +100,10 @@ def test_add_product_to_cart(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-06 — Continue shopping after adding a product")
-def test_continue_shopping_after_adding_a_product(prestashop_home_page, profile):
+def test_continue_shopping_after_adding_a_product(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
 
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     product_page.add_to_cart()
@@ -125,10 +125,10 @@ def test_continue_shopping_after_adding_a_product(prestashop_home_page, profile)
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-07 — Navigate to cart from the confirmation dialog")
-def test_navigate_to_cart_from_confirmation_dialog(prestashop_home_page, profile):
+def test_navigate_to_cart_from_confirmation_dialog(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
 
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
 
     product_page.add_to_cart()

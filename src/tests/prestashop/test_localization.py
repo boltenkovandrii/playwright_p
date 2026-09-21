@@ -10,7 +10,7 @@ def _open_dutch_home(prestashop_home_page):
 
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-01 — Switch storefront language")
-def test_switch_storefront_language(prestashop_home_page, profile):
+def test_switch_storefront_language(prestashop_home_page):
     home_page = prestashop_home_page.open()
     home_page.verify_current_language("en")
     home_page.verify_search_placeholder()
@@ -19,16 +19,16 @@ def test_switch_storefront_language(prestashop_home_page, profile):
     home_page.verify_current_language("nl")
     home_page.verify_search_placeholder()
 
-    catalog_page = home_page.open_category(profile, "Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes") #Should be localized?
     catalog_page.verify_current_language("nl")
 
 
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-02 — Preserve storefront language across core pages")
-def test_preserve_storefront_language_across_core_pages(prestashop_home_page, profile):
+def test_preserve_storefront_language_across_core_pages(prestashop_home_page):
     home_page = _open_dutch_home(prestashop_home_page)
     home_page.verify_current_language("nl")
-    catalog_page = home_page.open_category(profile, "Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes") #Should be localized?
     catalog_page.verify_current_language("nl")
 
     product_page = catalog_page.open_product_by_name(PRODUCT_NAME)
@@ -46,7 +46,7 @@ def test_preserve_storefront_language_across_core_pages(prestashop_home_page, pr
 
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-03 — Verify localization of core storefront pages")
-def test_verify_translated_ui(prestashop_home_page, profile):
+def test_verify_translated_ui(prestashop_home_page):
     home_page = _open_dutch_home(prestashop_home_page)
     home_page.verify_current_language("nl")
     home_page.verify_search_placeholder()
@@ -55,7 +55,7 @@ def test_verify_translated_ui(prestashop_home_page, profile):
     search_results_page.verify_current_language("nl")
     search_results_page.check_no_matches_message()
 
-    catalog_page = home_page.open_category(profile, "Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes") #Should be localized?
     catalog_page.verify_current_language("nl")
 
     product_page = catalog_page.open_product_by_name(PRODUCT_NAME)

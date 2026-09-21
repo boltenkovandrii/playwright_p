@@ -57,9 +57,9 @@ class HomePage(BaseStorefrontPage):
         self.page.goto(self._localized_url(f"search?{urlencode(params)}"))
         return SearchResultsPage(self.page, self.locale).verify_loaded()
 
-    def open_category(self, profile, name):
-        attach_screenshot(self.page, f"Opening category: {name} for profile: {profile}")
-        self.header.click_category(profile, name)
+    def open_category(self, name):
+        attach_screenshot(self.page, f"Opening category: {name}")
+        self.header.click_category(name)
         return CatalogPage(self.page, self.locale).verify_loaded()
 
     def open_featured_product(self, index=0):

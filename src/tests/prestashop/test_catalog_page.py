@@ -1,15 +1,15 @@
 import allure
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-01 — Check catalog page structure")
-def test_catalog_page_structure(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+def test_catalog_page_structure(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     catalog_page.check_structure()
 
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-02 — Browse products in a category")
-def test_browse_products_in_a_category(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+def test_browse_products_in_a_category(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Accessories")
     catalog_page.verify_category_name("Accessories")
     catalog_page.check_displayed_results_count(11)
     catalog_page.product_grid.product_at(0).check_structure()
@@ -22,9 +22,9 @@ def test_browse_products_in_a_category(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-03 — Open product details page")
-def test_open_product_details_page(prestashop_home_page, profile):
+def test_open_product_details_page(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
     product_page.verify_product_name(product_name)
     product_page.check_structure()
@@ -32,8 +32,8 @@ def test_open_product_details_page(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-04 — Change product sorting")
-def test_change_product_sorting(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+def test_change_product_sorting(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Accessories")
     initial_prices = catalog_page.product_grid.get_prices()
     catalog_page = catalog_page.sort_by("Price, high to low")
     sorted_prices = catalog_page.product_grid.get_prices()
@@ -43,9 +43,9 @@ def test_change_product_sorting(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-05 — Navigate through catalog pagination")
-def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
+def test_navigate_through_catalog_pagination(prestashop_home_page):
     # don't have enough products, so using workaround to check pagination
-    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+    catalog_page = prestashop_home_page.open().open_category("Accessories")
     catalog_page.check_pagination_visible(False)
 
     catalog_page = catalog_page.set_results_per_page_with_url(8)
@@ -59,9 +59,9 @@ def test_navigate_through_catalog_pagination(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-06 — Navigate using breadcrumbs")
-def test_navigate_using_breadcrumbs(prestashop_home_page, profile):
+def test_navigate_using_breadcrumbs(prestashop_home_page):
     product_name = "Hummingbird printed sweater"
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
     catalog_page = product_page.go_to_category_from_breadcrumb("Clothes")
     catalog_page.verify_category_name("Clothes")
@@ -69,8 +69,8 @@ def test_navigate_using_breadcrumbs(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-07 — Filter products by price")
-def test_filter_products_by_price(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+def test_filter_products_by_price(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Accessories")
     catalog_page.check_displayed_results_count(11)
     catalog_page = catalog_page.apply_price_filter(22, 38)
     catalog_page.check_displayed_results_count(3)
@@ -79,8 +79,8 @@ def test_filter_products_by_price(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-08 — Filter products by manufacturer")
-def test_filter_products_by_manufacturer(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Accessories")
+def test_filter_products_by_manufacturer(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Accessories")
     catalog_page.check_displayed_results_count(11)
     catalog_page = catalog_page.apply_manufacturer_filter("Studio Design")
     catalog_page.check_displayed_results_count(7)
