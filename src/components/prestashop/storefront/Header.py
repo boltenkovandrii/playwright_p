@@ -8,19 +8,19 @@ from utils.snapshots import load_snapshot
 class Header:
     def __init__(self, page):
         self.page = page
-        self.container = page.locator("#header")
+        self.container = page.get_by_test_id("header")
         self.desktop_language_selector = page.locator("#_desktop_language_selector button")
         self.mobile_language_selector = page.locator("#_mobile_language_selector select")
-        self.menu_button = page.locator("#menu-icon")
-        self.mobile_menu = page.locator("#mobile_top_menu_wrapper")
+        self.menu_button = page.get_by_test_id("menu-icon")
+        self.mobile_menu = page.get_by_test_id("mobile_top_menu_wrapper")
         self.search_input = self.container.locator("#search_widget input[type='text']")
-        self.desktop_cart = page.locator("#_desktop_cart")
-        self.mobile_cart = page.locator("#_mobile_cart")
+        self.desktop_cart = page.get_by_test_id("_desktop_cart")
+        self.mobile_cart = page.get_by_test_id("_mobile_cart")
         self.desktop_cart_products_count = self.desktop_cart.locator(".cart-products-count")
         self.mobile_cart_products_count = self.mobile_cart.locator(".cart-products-count")
         self.account_link = self.page.locator(".account")
-        self.desktop_user_info = page.locator("#_desktop_user_info")
-        self.mobile_user_info = page.locator("#_mobile_user_info")
+        self.desktop_user_info = page.get_by_test_id("_desktop_user_info")
+        self.mobile_user_info = page.get_by_test_id("_mobile_user_info")
 
     def verify_loaded(self):
         expect(self.container).to_be_visible()

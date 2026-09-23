@@ -25,7 +25,7 @@ class CartPage(BaseStorefrontPage):
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
-        expect(self.page.locator("#cart")).to_be_visible()
+        expect(self.page.get_by_test_id("cart")).to_be_visible()
         return self
 
     def verify_current_language(self, locale):

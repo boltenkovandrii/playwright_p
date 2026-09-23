@@ -12,7 +12,7 @@ from utils.network_helper import expect_response
 class CheckoutPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
-        self.checkout = page.locator("#checkout")
+        self.checkout = page.get_by_test_id("checkout")
 
         self.subtotal_products = page.get_by_test_id("cart-subtotal-products")
         self.subtotal_shipping = page.get_by_test_id("cart-subtotal-shipping")
@@ -28,7 +28,7 @@ class CheckoutPage(BaseStorefrontPage):
         self.shipping_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_shipping_heading"])
         self.payment_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["checkout_payment_heading"])
 
-        self.personal_info_form = self.personal_info_step.locator("#customer-form")
+        self.personal_info_form = self.personal_info_step.get_by_test_id("customer-form")
         self.first_name_input = self.personal_info_form.get_by_test_id("field-firstname")
         self.last_name_input = self.personal_info_form.get_by_test_id("field-lastname")
         self.email_input = self.personal_info_form.get_by_test_id("field-email")

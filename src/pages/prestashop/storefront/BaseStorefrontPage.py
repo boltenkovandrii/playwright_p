@@ -19,7 +19,7 @@ class BaseStorefrontPage(BasePage):
         self.locale = locale
         self.header = Header(page)
         self.footer = Footer(page, locale)
-        self.content = page.locator("#main")
+        self.content = page.get_by_test_id("main")
 
     def _localized_url(self, path="", locale=None):
         if locale is None:

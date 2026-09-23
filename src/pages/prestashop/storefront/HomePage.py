@@ -14,7 +14,7 @@ from utils.allure_reporting import attach_screenshot
 class HomePage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
-        self.carousel = page.locator("#carousel")
+        self.carousel = page.get_by_test_id("carousel")
         self.featured_products_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["featured_products_heading"])
         self.featured_products = ProductGrid(page.locator(".featured-products"))
 

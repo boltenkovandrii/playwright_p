@@ -10,7 +10,7 @@ class Footer:
     def __init__(self, page, locale="en"):
         self.page = page
         self.locale = locale
-        self.container = page.locator("#footer")
+        self.container = page.get_by_test_id("footer")
         self.account_infos = self.page.get_by_test_id("block_myaccount_infos")
         self.sign_out_link = self.account_infos.get_by_role("link", name=UI_TEXT[self.locale]["sign_out_link"])
 
