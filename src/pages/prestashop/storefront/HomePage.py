@@ -37,11 +37,21 @@ class HomePage(BaseStorefrontPage):
             expect(self.featured_products_heading).to_be_visible()
         except AssertionError as e:
             attach_screenshot(self.page, f"Language verification for locale {locale} failed, trying to switch language and verify again")
-            self.page = self.switch_language("en").page
-            self.page = self.switch_language("nl").page
-            self.page = self.switch_language(locale).page
-            return HomePage(self.page, self.locale).verify_loaded()
+            home_page = self._switch_language("en")
+            home_page = home_page._switch_language("nl")
+            home_page = home_page._switch_language(locale)
+            return HomePage(home_page.page, locale).verify_loaded()
         return self
+
+    # TODO: remove if not needed
+    def switch_language(self, locale):
+        return self._switch_language(locale).verify_loaded()
+
+    # TODO: remove if not needed
+    def _switch_language(self, locale):
+        attach_screenshot(self.page,f"Switching storefront language to: {locale}")
+        self.header.select_language(self.locale, locale)
+        return self.__class__(self.page, locale)
 
     def check_structure(self):
         attach_screenshot(self.page, "Checking home page structure")
