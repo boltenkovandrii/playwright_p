@@ -16,11 +16,6 @@ def test_switch_storefront_language(prestashop_home_page):
     home_page.verify_search_placeholder()
 
     home_page = home_page.switch_language("nl")
-
-    ## TODO: remove debug
-    # home_page.page.reload(wait_until="domcontentloaded")
-    #####
-
     home_page.verify_current_language("nl")
     home_page.verify_search_placeholder()
 

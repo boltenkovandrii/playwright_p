@@ -36,6 +36,7 @@ class HomePage(BaseStorefrontPage):
             super().verify_current_language(locale)
             expect(self.featured_products_heading).to_be_visible()
         except AssertionError as e:
+            attach_screenshot(self.page, f"Language verification for locale {locale} failed, trying to switch language and verify again")
             self.switch_language("en")
             self.switch_language("nl")
             self.switch_language(locale)
