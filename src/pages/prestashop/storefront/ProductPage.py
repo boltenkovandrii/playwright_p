@@ -12,7 +12,7 @@ class ProductPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
         self.product = page.get_by_test_id("main")
-        self.product_name = page.locator("#main h1")
+        self.product_name = self.product.locator("h1")
         self.product_information = page.locator(".product-information")
 
         self.cover_image = page.locator(".product-cover .img-fluid")
