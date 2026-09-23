@@ -18,21 +18,8 @@ def test_switch_storefront_language(prestashop_home_page):
     home_page = home_page.switch_language("nl")
 
     ## TODO: remove debug
-    heading = home_page.page.locator(".featured-products .products-section-title")
-
-    print("URL:", home_page.page.url)
-    print("Heading count:", heading.count())
-    print("Heading text:", heading.all_text_contents())
-
-    home_page.page.wait_for_timeout(500)
-
-    print("After 500ms:", heading.all_text_contents())
-
-    home_page.page.wait_for_timeout(1000)
-
-    print("After 1500ms:", heading.all_text_contents())
+    home_page.page.reload(wait_until="domcontentloaded")
     #####
-
 
     home_page.verify_current_language("nl")
     home_page.verify_search_placeholder()
