@@ -114,12 +114,31 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y docker-compose
 
+      - name: Show runner resources - REMOVE
+        run: |
+          echo "=== CPU ==="
+          nproc
+          lscpu | grep -E 'CPU\(s\)|Model name'
+      
+          echo "=== Memory ==="
+          free -h
+      
+          echo "=== Disk ==="
+          df -h
+      
+          echo "=== Docker ==="
+          docker info
+
       - name: Start app
         env:
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
-          docker-compose -f docker/docker-compose-prestashop.yml up --build -d
+          docker-compose -f docker/docker-compose-prestashop.yml up -d
+
+      - name: Show container resources - REMOVE
+        run: |
+          docker stats --no-stream
 
       - name: Run tests
         env:
@@ -143,7 +162,11 @@ jobs:
             echo "Running pytest with default profile selection"
           fi
           echo "Allure screenshots setting: $ALLURE_SCREENSHOTS"
-          pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n 1 --alluredir=reports/allure-results
+          pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n auto --alluredir=reports/allure-results
+
+      - name: Show container resources2 - REMOVE
+        run: |
+          docker stats --no-stream
 
       - name: Install Allure
         if: always()

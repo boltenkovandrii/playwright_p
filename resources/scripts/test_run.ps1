@@ -4,9 +4,9 @@
 Remove-Item reports/allure-results -Recurse -Force
 Remove-Item reports/allure-report -Recurse -Force
 
-#pytest  -n 8 --browser firefox
+#pytest  -n 12 --browser firefox
 #pytest  --headed  -n 8 --browser firefox
-#pytest  --headed  -n auto --browser chromium
+pytest  -n 4 --browser chromium src/tests/prestashop/test_localization1.py
 #pytest  --headed  -n auto --browser firefox  --browser chromium
 #pytest  --headed  -n 0 --browser firefox  --browser chromium
 #pytest  -n 8 --browser chromium --profile=desktop_1920x1200
@@ -16,8 +16,7 @@ Remove-Item reports/allure-report -Recurse -Force
 #pytest  --headed  -n auto --browser chromium --profile=desktop_1920x1200
 #pytest  --headed  -n auto --browser chromium --profile=tablet_landscape --profile=mobile_landscape
 #pytest  -n 8 --browser chromium --profile=tablet --profile=mobile --profile=desktop_1920x1200 src/tests/prestashop/test_localization.py
-
-pytest  -n 8 --browser chromium --profile=tablet --profile=mobile --profile=desktop_1920x1200
+#pytest  -n 8 --browser chromium --profile=tablet --profile=mobile --profile=desktop_1920x1200
 #pytest  --headed  -n auto --browser chromium --profile=mobile
 #pytest  -n 8 --browser chromium --browser webkit --browser firefox --profile=tablet --profile=mobile --profile=desktop_2560x1600 --profile=tablet_landscape --profile=mobile_landscape --profile=desktop_1920x1200
 #pytest  -n 8 --browser chromium --profile=tablet --profile=mobile --profile=desktop_2560x1600 --profile=tablet_landscape --profile=mobile_landscape --profile=desktop_1920x1200
