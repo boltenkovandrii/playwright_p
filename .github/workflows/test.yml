@@ -142,6 +142,8 @@ jobs:
 
       - name: Start resource monitor - REMOVE
         run: |
+          mkdir -p reports
+      
           (
             while true; do
               echo "===== $(date -Is) ====="
@@ -155,7 +157,13 @@ jobs:
               sleep 5
             done
           ) > reports/resource-monitor.log 2>&1 &
-          echo $! > /tmp/resource-monitor.pid          
+      
+          echo $! > /tmp/resource-monitor.pid
+          sleep 1
+      
+          echo "Monitor PID: $(cat /tmp/resource-monitor.pid)"
+          echo "Monitor log:"
+          cat reports/resource-monitor.log || true        
 
       - name: Run tests
         env:
@@ -189,7 +197,12 @@ jobs:
       - name: Stop resource monitor - REMOVE
         if: always()
         run: |
-          kill "$(cat /tmp/resource-monitor.pid)" 2>/dev/null || true
+          if [ -f /tmp/resource-monitor.pid ]; then
+            kill "$(cat /tmp/resource-monitor.pid)" 2>/dev/null || true
+          fi
+      
+          echo "=== Resource monitor ==="
+          cat reports/resource-monitor.log || true
 
       - name: Check container state - REMOVE
         if: always()
@@ -203,6 +216,7 @@ jobs:
         with:
           name: resource-monitor
           path: reports/resource-monitor.log
+          if-no-files-found: warn
 
 
       - name: Install Allure
