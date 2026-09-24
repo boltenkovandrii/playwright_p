@@ -7,7 +7,7 @@ PRODUCT_NAME = "Hummingbird printed t-shirt"
 # TODO: remove the whole class
 def _open_dutch_home(prestashop_home_page):
     return prestashop_home_page.open().switch_language("nl")
-'''
+
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-01 — Switch storefront language")
 def test_switch_storefront_language(prestashop_home_page):
@@ -119,7 +119,7 @@ def test_preserve_storefront_language_across_core_pages1(prestashop_home_page):
     checkout_page.check_structure()
     checkout_page.verify_current_language("nl")
 
-
+'''
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-03 — Verify localization of core storefront pages")
 def test_verify_translated_ui1(prestashop_home_page):

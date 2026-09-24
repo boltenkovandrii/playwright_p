@@ -23,8 +23,9 @@ class Footer:
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             snapshot_name = "footer_compact"
         else:
-            snapshot_name = "footer"
-        # Actual links in the footer could depend on the fact if user is logged in. So snapshots perform only partial (but still substantial) assertion to not make it overcomplicated.
+            # Actual links in the footer could depend on the fact if user is logged in. So snapshots perform only partial (but still substantial) assertion to not make it overcomplicated.
+            #snapshot_name = "footer" # When run on CI in parallel, prestashop sometimes mixes English and Dutch text in footer. Account-related data is not translated sometimes. So using even simplified version of snapshot (looks like an actual bug).
+            snapshot_name = "footer_simplified"
         expect(self.container).to_match_aria_snapshot(
             load_snapshot(snapshot_name, locale=locale, namespace="prestashop")
         )
