@@ -165,6 +165,7 @@ jobs:
           pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n auto --alluredir=reports/allure-results
 
       - name: Show container resources2 - REMOVE
+        if: always()
         run: |
           docker stats --no-stream
 

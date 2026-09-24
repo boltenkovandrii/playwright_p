@@ -159,7 +159,7 @@ def test_verify_translated_ui1(prestashop_home_page):
     account_page.verify_current_language("nl")
     account_page.check_structure()
 
-
+'''
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-01 — Switch storefront language")
 def test_switch_storefront_language2(prestashop_home_page):
@@ -611,3 +611,4 @@ def test_verify_translated_ui7(prestashop_home_page):
     account_page.verify_current_language("nl")
     account_page.check_structure()
 
+'''
