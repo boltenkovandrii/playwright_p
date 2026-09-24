@@ -187,7 +187,7 @@ jobs:
             echo "Running pytest with default profile selection"
           fi
           echo "Allure screenshots setting: $ALLURE_SCREENSHOTS"
-          pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n auto --alluredir=reports/allure-results
+          pytest $ARGS $PROFILE_ARGS --allure-screenshots=$ALLURE_SCREENSHOTS -n 3 --alluredir=reports/allure-results
 
       - name: Show container resources2 - REMOVE
         if: always()
