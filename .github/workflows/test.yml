@@ -140,6 +140,23 @@ jobs:
         run: |
           docker stats --no-stream
 
+      - name: Start resource monitor - REMOVE
+        run: |
+          (
+            while true; do
+              echo "===== $(date -Is) ====="
+              echo "--- HOST ---"
+              uptime
+              free -h
+              vmstat 1 1
+              echo "--- PRESTASHOP ---"
+              docker stats --no-stream prestashop-test
+              echo
+              sleep 5
+            done
+          ) > reports/resource-monitor.log 2>&1 &
+          echo $! > /tmp/resource-monitor.pid          
+
       - name: Run tests
         env:
           PRESTASHOP_BASE_URL: ${{ github.event.inputs.prestashop_base_url || env.PRESTASHOP_BASE_URL }}
@@ -168,6 +185,25 @@ jobs:
         if: always()
         run: |
           docker stats --no-stream
+
+      - name: Stop resource monitor - REMOVE
+        if: always()
+        run: |
+          kill "$(cat /tmp/resource-monitor.pid)" 2>/dev/null || true
+
+      - name: Check container state - REMOVE
+        if: always()
+        run: |
+          docker inspect prestashop-test \
+            --format='OOMKilled={{.State.OOMKilled}} RestartCount={{.RestartCount}} ExitCode={{.State.ExitCode}}'
+
+      - name: Upload resource monitor - REMOVE
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resource-monitor
+          path: reports/resource-monitor.log
+
 
       - name: Install Allure
         if: always()
