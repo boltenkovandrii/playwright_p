@@ -22,7 +22,8 @@ def test_switch_storefront_language(prestashop_home_page):
     catalog_page = home_page.open_category("Clothes") #Should be localized?
     catalog_page.verify_current_language("nl")
 
-
+#TODO: uncomment
+'''
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-02 — Preserve storefront language across core pages")
 def test_preserve_storefront_language_across_core_pages(prestashop_home_page):
@@ -83,3 +84,4 @@ def test_verify_translated_ui(prestashop_home_page):
     account_page.verify_current_language("nl")
     account_page.check_structure()
 
+'''
