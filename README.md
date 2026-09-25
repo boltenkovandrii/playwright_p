@@ -158,3 +158,4 @@ Business-readable scenario documentation for the storefront suite is stored unde
 
 - The framework uses the HTML `id` attribute as the configured Playwright test-id attribute. In a production implementation, dedicated test IDs would be preferable.
 - `PLAYWRIGHT_SETUP.md` remains available as a short setup reference, but the primary onboarding flow is documented here.
+- The demo application occasionally renders a mixture of localized and default-language content after a runtime locale switch. Localization tests therefore focus on stable shared UI and locale persistence rather than asserting every translated string.
