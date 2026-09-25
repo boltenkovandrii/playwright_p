@@ -1,29 +1,36 @@
-Playwright setup
+# Playwright Setup
 
-Run these steps once after installing dependencies to download browser binaries:
+This file is a short setup reference.
+For the primary onboarding flow, execution examples, and framework scope, see `README.md`.
 
-Local (developer machine):
+## Local setup
 
-1. Install Python deps:
-    pip install -e .
-2. Install allure-commandline using scoop (on Windows)
-   irm get.scoop.sh | iex
-   scoop install allure
-3. Install Playwright browsers:
-   python -m playwright install
+```powershell
+pip install -e .
+python -m playwright install
+```
 
-CI (GitHub Actions, Ubuntu):
+Optional on Windows for generating Allure HTML reports locally:
 
-- After installing Python deps, run:
-  python -m playwright install --with-deps
+```powershell
+scoop install allure
+```
 
-- To install only specific browsers (faster):
-  python -m playwright install --with-deps firefox chromium
+## CI setup
 
-Notes:
-- Use `python -m playwright install --with-deps` on CI runners to install system dependencies where available.
-- The CI workflow supports specifying the browser set at runtime (workflow_dispatch input `browsers`). Examples:
-  - Single browser (feature branch default): firefox
-  - Full set (main branch default): firefox chromium
-  - Manual run with specific browsers: provide `browsers` input as `firefox` or `firefox,chromium`.
-- For Windows developers, `playwright install` is usually sufficient.
+On CI runners, use:
+
+```powershell
+python -m playwright install --with-deps
+```
+
+To install only a subset of browsers:
+
+```powershell
+python -m playwright install --with-deps firefox chromium
+```
+
+## Notes
+
+- For Windows developers, `python -m playwright install` is usually sufficient.
+- The active automated scope in this repository is the **PrestaShop storefront**.

@@ -35,10 +35,10 @@ pytest --browser chromium --profile=tablet_landscape
 
 #### Run a single test
 ```powershell
-pytest src/tests/test_main_page.py::test_main_page_title --browser chromium
+pytest src/tests/prestashop/test_home_page.py::test_home_page_structure --browser chromium
 
-# With specific parametrized locale (en, nl, uk)
-pytest src/tests/test_main_page.py::test_main_page_title[en] --browser chromium
+# Run a full storefront suite file
+pytest src/tests/prestashop/test_home_page.py --browser chromium
 ```
 
 #### View test reports
@@ -69,29 +69,29 @@ scoop install allure
 The codebase uses the Page Object Model (POM) pattern to abstract page interactions:
 
 - **Base Pages** (`src/pages/BasePage.py`): All page objects inherit from `BasePage`, which provides the Playwright `page` object
-- **Page Objects** (`src/pages/*.py`): Encapsulate page elements and actions (e.g., `MainPage`, `HomePage`, `ArticlePage`)
-- **Components** (`src/components/*.py`): Reusable UI components used by pages (e.g., `Header`, `ContentMain`)
-- **Tests** (`src/tests/test_*.py`): Test files use fixtures that instantiate page objects and components
+- **Page Objects** (`src/pages/prestashop/storefront/*.py`): Encapsulate storefront elements and actions (e.g., `HomePage`, `CatalogPage`, `ProductPage`, `CheckoutPage`)
+- **Components** (`src/components/prestashop/storefront/*.py`): Reusable storefront UI components (e.g., `Header`, `Footer`, `ProductGrid`, `ProductCard`)
+- **Tests** (`src/tests/prestashop/test_*.py`): Test files use fixtures that instantiate page objects and components
 
 ### Test Structure
 
 ```
 src/
-├── pages/           # Page objects (MainPage, HomePage, ArticlePage, BasePage)
-├── components/      # Reusable UI components (Header, ContentMain, Appearance, etc.)
-├── fixtures/        # Pytest fixtures (pages, locale, profile)
-├── tests/           # Test files (test_*.py) and conftest.py
+├── pages/           # Base page + PrestaShop storefront page objects
+├── components/      # Reusable PrestaShop storefront UI components
+├── fixtures/        # Pytest fixtures (locale, profile, PrestaShop pages)
+├── tests/           # Test files and shared pytest configuration
 └── utils/           # Utilities (allure_reporting, etc.)
 ```
 
 ### Key Test Concepts
 
 #### Locales
-Tests use the `locale` fixture to parametrize tests across multiple languages (`en`, `nl`, `uk`):
+The framework is designed so more storefront languages can be added easily. The currently demonstrated locale coverage is `en` and `nl`:
 ```python
-@pytest.mark.parametrize("locale", ["en", "nl", "uk"], indirect=True)
-def test_example(main_page):
-    # main_page.locale is automatically set by fixture
+@pytest.mark.parametrize("locale", ["en", "nl"], indirect=True)
+def test_example(prestashop_home_page, locale):
+    # prestashop_home_page.locale is automatically set by fixture
     pass
 ```
 
@@ -119,7 +119,7 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 - Locators should use the test ID attribute (`id` attribute) where possible; avoid relying on generic selectors
 
 ### Components
-- Components are organized by AUT (Application Under Test) in subdirectories (`mediawiki/`, `prestashop/`)
+- Components are organized by AUT area; current active coverage uses `prestashop/storefront/`
 - Components provide methods to verify structure (e.g., `check_structure()`)
 - Components are passed a `page` object or parent container for element interaction
 
@@ -131,11 +131,10 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 - Keep tests parametrized for multiple locales/profiles when applicable
 
 ### Fixtures (in conftest.py)
-- `main_page`: MainPage fixture with locale support
-- `home_page`: HomePage fixture
-- `article_page`: ArticlePage fixture with locale support
+- `prestashop_home_page`: HomePage fixture with locale support
+- `prestashop_backoffice_login_page`: Backoffice login fixture exists, but current active automated coverage is storefront-focused
 - `profile`: Device profile fixture (desktop_1920x1200, mobile, tablet, etc)
-- `locale`: Locale fixture (en, nl, uk)
+- `locale`: Locale fixture (`en` by default; current demonstrated coverage uses `en` and `nl`)
 - `page`: Playwright page context with final screenshot attachment on teardown
 
 ### Test Configuration (pytest.ini)
@@ -156,9 +155,9 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 
 ## Testing AUTs (Applications Under Test)
 
-- **Wikipedia** (`https://www.wikipedia.org/`): Main test subject (MainPage, ArticlePage, HomePage)
-- **Prestashop** (Docker image): Work in progress (WIP)
-- **MediaWiki Sandbox** (Docker image): Work in progress (WIP)
+- **PrestaShop Storefront** (`PRESTASHOP_BASE_URL`): Current active automated test scope
+- Storefront scenarios are documented under `docs/prestashop/storefront/`
+- Backoffice is not part of the current active automated coverage
 
 ---
 
@@ -176,21 +175,21 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 ## Common Tasks
 
 ### Add a new test
-1. Create a test function in `src/tests/test_*.py` with `test_` prefix
-2. Use page fixtures (`main_page`, `home_page`, etc.)
+1. Create a test function in `src/tests/prestashop/test_*.py` with `test_` prefix
+2. Use existing page fixtures such as `prestashop_home_page`
 3. Add Allure decorators for reporting
 4. Parametrize with `locale` fixture if testing multi-language behavior
 5. Use `expect()` for assertions and `attach_screenshot()` for visual artifacts
 
 ### Add a new page
-1. Create `PageName.py` in `src/pages/`
+1. Create `PageName.py` in the appropriate package, typically `src/pages/prestashop/storefront/`
 2. Inherit from `BasePage` and implement `verify_loaded()`
 3. Define locators and interaction methods
 4. Methods should return `self` for chaining
-5. Add a pytest fixture in `src/fixtures/pages.py`
+5. Add or extend a pytest fixture in `src/fixtures/prestashop/pages.py` when needed
 
 ### Add a new component
-1. Create component in `src/components/` (or subdirectory for specific AUT)
+1. Create component in `src/components/prestashop/storefront/` for storefront coverage
 2. Provide a `check_structure()` method for verification
 3. Implement element interaction methods
 4. Import and use in page objects
@@ -198,14 +197,14 @@ Use `--browser=<browser>` to specify browsers or provide multiple `--browser` fl
 ### Run tests for a specific feature branch
 ```powershell
 # Feature branches default to firefox; manually add other browsers:
-pytest --browser firefox --browser chromium --profile=desktop
+pytest --browser firefox --browser chromium --profile=desktop_1920x1200
 
 # Or use the resources/scripts/test_run.ps1 and edit as needed
 ```
 
 ### Debug a failing test
 1. Check the Allure report in `reports/allure-report/` for screenshots and traces
-2. Re-run with `--headed` flag to see browser in action: `pytest --headed --browser chromium src/tests/test_file.py::test_name`
+2. Re-run with `--headed` flag to see browser in action: `pytest --headed --browser chromium src/tests/prestashop/test_home_page.py::test_home_page_structure`
 3. Use `--trace=on` to record Playwright traces (useful for debugging element interactions)
 4. Videos and traces are retained on failure by default; view in Allure or use Playwright Inspector
 
@@ -213,6 +212,7 @@ pytest --browser firefox --browser chromium --profile=desktop
 
 ## Notes
 
+- Current active automation is storefront-only
 - Tests are demonstrational; not all are production-ready
 - Test IDs use `id` attribute instead of the standard `data-testid` (working with what's available)
 - Allure report history is persisted in `reports/history/` for trend analysis
