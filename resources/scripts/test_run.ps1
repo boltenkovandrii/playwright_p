@@ -1,5 +1,5 @@
-# file contains various commands for running tests with different configurations
-# Used for debug and somewhat messy. Will be cleaned up in some (relatively far) future.
+# File contains various commands for running tests with different configurations.
+# Somewhat messy, but useful for debugging.
 
 Remove-Item reports/allure-results -Recurse -Force
 Remove-Item reports/allure-report -Recurse -Force

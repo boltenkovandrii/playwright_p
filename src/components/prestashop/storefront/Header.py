@@ -43,7 +43,6 @@ class Header:
         if current_locale == target_locale:
             return self
 
-        attach_screenshot(self.page, f"Selecting storefront language: {target_locale}")
         target_language = UI_TEXT[target_locale]["language"]
 
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
