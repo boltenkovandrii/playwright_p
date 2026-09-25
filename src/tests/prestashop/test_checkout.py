@@ -3,7 +3,7 @@ import allure
 
 @allure.suite("PrestaShop storefront - Checkout (Guest)")
 @allure.title("CHK-01 — Guest checkout page structure and checkout flow")
-def test_guest_checkout_page_structure(prestashop_home_page, profile):
+def test_guest_checkout_page_structure(prestashop_home_page):
     product_name = "Hummingbird printed t-shirt"
     first_name = "Jane"
     last_name = "Doe"
@@ -20,7 +20,7 @@ def test_guest_checkout_page_structure(prestashop_home_page, profile):
     expected_shipping = 8.40
     expected_total = 31.34
 
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
     cart_page = product_page.add_to_cart().go_to_cart()
 

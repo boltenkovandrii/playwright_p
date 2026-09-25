@@ -32,8 +32,8 @@ def test_search_with_no_matching_results(prestashop_home_page):
 
 @allure.suite("PrestaShop storefront - Search")
 @allure.title("SRCH-04 — Search from catalog page")
-def test_search_from_catalog_page(prestashop_home_page, profile):
-    catalog_page = prestashop_home_page.open().open_category(profile, "Clothes")
+def test_search_from_catalog_page(prestashop_home_page):
+    catalog_page = prestashop_home_page.open().open_category("Clothes")
     search_results = catalog_page.search("Hummingbird")
     search_results.check_structure()
     search_results.verify_products_match("Hummingbird")
@@ -42,7 +42,7 @@ def test_search_from_catalog_page(prestashop_home_page, profile):
 
 @allure.suite("PrestaShop storefront - Search")
 @allure.title("SRCH-05 — Navigate through search pagination")
-def test_navigate_through_search_pagination(prestashop_home_page, profile):
+def test_navigate_through_search_pagination(prestashop_home_page):
     # don't have enough products, so using workaround to check pagination
     search_results = prestashop_home_page.open_search_results("home")
     search_results.check_pagination_visible(False)

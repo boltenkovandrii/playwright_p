@@ -5,7 +5,7 @@ from playwright.sync_api import expect
 class DashboardPage(BaseBackofficePage):
     def __init__(self, page):
         super().__init__(page)
-        self.dashboard = page.locator("#content")
+        self.dashboard = page.get_by_test_id("content")
 
     def verify_loaded(self):
         super().verify_loaded()

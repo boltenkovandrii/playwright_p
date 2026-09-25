@@ -21,7 +21,7 @@ class RegistrationPage(BaseStorefrontPage):
         self.privacy_checkbox = page.locator("input[name='customer_privacy']")
         self.psgdpr_checkbox = page.locator("input[name='psgdpr']")
         self.submit_button = page.get_by_role("button", name=UI_TEXT[self.locale]["registration_submit_button"])
-        self.error_alert = page.locator("#notifications .alert-danger")
+        self.error_alert = page.get_by_test_id("notifications").locator(".alert-danger")
         self.field_errors = page.locator(".form-group.has-error")
         self.error_message = page.locator(".alert-danger")
 

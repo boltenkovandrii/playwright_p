@@ -11,8 +11,8 @@ from utils.allure_reporting import attach_screenshot
 class ProductPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
-        self.product = page.locator("#main")
-        self.product_name = page.locator("#main h1")
+        self.product = page.get_by_test_id("main")
+        self.product_name = self.product.locator("h1")
         self.product_information = page.locator(".product-information")
 
         self.cover_image = page.locator(".product-cover .img-fluid")
@@ -33,7 +33,7 @@ class ProductPage(BaseStorefrontPage):
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
 
 
-        self.cart_modal = page.locator("#blockcart-modal")
+        self.cart_modal = page.get_by_test_id("blockcart-modal")
         self.cart_modal_title = self.cart_modal.locator(".modal-title")
         self.cart_modal_product_name = self.cart_modal.locator(".product-name")
         self.cart_modal_product_quantity = self.cart_modal.locator(".product-quantity strong")

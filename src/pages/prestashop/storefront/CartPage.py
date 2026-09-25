@@ -16,7 +16,7 @@ class CartPage(BaseStorefrontPage):
         self.cart_items = page.locator(".cart-items .cart-item")
         self.cart_item_product_names = self.cart_items.locator(".product-line-info a.label")
         self.cart_item_product_prices = self.cart_items.locator(".current-price .price")
-        self.cart_products_subtotal_value = page.locator("#cart-subtotal-products .value")
+        self.cart_products_subtotal_value = page.get_by_test_id("cart-subtotal-products").locator(".value")
         self.cart_total_value = page.locator(".cart-summary-line.cart-total .value")
         self.empty_cart_message = page.locator(".no-items")
         self.continue_shopping_link = page.get_by_role("link", name=UI_TEXT[self.locale]["continue_shopping_link"])
@@ -25,7 +25,7 @@ class CartPage(BaseStorefrontPage):
     def verify_loaded(self):
         attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
-        expect(self.page.locator("#cart")).to_be_visible()
+        expect(self.page.get_by_test_id("cart")).to_be_visible()
         return self
 
     def verify_current_language(self, locale):

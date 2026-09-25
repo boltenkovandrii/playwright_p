@@ -11,8 +11,8 @@ from utils.allure_reporting import attach_screenshot
 class SearchResultsPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
-        self.heading = page.locator("#js-product-list-header")
-        self.product_grid = ProductGrid(page.locator("#js-product-list"))
+        self.heading = page.get_by_test_id("js-product-list-header")
+        self.product_grid = ProductGrid(page.get_by_test_id("js-product-list"))
         self.page_list = page.locator("nav.pagination ul.page-list")
         self.no_matches_message = page.get_by_test_id("product-search-no-matches")
         self.search_results_header = page.get_by_test_id("js-product-list-header")

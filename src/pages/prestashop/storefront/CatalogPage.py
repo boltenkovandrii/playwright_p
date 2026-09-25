@@ -13,10 +13,10 @@ from utils.responsive import BOOTSTRAP_MD
 class CatalogPage(BaseStorefrontPage):
     def __init__(self, page, locale="en"):
         super().__init__(page, locale)
-        self.product_grid = ProductGrid(page.locator("#js-product-list"))
-        self.heading = page.locator("#js-product-list-header")
+        self.product_grid = ProductGrid(page.get_by_test_id("js-product-list"))
+        self.heading = page.get_by_test_id("js-product-list-header")
         self.subcategory_links = page.locator(".subcategory-name")
-        self.active_filters = page.locator("#js-active-search-filters")
+        self.active_filters = page.get_by_test_id("js-active-search-filters")
         self.page_list = page.locator("nav.pagination ul.page-list")
         self.brands_header =  page.get_by_role("link", name=UI_TEXT[locale]["catalog_brands_header"])
 
@@ -204,4 +204,4 @@ class CatalogPage(BaseStorefrontPage):
     def _close_mobile_filters_if_needed(self):
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             attach_screenshot(self.page, "Closing filters for mobile")
-            self.page.locator("#search_filter_controls button").click()
+            self.page.get_by_test_id("search_filter_controls").locator("button").click()

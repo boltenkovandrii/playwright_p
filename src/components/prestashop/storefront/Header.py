@@ -1,7 +1,6 @@
 from playwright.sync_api import expect
 
 from resources.translations import UI_TEXT
-from tests.config.profiles import is_phone
 from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
@@ -9,19 +8,19 @@ from utils.snapshots import load_snapshot
 class Header:
     def __init__(self, page):
         self.page = page
-        self.container = page.locator("#header")
-        self.desktop_language_selector = page.locator("#_desktop_language_selector button")
-        self.mobile_language_selector = page.locator("#_mobile_language_selector select")
-        self.menu_button = page.locator("#menu-icon")
-        self.mobile_menu = page.locator("#mobile_top_menu_wrapper")
-        self.search_input = self.container.locator("#search_widget input[type='text']")
-        self.desktop_cart = page.locator("#_desktop_cart")
-        self.mobile_cart = page.locator("#_mobile_cart")
+        self.container = page.get_by_test_id("header")
+        self.desktop_language_selector = page.get_by_test_id("_desktop_language_selector").locator("button")
+        self.mobile_language_selector = page.get_by_test_id("_mobile_language_selector").locator("select")
+        self.menu_button = page.get_by_test_id("menu-icon")
+        self.mobile_menu = page.get_by_test_id("mobile_top_menu_wrapper")
+        self.search_input = self.container.get_by_test_id("search_widget").locator("input[type='text']")
+        self.desktop_cart = page.get_by_test_id("_desktop_cart")
+        self.mobile_cart = page.get_by_test_id("_mobile_cart")
         self.desktop_cart_products_count = self.desktop_cart.locator(".cart-products-count")
         self.mobile_cart_products_count = self.mobile_cart.locator(".cart-products-count")
         self.account_link = self.page.locator(".account")
-        self.desktop_user_info = page.locator("#_desktop_user_info")
-        self.mobile_user_info = page.locator("#_mobile_user_info")
+        self.desktop_user_info = page.get_by_test_id("_desktop_user_info")
+        self.mobile_user_info = page.get_by_test_id("_mobile_user_info")
 
     def verify_loaded(self):
         expect(self.container).to_be_visible()
@@ -44,7 +43,6 @@ class Header:
         if current_locale == target_locale:
             return self
 
-        attach_screenshot(self.page, f"Selecting storefront language: {target_locale}")
         target_language = UI_TEXT[target_locale]["language"]
 
         if self.page.viewport_size["width"] < BOOTSTRAP_MD:
@@ -95,12 +93,12 @@ class Header:
         expect(self.mobile_menu).not_to_be_visible()
         return self
 
-    def click_category(self ,profile, name):
-        if is_phone(profile):
+    def click_category(self, name):
+        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
             self.open_mobile_menu()
-            category_links = self.page.locator("#mobile_top_menu_wrapper .category > a")
+            category_links = self.page.get_by_test_id("mobile_top_menu_wrapper").locator(".category > a")
         else:
-            category_links = self.page.locator("#top-menu .category > a")
+            category_links = self.page.get_by_test_id("top-menu").locator(".category > a")
 
         category_links.filter(has_text=name).first.click()
         return self
