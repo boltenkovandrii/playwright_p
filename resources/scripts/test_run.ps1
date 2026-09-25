@@ -6,7 +6,7 @@ Remove-Item reports/allure-report -Recurse -Force
 
 #pytest  -n 12 --browser firefox
 #pytest  --headed  -n 8 --browser firefox
-#pytest  -n 4 --browser chromium src/tests/prestashop/test_localization1.py
+#pytest  -n 4 --browser chromium src/tests/prestashop/test_localization.py
 #pytest  --headed  -n auto --browser firefox  --browser chromium
 #pytest  --headed  -n 0 --browser firefox  --browser chromium
 #pytest  -n 8 --browser chromium --profile=desktop_1920x1200

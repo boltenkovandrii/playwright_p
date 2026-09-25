@@ -32,7 +32,7 @@ def test_search_with_no_matching_results(prestashop_home_page):
 
 @allure.suite("PrestaShop storefront - Search")
 @allure.title("SRCH-04 — Search from catalog page")
-def test_search_from_catalog_page(prestashop_home_page, profile):
+def test_search_from_catalog_page(prestashop_home_page):
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     search_results = catalog_page.search("Hummingbird")
     search_results.check_structure()
