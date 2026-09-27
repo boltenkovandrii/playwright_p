@@ -70,5 +70,5 @@ UI_TEXT = {
         "catalog_subcategory_men": "Heren",
         "catalog_subcategory_women": "Dames",
         "catalog_sort_price_desc": "Prijs, hoog naar laag",
-    }
+    },
 }

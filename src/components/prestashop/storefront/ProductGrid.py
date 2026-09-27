@@ -1,6 +1,6 @@
-from components.prestashop.storefront.ProductCard import ProductCard
 from playwright.sync_api import expect
 
+from components.prestashop.storefront.ProductCard import ProductCard
 from utils.allure_reporting import attach_screenshot
 
 

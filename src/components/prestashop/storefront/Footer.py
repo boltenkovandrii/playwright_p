@@ -26,9 +26,7 @@ class Footer:
             snapshot_name = "footer_compact_simplified"
         else:
             snapshot_name = "footer_simplified"
-        expect(self.container).to_match_aria_snapshot(
-            load_snapshot(snapshot_name, locale=locale, namespace="prestashop")
-        )
+        expect(self.container).to_match_aria_snapshot(load_snapshot(snapshot_name, locale=locale, namespace="prestashop"))
         return self
 
     def sign_out(self):

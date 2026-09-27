@@ -1,8 +1,7 @@
 import pytest
 
 from tests.config.profiles import get_profile, is_desktop
-from utils.allure_reporting import attach_screenshot, attach_playwright_artifacts, set_screenshot_context
-
+from utils.allure_reporting import attach_playwright_artifacts, attach_screenshot, set_screenshot_context
 
 pytest_plugins = [
     "fixtures.locale",
@@ -25,6 +24,7 @@ def pytest_addoption(parser):
         help="Whether to attach screenshots to Allure report (default: off)",
     )
 
+
 def pytest_generate_tests(metafunc):
     if "profile" not in metafunc.fixturenames:
         return
@@ -36,6 +36,7 @@ def pytest_generate_tests(metafunc):
 
     metafunc.parametrize("profile", profiles)
 
+
 @pytest.fixture
 def browser_context_args(browser_context_args, playwright, profile, browser_name):
 
@@ -46,6 +47,7 @@ def browser_context_args(browser_context_args, playwright, profile, browser_name
         **browser_context_args,
         **get_profile(playwright, profile),
     }
+
 
 # final screenshot
 @pytest.fixture

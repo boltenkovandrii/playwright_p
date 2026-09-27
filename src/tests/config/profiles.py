@@ -7,14 +7,12 @@ PROFILES = {
             "height": 1600,
         },
     },
-
     "desktop_1920x1200": {
         "viewport": {
             "width": 1920,
             "height": 1200,
         },
     },
-
     "mobile_landscape": {
         "device": "iPhone 13 landscape",
     },
@@ -29,6 +27,7 @@ PROFILES = {
     },
 }
 
+
 def get_profile(playwright, profile):
     if is_desktop(profile):
         return {
@@ -40,6 +39,7 @@ def get_profile(playwright, profile):
     return {
         **playwright.devices[device],
     }
+
 
 def is_desktop(profile):
     return profile.startswith("desktop")

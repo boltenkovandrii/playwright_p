@@ -24,3 +24,15 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 python_functions = "test_*"
+
+
+[dependency-groups]
+dev = [
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

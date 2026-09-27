@@ -1,9 +1,9 @@
 import re
 
-from components.prestashop.storefront.ProductGrid import ProductGrid
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from components.prestashop.storefront.ProductGrid import ProductGrid
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
@@ -49,11 +49,7 @@ class SearchResultsPage(BaseStorefrontPage):
     def verify_products_match(self, term):
         attach_screenshot(self.page, f"Verifying products match: {term}")
         for card in self.product_grid.cards.all():
-            expect(
-                card
-                .locator(".product-title a")
-                .filter(has_text=re.compile(re.escape(term), re.IGNORECASE))
-            ).to_be_visible()
+            expect(card.locator(".product-title a").filter(has_text=re.compile(re.escape(term), re.IGNORECASE))).to_be_visible()
         return self
 
     def check_pagination_visible(self, visible):
@@ -76,8 +72,7 @@ class SearchResultsPage(BaseStorefrontPage):
         try:
             expect(current_page).to_have_text(str(index), timeout=1000)
         except AssertionError:
-            attach_screenshot(self.page,f"Retrying click for page number: {index}")
+            attach_screenshot(self.page, f"Retrying click for page number: {index}")
             link.click()
 
         return SearchResultsPage(self.page, self.locale).verify_loaded()
-

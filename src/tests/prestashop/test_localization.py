@@ -8,6 +8,7 @@ PRODUCT_NAME = "Hummingbird printed t-shirt"
 def _open_dutch_home(prestashop_home_page):
     return prestashop_home_page.open().switch_language("nl")
 
+
 @allure.suite("PrestaShop storefront - Localization")
 @allure.title("LOCA-01 — Switch storefront language")
 def test_switch_storefront_language(prestashop_home_page):
@@ -19,7 +20,7 @@ def test_switch_storefront_language(prestashop_home_page):
     home_page.verify_current_language("nl")
     home_page.verify_search_placeholder()
 
-    catalog_page = home_page.open_category("Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes")  # Should be localized?
     catalog_page.verify_current_language("nl")
 
 
@@ -28,7 +29,7 @@ def test_switch_storefront_language(prestashop_home_page):
 def test_preserve_storefront_language_across_core_pages(prestashop_home_page):
     home_page = _open_dutch_home(prestashop_home_page)
     home_page.verify_current_language("nl")
-    catalog_page = home_page.open_category("Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes")  # Should be localized?
     catalog_page.verify_current_language("nl")
 
     product_page = catalog_page.open_product_by_name(PRODUCT_NAME)
@@ -55,7 +56,7 @@ def test_verify_translated_ui(prestashop_home_page):
     search_results_page.verify_current_language("nl")
     search_results_page.check_no_matches_message()
 
-    catalog_page = home_page.open_category("Clothes") #Should be localized?
+    catalog_page = home_page.open_category("Clothes")  # Should be localized?
     catalog_page.verify_current_language("nl")
 
     product_page = catalog_page.open_product_by_name(PRODUCT_NAME)
@@ -82,4 +83,3 @@ def test_verify_translated_ui(prestashop_home_page):
     account_page = authenticated_home_page.open_account_page()
     account_page.verify_current_language("nl")
     account_page.check_structure()
-

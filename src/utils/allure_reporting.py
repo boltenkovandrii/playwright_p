@@ -1,11 +1,11 @@
-from pathlib import Path
 from contextvars import ContextVar
+from pathlib import Path
 
 import allure
 
 # Context variables to track screenshot behavior
-_screenshots_enabled_context: ContextVar[bool] = ContextVar('screenshots_enabled', default=True)
-_is_retry_context: ContextVar[bool] = ContextVar('is_retry', default=False)
+_screenshots_enabled_context: ContextVar[bool] = ContextVar("screenshots_enabled", default=True)
+_is_retry_context: ContextVar[bool] = ContextVar("is_retry", default=False)
 
 
 def set_screenshot_context(screenshots_enabled: bool = True, is_retry: bool = False):

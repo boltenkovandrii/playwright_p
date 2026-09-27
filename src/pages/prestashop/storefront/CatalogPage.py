@@ -1,10 +1,10 @@
 import re
 
-from components.prestashop.storefront.ProductGrid import ProductGrid
-from pages.prestashop.storefront.ProductPage import ProductPage
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from components.prestashop.storefront.ProductGrid import ProductGrid
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.ProductPage import ProductPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
@@ -18,8 +18,7 @@ class CatalogPage(BaseStorefrontPage):
         self.subcategory_links = page.locator(".subcategory-name")
         self.active_filters = page.get_by_test_id("js-active-search-filters")
         self.page_list = page.locator("nav.pagination ul.page-list")
-        self.brands_header =  page.get_by_role("link", name=UI_TEXT[locale]["catalog_brands_header"])
-
+        self.brands_header = page.get_by_role("link", name=UI_TEXT[locale]["catalog_brands_header"])
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Catalog page")
@@ -93,7 +92,6 @@ class CatalogPage(BaseStorefrontPage):
             link.click()
 
         return CatalogPage(self.page, self.locale).verify_loaded()
-
 
     def set_results_per_page_with_url(self, results_per_page):
         attach_screenshot(self.page, f"Setting results_per_page: {results_per_page}")

@@ -1,7 +1,6 @@
-
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 

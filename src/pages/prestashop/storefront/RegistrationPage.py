@@ -1,6 +1,6 @@
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
@@ -64,7 +64,6 @@ class RegistrationPage(BaseStorefrontPage):
         # depending on the input, this may lead to either an error or a successful registration (so we will either stay on current page, or will be redirected to the HomePage)
         return BaseStorefrontPage(self.page, self.locale).verify_loaded()
 
-
     def fill_with(self, first_name="", last_name="", email="", password="", birthday=""):
         """Fill the specified fields and check required consent checkboxes when present.
         Returns self for error-assertion chaining."""
@@ -112,5 +111,3 @@ class RegistrationPage(BaseStorefrontPage):
     def verify_error_message_visible(self):
         expect(self.error_alert).to_be_visible()
         return self
-
-

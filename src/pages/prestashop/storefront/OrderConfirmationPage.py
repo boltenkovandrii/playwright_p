@@ -1,8 +1,8 @@
 import re
 
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
@@ -73,10 +73,5 @@ class OrderConfirmationPage(BaseStorefrontPage):
         row = self.order_summary_table.locator("tr", has_text=row_label)
         amount = row.locator("td").last.inner_text().replace("€", "").replace("\u00a0", "").strip()
         if not abs(float(amount) - float(expected_amount)) < 0.01:
-            raise AssertionError(
-                f"Expected amount {expected_amount} was not found in row '{row_label}'. "
-            )
+            raise AssertionError(f"Expected amount {expected_amount} was not found in row '{row_label}'. ")
         return self
-
-
-

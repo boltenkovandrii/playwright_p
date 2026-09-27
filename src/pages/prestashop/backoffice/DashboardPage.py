@@ -1,5 +1,6 @@
-from pages.prestashop.backoffice.BaseBackofficePage import BaseBackofficePage
 from playwright.sync_api import expect
+
+from pages.prestashop.backoffice.BaseBackofficePage import BaseBackofficePage
 
 
 class DashboardPage(BaseBackofficePage):

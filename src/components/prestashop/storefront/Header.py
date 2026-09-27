@@ -5,6 +5,7 @@ from utils.allure_reporting import attach_screenshot
 from utils.responsive import BOOTSTRAP_MD
 from utils.snapshots import load_snapshot
 
+
 class Header:
     def __init__(self, page):
         self.page = page
@@ -78,10 +79,7 @@ class Header:
             snapshot_name = "header_compact"
         else:
             snapshot_name = "header"
-        expect(self.container).to_match_aria_snapshot(
-            load_snapshot(snapshot_name, locale=locale, namespace="prestashop")
-        )
-
+        expect(self.container).to_match_aria_snapshot(load_snapshot(snapshot_name, locale=locale, namespace="prestashop"))
 
     def open_mobile_menu(self):
         self.menu_button.click()

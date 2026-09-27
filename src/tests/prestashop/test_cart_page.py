@@ -114,8 +114,8 @@ def test_verify_cart_totals(prestashop_home_page):
     product_page.set_quantity(3)
     cart_page = product_page.add_to_cart().proceed_to_checkout()
 
-    product_spec1 =  ProductSpec(name=product_name, attributes={"size": "M", "color": "Black"})
-    product_spec2 =  ProductSpec(name=product_name, attributes={"size": "XL", "color": "White"})
+    product_spec1 = ProductSpec(name=product_name, attributes={"size": "M", "color": "Black"})
+    product_spec2 = ProductSpec(name=product_name, attributes={"size": "XL", "color": "White"})
 
     cart_page.verify_product_count(2)
     cart_page.verify_product_quantity(product_spec1, 2)

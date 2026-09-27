@@ -1,8 +1,8 @@
+from playwright.sync_api import expect
+
 from components.prestashop.storefront.Footer import Footer
 from components.prestashop.storefront.Header import Header
 from pages.BasePage import BasePage
-from playwright.sync_api import expect
-
 from utils.allure_reporting import attach_screenshot
 from utils.environment import get_env_variable
 from utils.responsive import BOOTSTRAP_MD
@@ -79,12 +79,14 @@ class BaseStorefrontPage(BasePage):
         attach_screenshot(self.page, "Opening login page via account menu")
         self.header.open_login_page()
         from pages.prestashop.storefront.LoginPage import LoginPage
+
         return LoginPage(self.page, self.locale).verify_loaded()
 
     def open_account_page(self):
         attach_screenshot(self.page, "Opening to account page")
         self.header.open_account_page()
         from pages.prestashop.storefront.AccountDashboardPage import AccountDashboardPage
+
         return AccountDashboardPage(self.page, self.locale).verify_loaded()
 
     def sign_out(self):
@@ -115,6 +117,7 @@ class BaseStorefrontPage(BasePage):
     def as_home_page(self, locale=None):
         # Lazy import to avoid circular import from page
         from pages.prestashop.storefront.HomePage import HomePage
+
         if locale is None:
             locale = self.locale
         return HomePage(self.page, locale).verify_loaded()
@@ -122,6 +125,7 @@ class BaseStorefrontPage(BasePage):
     def as_login_page(self, locale=None):
         # Lazy import to avoid circular import from page
         from pages.prestashop.storefront.LoginPage import LoginPage
+
         if locale is None:
             locale = self.locale
         return LoginPage(self.page, locale).verify_loaded()
@@ -129,6 +133,7 @@ class BaseStorefrontPage(BasePage):
     def as_registration_page(self, locale=None):
         # Lazy import to avoid circular import from page
         from pages.prestashop.storefront.RegistrationPage import RegistrationPage
+
         if locale is None:
             locale = self.locale
         return RegistrationPage(self.page, locale).verify_loaded()

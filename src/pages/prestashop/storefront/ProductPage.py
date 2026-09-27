@@ -1,9 +1,9 @@
 import re
 
-from pages.prestashop.storefront.CartPage import CartPage
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.CartPage import CartPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
@@ -31,7 +31,6 @@ class ProductPage(BaseStorefrontPage):
         self.short_description = self.product_information.locator("p").filter(has_text=re.compile(r"\S")).first
 
         self.add_to_cart_button = page.locator("[data-button-action='add-to-cart']")
-
 
         self.cart_modal = page.get_by_test_id("blockcart-modal")
         self.cart_modal_title = self.cart_modal.locator(".modal-title")
@@ -78,9 +77,7 @@ class ProductPage(BaseStorefrontPage):
 
     def verify_product_name(self, expected_name):
         attach_screenshot(self.page, "Verifying product name")
-        expect(self.product_name).to_contain_text(
-            re.compile(re.escape(expected_name), re.IGNORECASE)
-        )
+        expect(self.product_name).to_contain_text(re.compile(re.escape(expected_name), re.IGNORECASE))
         return self
 
     def verify_regular_price(self, expected_price):
@@ -202,7 +199,7 @@ class ProductPage(BaseStorefrontPage):
             self._color_option(color).check(force=True)
             expect(self._color_option(color)).to_be_checked()
             expect(self.cover_image).not_to_have_attribute("src", original_image)
-        else :
+        else:
             attach_screenshot(self.page, f"Color: {color} is already selected")
         return self
 
@@ -224,6 +221,7 @@ class ProductPage(BaseStorefrontPage):
     def go_to_category_from_breadcrumb(self, category_name):
         attach_screenshot(self.page, "Going to category from breadcrumb")
         from pages.prestashop.storefront.CatalogPage import CatalogPage
+
         with self.page.expect_navigation(wait_until="domcontentloaded"):
             self.page.locator("nav.breadcrumb a").filter(has_text=category_name).click()
         return CatalogPage(self.page, self.locale).verify_loaded()

@@ -1,9 +1,9 @@
 import re
 
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
-from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage
 from playwright.sync_api import expect
 
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 from utils.network_helper import expect_response
@@ -52,7 +52,6 @@ class CheckoutPage(BaseStorefrontPage):
         self.payment_option_radios = self.payment_step.locator("input[name='payment-option']")
         self.terms_checkbox = self.payment_step.locator("input[id='conditions_to_approve[terms-and-conditions]']")
         self.place_order_button = self.payment_step.get_by_role("button", name=UI_TEXT[self.locale]["checkout_place_order_button"])
-
 
     def verify_loaded(self):
         attach_screenshot(self.page, "Checkout page")
@@ -146,7 +145,6 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.shipping_continue_button).to_be_visible()
         return self
 
-
     def fill_shipping_method(self, name):
         attach_screenshot(self.page, "Selecting shipping method")
         shipping_option = self.delivery_options.filter(has=self.page.get_by_text(name))
@@ -187,11 +185,3 @@ class CheckoutPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Placing order")
         self.place_order_button.click()
         return OrderConfirmationPage(self.page, self.locale).verify_loaded()
-
-
-
-
-
-
-
-

@@ -1,10 +1,10 @@
 import re
 
-from helpers.prestashop.ProductSpec import ProductSpec
-from pages.prestashop.storefront.CheckoutPage import CheckoutPage
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
+from helpers.prestashop.ProductSpec import ProductSpec
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.CheckoutPage import CheckoutPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
@@ -56,9 +56,7 @@ class CartPage(BaseStorefrontPage):
         return self
 
     def verify_product_with_name_present(self, expected_name, expected_count=1):
-        product_name = self.cart_item_product_names.filter(
-            has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$")
-        )
+        product_name = self.cart_item_product_names.filter(has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$"))
         expect(product_name).to_have_count(expected_count)
         expect(product_name.first).to_be_visible()
         return self
@@ -111,13 +109,10 @@ class CartPage(BaseStorefrontPage):
         expect(self.cart_total_value).to_have_text(f"€{expected_total}")
         return self
 
-
     def _cart_item_by_product(self, product: ProductSpec):
-        candidates = self.cart_items.filter(
-            has=self.page.locator(".product-line-info a.label", has_text=re.compile(rf"^\s*{re.escape(product.name)}\s*$"))
-        )
+        candidates = self.cart_items.filter(has=self.page.locator(".product-line-info a.label", has_text=re.compile(rf"^\s*{re.escape(product.name)}\s*$")))
 
         for attribute, value in product.attributes.items():
-            candidates = candidates.filter(has=self.page.locator( f".{attribute} .value", has_text=value))
+            candidates = candidates.filter(has=self.page.locator(f".{attribute} .value", has_text=value))
 
         return candidates.first

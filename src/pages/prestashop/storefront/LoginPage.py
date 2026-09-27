@@ -1,8 +1,8 @@
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from playwright.sync_api import expect
 
-from resources.translations import UI_TEXT
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from pages.prestashop.storefront.HomePage import HomePage
+from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
@@ -45,6 +45,7 @@ class LoginPage(BaseStorefrontPage):
         attach_screenshot(self.page, "Navigating to registration page")
         self.register_link.click()
         from pages.prestashop.storefront.RegistrationPage import RegistrationPage
+
         return RegistrationPage(self.page, self.locale).verify_loaded()
 
     def login(self, email, password):

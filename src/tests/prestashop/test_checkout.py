@@ -37,12 +37,7 @@ def test_guest_checkout_page_structure(prestashop_home_page):
     checkout_page.fill_shipping_method(name=shipping_method)
     checkout_page.check_payment_structure()
 
-    order_confirmation_page = (
-        checkout_page
-        .select_payment_method(method_name=payment_method)
-        .accept_terms()
-        .place_order()
-    )
+    order_confirmation_page = checkout_page.select_payment_method(method_name=payment_method).accept_terms().place_order()
 
     order_confirmation_page.check_structure()
     order_confirmation_page.verify_order_reference_present()
@@ -52,4 +47,3 @@ def test_guest_checkout_page_structure(prestashop_home_page):
     order_confirmation_page.verify_total_amount(expected_total)
     order_confirmation_page.verify_shipping_method(shipping_method)
     order_confirmation_page.verify_payment_method(payment_method_confirmation)
-

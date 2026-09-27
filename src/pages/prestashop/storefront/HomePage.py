@@ -1,11 +1,11 @@
 from urllib.parse import urlencode
 
-from components.prestashop.storefront.ProductGrid import ProductGrid
-from pages.prestashop.storefront.CatalogPage import CatalogPage
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
-from pages.prestashop.storefront.ProductPage import ProductPage
 from playwright.sync_api import expect
 
+from components.prestashop.storefront.ProductGrid import ProductGrid
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
+from pages.prestashop.storefront.CatalogPage import CatalogPage
+from pages.prestashop.storefront.ProductPage import ProductPage
 from pages.prestashop.storefront.SearchResultsPage import SearchResultsPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
@@ -75,7 +75,6 @@ class HomePage(BaseStorefrontPage):
         attach_screenshot(self.page, f"Opening featured product by name: {name}")
         self.featured_products.open_product_by_name(name)
         return ProductPage(self.page, self.locale).verify_loaded()
-
 
     def verify_header_cart_count(self, expected_count):
         self.header.verify_cart_count(expected_count)
