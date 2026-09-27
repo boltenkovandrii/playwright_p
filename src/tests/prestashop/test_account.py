@@ -57,7 +57,7 @@ def test_registration_validation(prestashop_home_page):
         email="not-an-email",
         password="x",
     ).submit().as_registration_page()
-    login_page.verify_email_error()
+    registration_page.verify_email_error()
 
     # Enter valid email, but a password that does not meet the minimum requirements (e.g., too short), and submit.
     unique_email = f"testuser.{uuid.uuid4().hex[:8]}@example.com"
@@ -67,7 +67,7 @@ def test_registration_validation(prestashop_home_page):
         email=unique_email,
         password="x",
     ).submit().as_registration_page()
-    login_page.verify_password_error()
+    registration_page.verify_password_error()
 
     # Entering an email address that is already registered
     registration_page = registration_page.fill_with(

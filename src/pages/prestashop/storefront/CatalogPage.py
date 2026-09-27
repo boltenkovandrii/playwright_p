@@ -49,19 +49,16 @@ class CatalogPage(BaseStorefrontPage):
         return ProductPage(self.page, self.locale).verify_loaded()
 
     def verify_category_name(self, name):
-        attach_screenshot(self.page, "Verifying category name")
         expect(self.heading).to_contain_text(re.compile(re.escape(name), re.IGNORECASE))
         return self
 
     def check_subcategories_list(self, *names):
-        attach_screenshot(self.page, "Checking subcategories list")
         expect(self.subcategory_links).to_have_count(len(names))
         for name in names:
             expect(self.subcategory_links.filter(has_text=re.compile(rf"^\s*{re.escape(name)}\s*$"))).to_be_visible()
         return self
 
     def check_displayed_results_count(self, count):
-        attach_screenshot(self.page, "Checking displayed results count")
         expect(self.product_grid.cards).to_have_count(count)
         return self
 

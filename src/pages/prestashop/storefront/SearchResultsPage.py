@@ -37,7 +37,6 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def check_displayed_results_count(self, count):
-        attach_screenshot(self.page, "Checking displayed results count")
         expect(self.product_grid.cards).to_have_count(count)
         return self
 
@@ -58,7 +57,6 @@ class SearchResultsPage(BaseStorefrontPage):
         return self
 
     def check_pagination_visible(self, visible):
-        attach_screenshot(self.page, "Checking pagination visibility")
         if visible:
             expect(self.page_list).to_be_visible()
         else:

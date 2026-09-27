@@ -93,7 +93,6 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.personal_info_continue_button).to_be_visible()
         return self
 
-    # Might need to add another parameters or even whole additional layer for workflow interactions, but it is not needed so far
     def fill_personal_info(self, first_name, last_name, email):
         attach_screenshot(self.page, "Filling personal information")
         self.first_name_input.fill(first_name)
@@ -121,7 +120,6 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.address_continue_button).to_be_visible()
         return self
 
-    # Might need to add another parameters or even whole additional layer for workflow interactions, but it is not needed so far
     def fill_address(self, address_line_1, city, postal_code, country, phone, state=None):
         attach_screenshot(self.page, "Filling address information")
         self.address_input.fill(address_line_1)

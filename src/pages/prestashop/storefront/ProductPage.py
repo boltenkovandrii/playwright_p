@@ -214,9 +214,6 @@ class ProductPage(BaseStorefrontPage):
     def get_image_source(self):
         return self.cover_image.get_attribute("src")
 
-    def go_to_cart(self):
-        return self.proceed_to_checkout()
-
     def proceed_to_checkout(self):
         attach_screenshot(self.page, "Going to cart")
         with self.page.expect_navigation(wait_until="domcontentloaded"):

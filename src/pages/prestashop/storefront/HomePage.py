@@ -69,7 +69,6 @@ class HomePage(BaseStorefrontPage):
         return ProductPage(self.page, self.locale).verify_loaded()
 
     def get_featured_product_name(self, index=0):
-        attach_screenshot(self.page, f"Getting featured product name at index: {index}")
         return self.featured_products.product_at(index).get_name()
 
     def open_featured_product_by_name(self, name):

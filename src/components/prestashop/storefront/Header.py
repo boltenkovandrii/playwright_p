@@ -103,10 +103,6 @@ class Header:
         category_links.filter(has_text=name).first.click()
         return self
 
-    def click_cart(self):
-        self.desktop_cart.locator("a").click()
-        return self
-
     def verify_cart_count(self, expected_count):
         expected_text = f"({expected_count})"
 

@@ -35,7 +35,7 @@ def test_preserve_storefront_language_across_core_pages(prestashop_home_page):
     product_page.check_structure()
     product_page.verify_current_language("nl")
 
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
     cart_page.check_structure()
     cart_page.verify_current_language("nl")
 
@@ -62,7 +62,7 @@ def test_verify_translated_ui(prestashop_home_page):
     product_page.verify_current_language("nl")
     product_page.check_structure()
 
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
     cart_page.verify_current_language("nl")
     cart_page.check_structure()
 
