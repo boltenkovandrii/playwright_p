@@ -102,6 +102,12 @@ jobs:
            
            echo "allure_screenshots=$ALLURE_SCREENSHOTS" >> $GITHUB_OUTPUT
 
+      - name: Lint with Ruff
+        run: ruff check --output-format=github .
+
+      - name: Check formatting with Ruff
+        run: ruff format --check .
+
       - name: Install Playwright browsers
         run: python -m playwright install --with-deps
 #        run: python -m playwright install --with-deps ${{ steps.set-browsers.outputs.browsers }}  ## providing user input directly to bash is not safe and just installing all the browsers does not consume a lot of resources

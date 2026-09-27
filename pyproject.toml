@@ -17,6 +17,7 @@ dependencies = [
     "pytest-rerunfailures",
     "allure-python-commons",
     "python-dotenv",
+    "ruff",
 ]
 
 [tool.setuptools.packages.find]
@@ -24,12 +25,6 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 python_functions = "test_*"
-
-
-[dependency-groups]
-dev = [
-    "ruff",
-]
 
 [tool.ruff]
 line-length = 200
