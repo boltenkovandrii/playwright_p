@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import re
+from typing import Self
 
 from playwright.sync_api import Locator, Page, expect
-from typing import Self
 
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage

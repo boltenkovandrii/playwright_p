@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import Locator, Page, expect
 from typing import Self
+
+from playwright.sync_api import Locator, Page, expect
 
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
@@ -158,4 +159,3 @@ class Header:
         if viewport_size is None:
             raise AssertionError("Viewport size is not available")
         return viewport_size["width"]
-

@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from playwright.sync_api import Locator, Page, expect
-from typing import Self
 
 from helpers.prestashop.ProductSpec import ProductSpec
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage

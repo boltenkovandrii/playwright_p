@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import re
+from typing import Self
 
 from playwright.sync_api import Locator, expect
-from typing import Self
 
 from utils.allure_reporting import attach_screenshot
 

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import Page
 from typing import Self
+
+from playwright.sync_api import Page
 
 
 class BasePage:

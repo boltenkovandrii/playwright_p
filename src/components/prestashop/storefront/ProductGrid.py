@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import expect
-from playwright.sync_api import Locator
 from typing import Self
+
+from playwright.sync_api import Locator, expect
 
 from components.prestashop.storefront.ProductCard import ProductCard
 from utils.allure_reporting import attach_screenshot

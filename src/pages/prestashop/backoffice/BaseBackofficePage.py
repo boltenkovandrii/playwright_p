@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import expect
 from typing import Self
+
+from playwright.sync_api import expect
 
 from pages.BasePage import BasePage
 from utils.environment import get_env_variable

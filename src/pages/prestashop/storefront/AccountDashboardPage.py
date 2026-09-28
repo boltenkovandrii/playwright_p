@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import expect
-from playwright.sync_api import Page
 from typing import Self
+
+from playwright.sync_api import Page, expect
 
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from playwright.sync_api import Page, expect
 from typing import Self
+
+from playwright.sync_api import Page, expect
 
 from pages.prestashop.backoffice.BaseBackofficePage import BaseBackofficePage
 

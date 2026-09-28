@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
-from playwright.sync_api import expect
-from playwright.sync_api import Page
-from typing import Self
+from playwright.sync_api import Page, expect
 
 from components.prestashop.storefront.Footer import Footer
 from components.prestashop.storefront.Header import Header
@@ -156,4 +154,3 @@ class BaseStorefrontPage(BasePage):
         if viewport_size is None:
             raise AssertionError("Viewport size is not available")
         return viewport_size["width"]
-
