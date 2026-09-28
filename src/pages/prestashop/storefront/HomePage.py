@@ -21,10 +21,6 @@ class HomePage(BaseStorefrontPage):
         self.featured_products_heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["featured_products_heading"])
         self.featured_products = ProductGrid(page.locator(".featured-products"))
 
-    def open(self, path: str = "") -> Self:
-        super().open(path)
-        return self
-
     def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Home page")
         super().verify_loaded()

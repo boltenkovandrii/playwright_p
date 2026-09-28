@@ -1,53 +1,45 @@
-# AGENTS.md
+# Repository Agent Instructions
 
-## Project Snapshot
-- Python Playwright + pytest automation framework with current active coverage on the **PrestaShop storefront**.
-- Core pattern is Page Object Model: page objects in `src/pages/prestashop/storefront/` compose reusable UI components from `src/components/prestashop/storefront/`.
-- Every page object inherits `BasePage` and must implement `verify_loaded()` (see `src/pages/BasePage.py`).
+## Project
 
-## Architecture That Matters
-- Tests live in `src/tests/` and use fixtures from `src/fixtures/` (loaded via `pytest_plugins` in `src/tests/conftest.py`).
-- Data flow is fixture-driven: pytest creates `page` -> page fixture builds page object -> tests call fluent page methods.
-- Locale-aware storefront pages use `resources/translations.py` + localized storefront URLs (example: `src/pages/prestashop/storefront/HomePage.py`).
-- Device profile behavior is centralized in `src/tests/config/profiles.py`; profile selection is injected via fixtures/options.
-- Failure artifacts are attached by pytest hooks/utilities (`src/tests/conftest.py`, `src/utils/allure_reporting.py`).
+This is a Python + Playwright + pytest UI automation portfolio project. Current automated coverage targets the PrestaShop storefront.
 
-## Working Conventions (Project-Specific)
-- Prefer `expect(...)` assertions from Playwright, not plain `assert`, in page/test UI checks.
-- Keep page methods chainable by returning `self` after actions.
-- Use test metadata decorators consistently (`@allure.suite`, `@allure.title`) as seen in `src/tests/prestashop/test_home_page.py`.
-- Parametrize locales with `indirect=True`:
-  `@pytest.mark.parametrize("locale", ["en", "nl"], indirect=True)` together with a test signature such as `def test_example(prestashop_home_page, locale):`.
-- Selector convention is nonstandard: test-id attribute is configured as `id` (see `pytest.ini` + README notes).
+The project demonstrates maintainable E2E automation rather than exhaustive coverage of the AUT.
 
-## Browser/Profile Rules You Must Respect
-- Supported browsers include `firefox`, `chromium`, `webkit` in config/docs, but profile emulation has a known Firefox limitation.
-- Non-desktop profile + Firefox is intentionally skipped (logic in `src/tests/conftest.py`).
-- Default profile fixture value is desktop-oriented (`desktop_1920x1200`) unless overridden.
+## Architecture
 
-## Dev Workflows
-- Install deps: `pip install -e .`
-- Install browsers: `python -m playwright install`
-- Fast local run script (PowerShell): `resources/scripts/test_run.ps1`
-- Typical direct run examples:
-  - `pytest -n auto --browser chromium`
-  - `pytest src/tests/prestashop/test_home_page.py::test_home_page_structure --browser chromium`
-- Reporting outputs:
-  - raw: `reports/allure-results/`
-  - HTML: `reports/allure-report/index.html`
+* Tests live under `src/tests/`.
+* Pytest fixtures live under `src/fixtures/`.
+* Page Objects live under `src/pages/`.
+* Reusable UI components live under `src/components/`.
+* Shared helpers live under `src/helpers/` and `src/utils/`.
+* Storefront Page Objects inherit from `BaseStorefrontPage`; all Page Objects implement `verify_loaded()`.
+* Tests express user behavior and business expectations.
+* UI locators and UI interaction logic belong in Page Objects/components, not tests.
+* Same-page Page Object actions return `Self`; navigation actions return the appropriate destination Page Object.
 
-## Integration Points
-- AUT endpoints are externalized (for example `PRESTASHOP_BASE_URL` via `.env`; see README/fixtures usage).
-- Docker compose files for local AUT stacks are under `docker/`.
-- CI is GitHub Actions oriented, with browser/profile matrix behavior documented in repo docs.
+## Engineering Rules
 
-## When Adding/Editing Tests
-- Reuse existing fixtures first, especially `prestashop_home_page` from `src/fixtures/prestashop/pages.py`.
-- Mirror the existing layout: storefront tests under `src/tests/prestashop/`, storefront pages under `src/pages/prestashop/storefront/`, and storefront components under `src/components/prestashop/storefront/`.
-- For new pages/components, follow the existing split and implement `verify_loaded()` on every page object.
-- Keep Allure artifacts useful: attach screenshots intentionally and rely on failure hooks for traces/videos.
+* Prefer existing abstractions over introducing new ones.
+* Keep changes focused on the requested behavior.
+* Prefer Playwright web-first assertions and auto-waiting.
+* Do not use `time.sleep()` or arbitrary waits.
+* Use stable, user-facing or accessibility-based locators where possible.
+* Do not use positional locators merely to suppress strict-mode errors.
+* Keep tests independent and suitable for parallel execution.
+* Add screenshots only at useful diagnostic/state-transition points.
+* Use existing reporting and fixture infrastructure rather than duplicating it.
+* Do not silently work around unexpected AUT behavior; document intentional limitations.
+* Do not change unrelated files or architecture without a concrete reason.
 
-## Coverage Documentation
-- Storefront scenario design documents live under `docs/prestashop/storefront/`.
-- Use these markdown files as the business-readable coverage map when extending or reviewing the suite.
+## Validation
 
+After implementation, run the smallest relevant test scope first, then broader checks when practical.
+
+The repository uses Ruff, mypy, pytest, Playwright and Allure. Follow the commands documented in `README.md`.
+
+## Documentation
+
+Business-readable test scenarios are stored under `docs/prestashop/storefront/`.
+
+When adding or changing coverage, keep the scenario documentation and automated tests consistent.
