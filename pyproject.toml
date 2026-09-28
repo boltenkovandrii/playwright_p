@@ -9,16 +9,21 @@ description = "Playwright automation framework"
 requires-python = ">=3.10"
 
 dependencies = [
-    "pytest",
-    "playwright",
-    "pytest-playwright",
-    "allure-pytest",
-    "pytest-xdist",
-    "pytest-rerunfailures",
-    "allure-python-commons",
-    "python-dotenv",
-    "ruff",
-    "mypy",
+    "pytest>=9.1.1",
+    "playwright>=1.45.0",
+    "pytest-playwright>=0.8.0",
+    "allure-pytest>=2.13.2",
+    "pytest-xdist>=3.5.0",
+    "pytest-rerunfailures>=12.0",
+    "allure-python-commons>=2.13.2",
+    "python-dotenv>=1.0.0",
+    "typing_extensions>=4.9.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.3.7",
+    "mypy>=1.8.0",
 ]
 
 [tool.setuptools.packages.find]

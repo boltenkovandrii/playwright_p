@@ -141,6 +141,13 @@ cd test-artifacts\allure-results
 python -m http.server 8080
   ```
 
+## Retry strategy
+A single retry is enabled to distinguish transient failures from consistently reproducible failures; retries are not intended to mask test instability.
+
+For failed\retried tests screenshots are stored for all important steps.
+
+Reports also contain traces and videos for the failed tests.
+
 ## Test Design Documentation
 
 Business-readable scenario documentation for the storefront suite is stored under:
