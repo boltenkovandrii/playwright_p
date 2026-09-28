@@ -161,6 +161,15 @@ Business-readable scenario documentation for the storefront suite is stored unde
 - `docs/prestashop/storefront/account.md`
 - `docs/prestashop/storefront/localization.md`
 
+## AI-assisted development
+Project contain definitions of two agents:
+- `.github/agents/test-designer.agent.md` - an agent that can generate new test scenarios based on existing ones and the AUT
+- `.github/agents/playwright-implementer.agent.md` - an agent that can implement Playwright test code based on a scenario definition
+
+Both agents are designed to help with local development. They are not intended for use in a CI/CD pipeline. 
+And in general this is rather 'work in progress' feature - they are not intended to replace human test designers or developers, but rather to assist them in generating new scenarios and implementing them.
+
+
 ## Notes
 
 - The framework uses the HTML `id` attribute as the configured Playwright test-id attribute. In a production implementation, dedicated test IDs would be preferable.
