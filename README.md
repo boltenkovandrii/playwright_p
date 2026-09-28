@@ -57,7 +57,7 @@ src/
 ### 1. Install dependencies
 
 ```powershell
-pip install -e .
+pip install -e ".[dev]"
 python -m playwright install
 ```
 
@@ -141,6 +141,13 @@ cd test-artifacts\allure-results
 python -m http.server 8080
   ```
 
+## Retry strategy
+A single retry is enabled to distinguish transient failures from consistently reproducible failures; retries are not intended to mask test instability.
+
+Screenshots for all important steps are stored for failed tests and their retries.
+
+Reports also contain traces and videos for the failed tests.
+
 ## Test Design Documentation
 
 Business-readable scenario documentation for the storefront suite is stored under:
@@ -153,6 +160,31 @@ Business-readable scenario documentation for the storefront suite is stored unde
 - `docs/prestashop/storefront/search.md`
 - `docs/prestashop/storefront/account.md`
 - `docs/prestashop/storefront/localization.md`
+
+### Code quality checks
+
+Install development dependencies:
+```powershell
+pip install -e ".[dev]"
+```
+Run:
+```powershell
+ruff check .
+ruff format --check .
+mypy .
+```
+
+## AI-assisted development
+
+GitHub Copilot is used as an engineering aid rather than as an autonomous test generator.
+
+The repository contains two custom agents:
+
+- test-designer — analyzes requirements and existing coverage and produces implementation-independent test scenarios.
+- playwright-implementer — implements approved scenarios while following the repository's Page Object, locator, synchronization, and reporting conventions.
+
+AI-generated changes are reviewed manually and validated through the same test and CI pipeline as manually written changes.
+
 
 ## Notes
 

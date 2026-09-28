@@ -1,16 +1,22 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING, Self
+
+from playwright.sync_api import Locator, Page, expect
 
 from helpers.prestashop.ProductSpec import ProductSpec
-from pages.prestashop.storefront.CheckoutPage import CheckoutPage
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
-from playwright.sync_api import expect
-
+from pages.prestashop.storefront.CheckoutPage import CheckoutPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
+if TYPE_CHECKING:
+    from pages.prestashop.storefront.HomePage import HomePage
+
 
 class CartPage(BaseStorefrontPage):
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         super().__init__(page, locale)
         self.cart = page.locator(".cart-grid")
         self.cart_items = page.locator(".cart-items .cart-item")
@@ -22,19 +28,19 @@ class CartPage(BaseStorefrontPage):
         self.continue_shopping_link = page.get_by_role("link", name=UI_TEXT[self.locale]["continue_shopping_link"])
         self.proceed_to_checkout_link = page.get_by_role("link", name=UI_TEXT[self.locale]["proceed_to_checkout_link"])
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Cart page")
         super().verify_loaded()
         expect(self.page.get_by_test_id("cart")).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
+    def verify_current_language(self, locale: str) -> Self:
         super().verify_current_language(locale)
         expect(self.continue_shopping_link).to_be_visible()
         expect(self.proceed_to_checkout_link).to_be_visible()
         return self
 
-    def check_structure(self):
+    def check_structure(self) -> Self:
         attach_screenshot(self.page, "Checking cart page structure")
         super().check_structure()
         expect(self.cart).to_be_visible()
@@ -44,33 +50,31 @@ class CartPage(BaseStorefrontPage):
         expect(self.proceed_to_checkout_link).to_be_visible()
         return self
 
-    def check_empty_structure(self):
+    def check_empty_structure(self) -> Self:
         attach_screenshot(self.page, "Checking empty cart structure")
         super().check_structure()
         expect(self.empty_cart_message).to_be_visible()
         expect(self.empty_cart_message).to_contain_text(UI_TEXT[self.locale]["cart_empty_message"])
         return self
 
-    def verify_product_count(self, expected_count):
+    def verify_product_count(self, expected_count: int) -> Self:
         expect(self.cart_items).to_have_count(expected_count)
         return self
 
-    def verify_product_with_name_present(self, expected_name, expected_count=1):
-        product_name = self.cart_item_product_names.filter(
-            has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$")
-        )
+    def verify_product_with_name_present(self, expected_name: str, expected_count: int = 1) -> Self:
+        product_name = self.cart_item_product_names.filter(has_text=re.compile(rf"^\s*{re.escape(expected_name)}\s*$"))
         expect(product_name).to_have_count(expected_count)
         expect(product_name.first).to_be_visible()
         return self
 
-    def verify_product_price(self, product, expected_price):
-        for item in self.cart_items.filter(has_text=product).all():
+    def verify_product_price(self, product_name: str, expected_price: float) -> Self:
+        for item in self.cart_items.filter(has_text=product_name).all():
             price = item.locator(".current-price .price")
             expect(price).to_be_visible()
             expect(price).to_have_text(f"€{expected_price}")
         return self
 
-    def set_product_quantity(self, product, quantity):
+    def set_product_quantity(self, product: ProductSpec, quantity: int) -> Self:
         attach_screenshot(self.page, f"Updating quantity for {product} to {quantity}")
         quantity_input = self._cart_item_by_product(product).locator("input.js-cart-line-product-quantity")
         expect(quantity_input).to_be_visible()
@@ -79,12 +83,12 @@ class CartPage(BaseStorefrontPage):
         expect(quantity_input).to_have_value(str(quantity))
         return self
 
-    def verify_product_quantity(self, product, expected_quantity):
+    def verify_product_quantity(self, product: ProductSpec, expected_quantity: int) -> Self:
         quantity_input = self._cart_item_by_product(product).locator("input.js-cart-line-product-quantity")
         expect(quantity_input).to_have_value(str(expected_quantity))
         return self
 
-    def remove_product(self, product):
+    def remove_product(self, product: ProductSpec) -> Self:
         attach_screenshot(self.page, f"Removing product from cart: {product}")
         product_item = self._cart_item_by_product(product)
         expect(product_item).to_be_visible()
@@ -92,32 +96,29 @@ class CartPage(BaseStorefrontPage):
         expect(self._cart_item_by_product(product)).to_have_count(0)
         return self
 
-    def continue_shopping(self):
+    def continue_shopping(self) -> HomePage:
         attach_screenshot(self.page, "Continuing shopping from cart page")
         self.continue_shopping_link.click()
         # avoiding circular imports
         return self.as_home_page()
 
-    def proceed_to_checkout(self):
+    def proceed_to_checkout(self) -> CheckoutPage:
         attach_screenshot(self.page, "Proceeding from cart to checkout")
         self.proceed_to_checkout_link.click()
         return CheckoutPage(self.page, self.locale).verify_loaded()
 
-    def verify_products_subtotal(self, expected_subtotal):
+    def verify_products_subtotal(self, expected_subtotal: float) -> Self:
         expect(self.cart_products_subtotal_value).to_have_text(f"€{expected_subtotal}")
         return self
 
-    def verify_total(self, expected_total):
+    def verify_total(self, expected_total: float) -> Self:
         expect(self.cart_total_value).to_have_text(f"€{expected_total}")
         return self
 
-
-    def _cart_item_by_product(self, product: ProductSpec):
-        candidates = self.cart_items.filter(
-            has=self.page.locator(".product-line-info a.label", has_text=re.compile(rf"^\s*{re.escape(product.name)}\s*$"))
-        )
+    def _cart_item_by_product(self, product: ProductSpec) -> Locator:
+        candidates = self.cart_items.filter(has=self.page.locator(".product-line-info a.label", has_text=re.compile(rf"^\s*{re.escape(product.name)}\s*$")))
 
         for attribute, value in product.attributes.items():
-            candidates = candidates.filter(has=self.page.locator( f".{attribute} .value", has_text=value))
+            candidates = candidates.filter(has=self.page.locator(f".{attribute} .value", has_text=value))
 
         return candidates.first

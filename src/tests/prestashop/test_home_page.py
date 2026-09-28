@@ -32,4 +32,3 @@ def test_navigate_to_product_from_featured_products_section(prestashop_home_page
     product_page = home_page.open_featured_product_by_name(product_name)
     product_page.verify_product_name(product_name)
     product_page.check_structure()
-

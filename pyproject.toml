@@ -6,17 +6,23 @@ build-backend = "setuptools.build_meta"
 name = "playwright_p"
 version = "0.1.0"
 description = "Playwright automation framework"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 dependencies = [
-    "pytest",
-    "playwright",
-    "pytest-playwright",
-    "allure-pytest",
-    "pytest-xdist",
-    "pytest-rerunfailures",
-    "allure-python-commons",
-    "python-dotenv",
+    "pytest>=9.1.1",
+    "playwright>=1.45.0",
+    "pytest-playwright>=0.8.0",
+    "allure-pytest>=2.13.2",
+    "pytest-xdist>=3.5.0",
+    "pytest-rerunfailures>=12.0",
+    "allure-python-commons>=2.13.2",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.3.7",
+    "mypy>=1.8.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -24,3 +30,21 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 python_functions = "test_*"
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+disallow_untyped_defs = false
+disallow_untyped_calls = false

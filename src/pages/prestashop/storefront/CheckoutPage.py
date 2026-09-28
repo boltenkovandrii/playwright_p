@@ -1,16 +1,19 @@
+from __future__ import annotations
+
 import re
+from typing import Self
+
+from playwright.sync_api import Locator, Page, expect
 
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from pages.prestashop.storefront.OrderConfirmationPage import OrderConfirmationPage
-from playwright.sync_api import expect
-
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 from utils.network_helper import expect_response
 
 
 class CheckoutPage(BaseStorefrontPage):
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         super().__init__(page, locale)
         self.checkout = page.get_by_test_id("checkout")
 
@@ -53,15 +56,14 @@ class CheckoutPage(BaseStorefrontPage):
         self.terms_checkbox = self.payment_step.locator("input[id='conditions_to_approve[terms-and-conditions]']")
         self.place_order_button = self.payment_step.get_by_role("button", name=UI_TEXT[self.locale]["checkout_place_order_button"])
 
-
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Checkout page")
         self.header.verify_loaded()
         expect(self.checkout).to_be_visible()
         expect(self.personal_info_step).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
+    def verify_current_language(self, locale: str) -> Self:
         # don't use super().verify_current_language(locale) like on other pages, because checkout page does not have header with language selector
         expect(self.personal_info_heading).to_be_visible()
         expect(self.addresses_heading).to_be_visible()
@@ -70,7 +72,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.personal_info_continue_button).to_be_visible()
         return self
 
-    def check_structure(self):
+    def check_structure(self) -> Self:
         attach_screenshot(self.page, "Checking checkout page structure")
         expect(self.checkout).to_be_visible()
         expect(self.subtotal_products).to_be_visible()
@@ -82,7 +84,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.payment_step).to_be_visible()
         return self
 
-    def check_personal_info_structure(self):
+    def check_personal_info_structure(self) -> Self:
         attach_screenshot(self.page, "Checking personal information step structure")
         expect(self.personal_info_step).to_be_visible()
         expect(self.personal_info_heading).to_be_visible()
@@ -93,8 +95,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.personal_info_continue_button).to_be_visible()
         return self
 
-    # Might need to add another parameters or even whole additional layer for workflow interactions, but it is not needed so far
-    def fill_personal_info(self, first_name, last_name, email):
+    def fill_personal_info(self, first_name: str, last_name: str, email: str) -> Self:
         attach_screenshot(self.page, "Filling personal information")
         self.first_name_input.fill(first_name)
         self.last_name_input.fill(last_name)
@@ -110,7 +111,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.addresses_step).to_have_attribute("class", re.compile(r"js-current-step"))
         return self
 
-    def check_addresses_structure(self):
+    def check_addresses_structure(self) -> Self:
         attach_screenshot(self.page, "Checking addresses step structure")
         expect(self.addresses_step).to_be_visible()
         expect(self.addresses_heading).to_be_visible()
@@ -121,8 +122,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.address_continue_button).to_be_visible()
         return self
 
-    # Might need to add another parameters or even whole additional layer for workflow interactions, but it is not needed so far
-    def fill_address(self, address_line_1, city, postal_code, country, phone, state=None):
+    def fill_address(self, address_line_1: str, city: str, postal_code: str, country: str, phone: str, state: str | None = None) -> Self:
         attach_screenshot(self.page, "Filling address information")
         self.address_input.fill(address_line_1)
         self.city_input.fill(city)
@@ -140,7 +140,7 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.shipping_step).to_have_attribute("class", re.compile(r"js-current-step"))
         return self
 
-    def check_shipping_method_structure(self):
+    def check_shipping_method_structure(self) -> Self:
         attach_screenshot(self.page, "Checking shipping step structure")
         expect(self.shipping_step).to_be_visible()
         expect(self.shipping_heading).to_be_visible()
@@ -148,10 +148,9 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.shipping_continue_button).to_be_visible()
         return self
 
-
-    def fill_shipping_method(self, name):
+    def fill_shipping_method(self, name: str) -> Self:
         attach_screenshot(self.page, "Selecting shipping method")
-        shipping_option = self.delivery_options.filter(has=self.page.get_by_text(name))
+        shipping_option: Locator = self.delivery_options.filter(has=self.page.get_by_text(name))
 
         # waiting for ajax request to be finished before clicking 'continue'
         with expect_response(self.page, "action=selectDeliveryOption"):
@@ -160,7 +159,7 @@ class CheckoutPage(BaseStorefrontPage):
         self.shipping_continue_button.click()
         return self
 
-    def check_payment_structure(self):
+    def check_payment_structure(self) -> Self:
         attach_screenshot(self.page, "Checking payment step structure")
         expect(self.payment_step).to_be_visible()
         expect(self.payment_heading).to_be_visible()
@@ -169,31 +168,23 @@ class CheckoutPage(BaseStorefrontPage):
         expect(self.place_order_button).to_be_visible()
         return self
 
-    def select_payment_method(self, method_name):
+    def select_payment_method(self, method_name: str) -> Self:
         attach_screenshot(self.page, "Selecting payment method")
 
-        method = self.payment_options.filter(has=self.page.get_by_text(method_name))
-        payment_radio = method.locator("input[type='radio'][name='payment-option']")
+        method: Locator = self.payment_options.filter(has=self.page.get_by_text(method_name))
+        payment_radio: Locator = method.locator("input[type='radio'][name='payment-option']")
         payment_radio.check()
         expect(payment_radio).to_be_checked()
         return self
 
-    def accept_terms(self):
+    def accept_terms(self) -> Self:
         attach_screenshot(self.page, "Accepting terms and conditions")
         if not self.terms_checkbox.is_checked():
             self.terms_checkbox.check()
         expect(self.terms_checkbox).to_be_checked()
         return self
 
-    def place_order(self):
+    def place_order(self) -> OrderConfirmationPage:
         attach_screenshot(self.page, "Placing order")
         self.place_order_button.click()
         return OrderConfirmationPage(self.page, self.locale).verify_loaded()
-
-
-
-
-
-
-
-

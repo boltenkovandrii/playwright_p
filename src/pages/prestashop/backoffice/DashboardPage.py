@@ -1,13 +1,18 @@
+from __future__ import annotations
+
+from typing import Self
+
+from playwright.sync_api import Page, expect
+
 from pages.prestashop.backoffice.BaseBackofficePage import BaseBackofficePage
-from playwright.sync_api import expect
 
 
 class DashboardPage(BaseBackofficePage):
-    def __init__(self, page):
+    def __init__(self, page: Page) -> None:
         super().__init__(page)
         self.dashboard = page.get_by_test_id("content")
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         super().verify_loaded()
         expect(self.dashboard).to_be_visible()
         return self

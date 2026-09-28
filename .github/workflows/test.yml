@@ -48,7 +48,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e .
+          python -m pip install -e ".[dev]"
 
       - name: Determine profiles
         id: set-profiles
@@ -101,6 +101,15 @@ jobs:
            fi
            
            echo "allure_screenshots=$ALLURE_SCREENSHOTS" >> $GITHUB_OUTPUT
+
+      - name: Lint with Ruff
+        run: ruff check --output-format=github .
+
+      - name: Check formatting with Ruff
+        run: ruff format --check .
+
+      - name: Type checking with mypy
+        run: mypy .
 
       - name: Install Playwright browsers
         run: python -m playwright install --with-deps

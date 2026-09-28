@@ -1,4 +1,6 @@
 import allure
+
+
 @allure.suite("PrestaShop storefront - Navigation & catalog")
 @allure.title("CAT-01 — Check catalog page structure")
 def test_catalog_page_structure(prestashop_home_page):
@@ -85,4 +87,3 @@ def test_filter_products_by_manufacturer(prestashop_home_page):
     catalog_page = catalog_page.apply_manufacturer_filter("Studio Design")
     catalog_page.check_displayed_results_count(7)
     catalog_page.verify_active_filter_contains("Studio Design")
-

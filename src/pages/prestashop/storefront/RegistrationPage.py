@@ -1,12 +1,16 @@
-from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
-from playwright.sync_api import expect
+from __future__ import annotations
 
+from typing import Self
+
+from playwright.sync_api import Page, expect
+
+from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class RegistrationPage(BaseStorefrontPage):
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         super().__init__(page, locale)
         self.heading = page.get_by_role("heading", name=UI_TEXT[self.locale]["registration_heading"])
         self.social_title_mr = page.get_by_test_id("field-id_gender-1")
@@ -25,22 +29,22 @@ class RegistrationPage(BaseStorefrontPage):
         self.field_errors = page.locator(".form-group.has-error")
         self.error_message = page.locator(".alert-danger")
 
-    def open(self, path="registration"):
+    def open(self, path: str = "registration") -> Self:
         super().open(path)
         return self
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Registration page")
         super().verify_loaded()
         expect(self.heading).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
+    def verify_current_language(self, locale: str) -> Self:
         super().verify_current_language(locale)
         expect(self.heading).to_be_visible()
         return self
 
-    def check_structure(self):
+    def check_structure(self) -> Self:
         attach_screenshot(self.page, "Checking registration page structure")
         super().check_structure()
         expect(self.heading).to_be_visible()
@@ -58,14 +62,20 @@ class RegistrationPage(BaseStorefrontPage):
         expect(self.submit_button).to_be_visible()
         return self
 
-    def submit(self):
+    def submit(self) -> BaseStorefrontPage:
         attach_screenshot(self.page, "Submitting the registration form")
         self.submit_button.click()
         # depending on the input, this may lead to either an error or a successful registration (so we will either stay on current page, or will be redirected to the HomePage)
         return BaseStorefrontPage(self.page, self.locale).verify_loaded()
 
-
-    def fill_with(self, first_name="", last_name="", email="", password="", birthday=""):
+    def fill_with(
+        self,
+        first_name: str = "",
+        last_name: str = "",
+        email: str = "",
+        password: str = "",
+        birthday: str = "",
+    ) -> Self:
         """Fill the specified fields and check required consent checkboxes when present.
         Returns self for error-assertion chaining."""
         attach_screenshot(self.page, "Submitting registration form with partial data")
@@ -85,27 +95,30 @@ class RegistrationPage(BaseStorefrontPage):
             self.psgdpr_checkbox.check()
         return self
 
-    def verify_first_name_error(self):
+    def verify_first_name_error(self) -> Self:
         # Don't check error message itself - it is browser-dependent and de-facto is not prestashop functionality
         expect(self.first_name_input).to_have_js_property("validity.valid", False)
         return self
 
-    def verify_email_error(self, message):
+    def verify_email_error(self) -> Self:
+        # Don't check error message itself - it is browser-dependent and de-facto is not prestashop functionality
         expect(self.email_input).to_have_js_property("validity.valid", False)
-        expect(self.email_input).to_have_js_property("validationMessage", message)
         return self
 
-    def verify_error_message(self, message):
+    def verify_password_error(self) -> Self:
+        # Don't check error message itself - it is browser-dependent and de-facto is not prestashop functionality
+        expect(self.password_input).to_have_js_property("validity.valid", False)
+        return self
+
+    def verify_error_message(self, message: str) -> Self:
         expect(self.error_message).to_be_visible()
         expect(self.error_message).to_have_text(message)
         return self
 
-    def verify_field_errors_visible(self):
+    def verify_field_errors_visible(self) -> Self:
         expect(self.field_errors.first).to_be_visible()
         return self
 
-    def verify_error_message_visible(self):
+    def verify_error_message_visible(self) -> Self:
         expect(self.error_alert).to_be_visible()
         return self
-
-

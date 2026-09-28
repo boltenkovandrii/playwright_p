@@ -1,15 +1,18 @@
+from __future__ import annotations
+
 import re
+from typing import Self
+
+from playwright.sync_api import Page, expect
 
 from components.prestashop.storefront.ProductGrid import ProductGrid
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
-from playwright.sync_api import expect
-
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
 
 
 class SearchResultsPage(BaseStorefrontPage):
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         super().__init__(page, locale)
         self.heading = page.get_by_test_id("js-product-list-header")
         self.product_grid = ProductGrid(page.get_by_test_id("js-product-list"))
@@ -17,18 +20,18 @@ class SearchResultsPage(BaseStorefrontPage):
         self.no_matches_message = page.get_by_test_id("product-search-no-matches")
         self.search_results_header = page.get_by_test_id("js-product-list-header")
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Search results page")
         super().verify_loaded()
         expect(self.heading).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
+    def verify_current_language(self, locale: str) -> Self:
         super().verify_current_language(locale)
         expect(self.search_results_header).to_contain_text(UI_TEXT[self.locale]["search_results_header"])
         return self
 
-    def check_structure(self):
+    def check_structure(self) -> Self:
         attach_screenshot(self.page, "Checking search results page structure")
         super().check_structure()
         expect(self.heading).to_be_visible()
@@ -36,36 +39,30 @@ class SearchResultsPage(BaseStorefrontPage):
             self.product_grid.check_structure()
         return self
 
-    def check_displayed_results_count(self, count):
-        attach_screenshot(self.page, "Checking displayed results count")
+    def check_displayed_results_count(self, count: int) -> Self:
         expect(self.product_grid.cards).to_have_count(count)
         return self
 
-    def check_no_matches_message(self):
+    def check_no_matches_message(self) -> Self:
         attach_screenshot(self.page, "Checking no matches message")
         expect(self.no_matches_message).to_be_visible()
         expect(self.no_matches_message).to_contain_text(UI_TEXT[self.locale]["search_no_matches_message"])
         return self
 
-    def verify_products_match(self, term):
+    def verify_products_match(self, term: str) -> Self:
         attach_screenshot(self.page, f"Verifying products match: {term}")
         for card in self.product_grid.cards.all():
-            expect(
-                card
-                .locator(".product-title a")
-                .filter(has_text=re.compile(re.escape(term), re.IGNORECASE))
-            ).to_be_visible()
+            expect(card.locator(".product-title a").filter(has_text=re.compile(re.escape(term), re.IGNORECASE))).to_be_visible()
         return self
 
-    def check_pagination_visible(self, visible):
-        attach_screenshot(self.page, "Checking pagination visibility")
+    def check_pagination_visible(self, visible: bool) -> Self:
         if visible:
             expect(self.page_list).to_be_visible()
         else:
             expect(self.page_list).not_to_be_visible()
         return self
 
-    def go_to_page_number(self, index):
+    def go_to_page_number(self, index: int) -> SearchResultsPage:
         attach_screenshot(self.page, f"Going to page number: {index}")
 
         link = self.page_list.get_by_role("link", name=str(index), exact=True)
@@ -78,8 +75,7 @@ class SearchResultsPage(BaseStorefrontPage):
         try:
             expect(current_page).to_have_text(str(index), timeout=1000)
         except AssertionError:
-            attach_screenshot(self.page,f"Retrying click for page number: {index}")
+            attach_screenshot(self.page, f"Retrying click for page number: {index}")
             link.click()
 
         return SearchResultsPage(self.page, self.locale).verify_loaded()
-

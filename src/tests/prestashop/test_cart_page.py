@@ -8,7 +8,7 @@ from helpers.prestashop.ProductSpec import ProductSpec
 def test_cart_page_structure(prestashop_home_page):
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product(0)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
     cart_page.check_structure()
 
 
@@ -19,7 +19,7 @@ def test_add_single_product_to_cart(prestashop_home_page):
 
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     cart_page.verify_product_count(1)
     cart_page.verify_product_quantity(ProductSpec(name=product_name), 1)
@@ -36,7 +36,7 @@ def test_add_multiple_quantities(prestashop_home_page):
     product_page.verify_header_cart_count(0)
 
     product_page.set_quantity(3)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     cart_page.verify_product_count(1)
     cart_page.verify_product_quantity(ProductSpec(name=product_name), 3)
@@ -49,7 +49,7 @@ def test_remove_product_from_cart(prestashop_home_page):
 
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     cart_page.remove_product(ProductSpec(name=product_name))
     cart_page.check_empty_structure()
@@ -62,7 +62,7 @@ def test_update_product_quantity(prestashop_home_page):
 
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     product_spec = ProductSpec(name=product_name)
 
@@ -83,14 +83,14 @@ def test_continue_shopping_from_cart(prestashop_home_page):
 
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     home_page = cart_page.continue_shopping()
     home_page.verify_header_cart_count(1)
 
     catalog_page = prestashop_home_page.open().open_category("Clothes")
     product_page = catalog_page.open_product_by_name(product_name)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
     home_page = cart_page.continue_shopping()
     home_page.verify_header_cart_count(2)
@@ -112,10 +112,10 @@ def test_verify_cart_totals(prestashop_home_page):
     product_page = product_page.select_size("XL")
     product_page = product_page.select_color("White")
     product_page.set_quantity(3)
-    cart_page = product_page.add_to_cart().go_to_cart()
+    cart_page = product_page.add_to_cart().proceed_to_checkout()
 
-    product_spec1 =  ProductSpec(name=product_name, attributes={"size": "M", "color": "Black"})
-    product_spec2 =  ProductSpec(name=product_name, attributes={"size": "XL", "color": "White"})
+    product_spec1 = ProductSpec(name=product_name, attributes={"size": "M", "color": "Black"})
+    product_spec2 = ProductSpec(name=product_name, attributes={"size": "XL", "color": "White"})
 
     cart_page.verify_product_count(2)
     cart_page.verify_product_quantity(product_spec1, 2)

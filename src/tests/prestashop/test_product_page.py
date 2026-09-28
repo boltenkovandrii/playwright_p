@@ -1,5 +1,5 @@
 import allure
-import pytest
+
 
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-01 — Check product page structure")
@@ -22,10 +22,11 @@ def test_view_product_information(prestashop_home_page):
     product_page.verify_short_description("Regular fit, round neckline, long sleeves. 100% cotton, brushed inner side for extra comfort.")
 
     product_page.verify_in_stock_count(1200)
-    product_page.verify_full_description("Studio Design' PolyFaune collection features classic products with colorful patterns, "
-                                         "inspired by the traditional japanese origamis. To wear with a chino or jeans. "
-                                         "The sublimation textile printing process provides an exceptional color rendering and a color, guaranteed overtime.")
-
+    product_page.verify_full_description(
+        "Studio Design' PolyFaune collection features classic products with colorful patterns, "
+        "inspired by the traditional japanese origamis. To wear with a chino or jeans. "
+        "The sublimation textile printing process provides an exceptional color rendering and a color, guaranteed overtime."
+    )
 
 
 @allure.suite("PrestaShop storefront - Product Details")
@@ -59,7 +60,6 @@ def test_change_product_quantity(prestashop_home_page):
     product_page.verify_quantity_is_equal(3)
 
 
-
 @allure.suite("PrestaShop storefront - Product Details")
 @allure.title("PDP-04 — Select product combination")
 def test_select_product_combination(prestashop_home_page):
@@ -76,7 +76,7 @@ def test_select_product_combination(prestashop_home_page):
     product_page.verify_selected_size("M")
     product_page.verify_product_context_visible()
 
-    original_image  = product_page.get_image_source()
+    original_image = product_page.get_image_source()
     product_page = product_page.select_color("Black")
     product_page.verify_selected_color("Black")
     product_page.verify_product_context_visible()

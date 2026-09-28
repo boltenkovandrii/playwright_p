@@ -1,10 +1,6 @@
 from pathlib import Path
 
-SNAPSHOT_DIR = (
-    Path(__file__).parent.parent.parent
-    / "resources"
-    / "snapshots"
-)
+SNAPSHOT_DIR = Path(__file__).parent.parent.parent / "resources" / "snapshots"
 
 
 def load_snapshot(
