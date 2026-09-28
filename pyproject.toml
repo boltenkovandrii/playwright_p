@@ -19,7 +19,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
     "ruff>=0.3.7",
     "mypy>=1.8.0",
