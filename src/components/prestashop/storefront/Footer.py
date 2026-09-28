@@ -1,4 +1,7 @@
-from playwright.sync_api import expect
+from __future__ import annotations
+
+from playwright.sync_api import Locator, Page, expect
+from typing import Self
 
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
@@ -7,30 +10,37 @@ from utils.snapshots import load_snapshot
 
 
 class Footer:
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         self.page = page
         self.locale = locale
         self.container = page.get_by_test_id("footer")
         self.account_infos = self.page.get_by_test_id("block_myaccount_infos")
         self.sign_out_link = self.account_infos.get_by_role("link", name=UI_TEXT[self.locale]["sign_out_link"])
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         expect(self.container).to_be_visible()
         return self
 
-    def check_structure(self, locale="en"):
+    def check_structure(self, locale: str = "en") -> Self:
         attach_screenshot(self.container, "Checking footer structure", False)
         # Actual links in the footer could depend on the fact if user is logged in. So snapshots perform only partial (but still substantial) assertion to not make it overcomplicated.
         # Account-related footer content is occasionally returned in English after a locale switch in CI. Keeping the structural assertion focused on stable, locale-independent footer sections.
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+        if self._viewport_width() < BOOTSTRAP_MD:
             snapshot_name = "footer_compact_simplified"
         else:
             snapshot_name = "footer_simplified"
         expect(self.container).to_match_aria_snapshot(load_snapshot(snapshot_name, locale=locale, namespace="prestashop"))
         return self
 
-    def sign_out(self):
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+    def sign_out(self) -> Self:
+        if self._viewport_width() < BOOTSTRAP_MD:
             self.account_infos.click()
         self.sign_out_link.click()
         return self
+
+    def _viewport_width(self) -> int:
+        viewport_size = self.page.viewport_size
+        if viewport_size is None:
+            raise AssertionError("Viewport size is not available")
+        return viewport_size["width"]
+

@@ -1,14 +1,16 @@
 from contextvars import ContextVar
 from pathlib import Path
+from typing import Any, cast
 
 import allure
+from playwright.sync_api import Locator, Page
 
 # Context variables to track screenshot behavior
 _screenshots_enabled_context: ContextVar[bool] = ContextVar("screenshots_enabled", default=True)
 _is_retry_context: ContextVar[bool] = ContextVar("is_retry", default=False)
 
 
-def set_screenshot_context(screenshots_enabled: bool = True, is_retry: bool = False):
+def set_screenshot_context(screenshots_enabled: bool = True, is_retry: bool = False) -> None:
     """
     Set the context for screenshot handling.
 
@@ -20,7 +22,7 @@ def set_screenshot_context(screenshots_enabled: bool = True, is_retry: bool = Fa
     _is_retry_context.set(is_retry)
 
 
-def attach_screenshot(target, name, full_page=True):
+def attach_screenshot(target: Page | Locator, name: str, full_page: bool = True) -> None:
     """
     Attach a screenshot to the Allure report.
 
@@ -41,8 +43,8 @@ def attach_screenshot(target, name, full_page=True):
             pass  # Add a text step instead of a screenshot
         else:
             # Attach screenshot on first run (if enabled) or on any retry
-            if full_page:
-                screenshot = target.screenshot(full_page=True)
+            if isinstance(target, Page):
+                screenshot = target.screenshot(full_page=full_page)
             else:
                 screenshot = target.screenshot()
 
@@ -53,17 +55,18 @@ def attach_screenshot(target, name, full_page=True):
             )
 
 
-def attach_playwright_artifacts(output_path):
+def attach_playwright_artifacts(output_path: str | Path) -> None:
     output_dir = Path(output_path)
+    attach_file = cast(Any, allure.attach.file)
     for trace in output_dir.glob("trace*.zip"):
-        allure.attach.file(
+        attach_file(
             str(trace),
             name="Trace",
             attachment_type=allure.attachment_type.ZIP,
         )
 
     for video in output_dir.glob("video*.webm"):
-        allure.attach.file(
+        attach_file(
             str(video),
             name="Video",
             attachment_type="video/webm",

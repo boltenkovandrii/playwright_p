@@ -1,4 +1,7 @@
-from playwright.sync_api import expect
+from __future__ import annotations
+
+from playwright.sync_api import Locator, Page, expect
+from typing import Self
 
 from resources.translations import UI_TEXT
 from utils.allure_reporting import attach_screenshot
@@ -7,7 +10,7 @@ from utils.snapshots import load_snapshot
 
 
 class Header:
-    def __init__(self, page):
+    def __init__(self, page: Page) -> None:
         self.page = page
         self.container = page.get_by_test_id("header")
         self.desktop_language_selector = page.get_by_test_id("_desktop_language_selector").locator("button")
@@ -23,12 +26,12 @@ class Header:
         self.desktop_user_info = page.get_by_test_id("_desktop_user_info")
         self.mobile_user_info = page.get_by_test_id("_mobile_user_info")
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         expect(self.container).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+    def verify_current_language(self, locale: str) -> Self:
+        if self._viewport_width() < BOOTSTRAP_MD:
             self.open_mobile_menu()
             expect(self.mobile_language_selector.locator("option:checked")).to_have_text(UI_TEXT[locale]["language"])
             self.close_mobile_menu()
@@ -36,17 +39,17 @@ class Header:
             expect(self.desktop_language_selector).to_contain_text(UI_TEXT[locale]["language"])
         return self
 
-    def verify_search_placeholder(self, locale):
+    def verify_search_placeholder(self, locale: str) -> Self:
         expect(self.search_input).to_have_attribute("placeholder", UI_TEXT[locale]["search_placeholder"])
         return self
 
-    def select_language(self, current_locale, target_locale):
+    def select_language(self, current_locale: str, target_locale: str) -> Self:
         if current_locale == target_locale:
             return self
 
         target_language = UI_TEXT[target_locale]["language"]
 
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+        if self._viewport_width() < BOOTSTRAP_MD:
             self.open_mobile_menu()
             with self.page.expect_navigation(wait_until="domcontentloaded"):
                 self.mobile_language_selector.select_option(label=target_language)
@@ -57,12 +60,12 @@ class Header:
 
         return self
 
-    def check_structure(self, locale="en"):
+    def check_structure(self, locale: str = "en") -> Self:
         attach_screenshot(self.container, "Checking header structure", False)
         expect(self.container).to_be_visible()
         expect(self.search_input).to_be_visible()
 
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+        if self._viewport_width() < BOOTSTRAP_MD:
             expect(self.menu_button).to_be_visible()
             expect(self.mobile_cart).to_be_visible()
             expect(self.desktop_cart).not_to_be_visible()
@@ -75,24 +78,25 @@ class Header:
 
         # Not the best check - will break on adding categories, ignores many elements hard to verify.
         # Probably direct checks of the elements would be better. Left as is to demonstrate usage of snapshots
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+        if self._viewport_width() < BOOTSTRAP_MD:
             snapshot_name = "header_compact"
         else:
             snapshot_name = "header"
         expect(self.container).to_match_aria_snapshot(load_snapshot(snapshot_name, locale=locale, namespace="prestashop"))
+        return self
 
-    def open_mobile_menu(self):
+    def open_mobile_menu(self) -> Self:
         self.menu_button.click()
         expect(self.mobile_menu).to_be_visible()
         return self
 
-    def close_mobile_menu(self):
+    def close_mobile_menu(self) -> Self:
         self.menu_button.click()
         expect(self.mobile_menu).not_to_be_visible()
         return self
 
-    def click_category(self, name):
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+    def click_category(self, name: str) -> Self:
+        if self._viewport_width() < BOOTSTRAP_MD:
             self.open_mobile_menu()
             category_links = self.page.get_by_test_id("mobile_top_menu_wrapper").locator(".category > a")
         else:
@@ -101,10 +105,10 @@ class Header:
         category_links.filter(has_text=name).first.click()
         return self
 
-    def verify_cart_count(self, expected_count):
+    def verify_cart_count(self, expected_count: int) -> Self:
         expected_text = f"({expected_count})"
 
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+        if self._viewport_width() < BOOTSTRAP_MD:
             cart_products_count = self.mobile_cart_products_count
         else:
             cart_products_count = self.desktop_cart_products_count
@@ -113,35 +117,45 @@ class Header:
         expect(cart_products_count).to_have_text(expected_text)
         return self
 
-    def search(self, query):
+    def search(self, query: str) -> Self:
         self.search_input.fill(query)
         self.search_input.press("Enter")
         return self
 
-    def open_account_page(self):
+    def open_account_page(self) -> Self:
         self._active_user_info().locator(".account").click()
         return self
 
-    def verify_logged_in(self):
+    def verify_logged_in(self) -> Self:
         expect(self._active_user_info().locator(".account")).to_be_visible()
         return self
 
-    def verify_not_logged_in(self):
+    def verify_not_logged_in(self) -> Self:
         expect(self._active_user_info().locator(".account")).not_to_be_visible()
         return self
 
-    def get_account_name(self):
-        return self._active_user_info().locator(".account span").text_content().strip()
+    def get_account_name(self) -> str:
+        account_name = self._active_user_info().locator(".account span").text_content()
+        if account_name is None:
+            raise AssertionError("Account name text is not available")
+        return account_name.strip()
 
-    def open_login_page(self):
+    def open_login_page(self) -> Self:
         self._active_user_info().locator("a").click()
         return self
 
-    def sign_out(self):
+    def sign_out(self) -> Self:
         self._active_user_info().locator(".logout").click()
         return self
 
-    def _active_user_info(self):
-        if self.page.viewport_size["width"] < BOOTSTRAP_MD:
+    def _active_user_info(self) -> Locator:
+        if self._viewport_width() < BOOTSTRAP_MD:
             return self.mobile_user_info
         return self.desktop_user_info
+
+    def _viewport_width(self) -> int:
+        viewport_size = self.page.viewport_size
+        if viewport_size is None:
+            raise AssertionError("Viewport size is not available")
+        return viewport_size["width"]
+

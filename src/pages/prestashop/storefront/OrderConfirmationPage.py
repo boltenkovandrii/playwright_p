@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import re
 
-from playwright.sync_api import expect
+from playwright.sync_api import Page, expect
+from typing import Self
 
 from pages.prestashop.storefront.BaseStorefrontPage import BaseStorefrontPage
 from resources.translations import UI_TEXT
@@ -9,7 +12,7 @@ from utils.allure_reporting import attach_screenshot
 
 # Page object is (almost) not localized. Since existing tests only use english version of the page - consider it is OK. May need to change English strings with UI_TEXT values.
 class OrderConfirmationPage(BaseStorefrontPage):
-    def __init__(self, page, locale="en"):
+    def __init__(self, page: Page, locale: str = "en") -> None:
         super().__init__(page, locale)
         self.confirmation_block = page.get_by_test_id("content-hook_order_confirmation")
         self.confirmation_heading = self.confirmation_block.get_by_role("heading", name=UI_TEXT[self.locale]["order_confirmation_heading"])
@@ -20,19 +23,19 @@ class OrderConfirmationPage(BaseStorefrontPage):
 
         self.order_reference = page.get_by_test_id("order-reference-value")
 
-    def verify_loaded(self):
+    def verify_loaded(self) -> Self:
         attach_screenshot(self.page, "Order confirmation page")
         super().verify_loaded()
         expect(self.page).to_have_url(re.compile(r"order-confirmation"))
         expect(self.confirmation_block).to_be_visible()
         return self
 
-    def verify_current_language(self, locale):
+    def verify_current_language(self, locale: str) -> Self:
         super().verify_current_language(locale)
         expect(self.confirmation_heading).to_be_visible()
         return self
 
-    def check_structure(self):
+    def check_structure(self) -> Self:
         attach_screenshot(self.page, "Checking order confirmation structure")
         expect(self.confirmation_block).to_be_visible()
         expect(self.confirmation_heading).to_be_visible()
@@ -41,35 +44,35 @@ class OrderConfirmationPage(BaseStorefrontPage):
         expect(self.order_details).to_be_visible()
         return self
 
-    def verify_order_reference_present(self):
+    def verify_order_reference_present(self) -> Self:
         expect(self.order_reference).to_contain_text(re.compile(r"Order reference:\s*[A-Z0-9]+"))
         return self
 
-    def verify_product_with_name_present(self, product_name):
+    def verify_product_with_name_present(self, product_name: str) -> Self:
         expect(self.order_items_section).to_contain_text(product_name)
         return self
 
-    def verify_shipping_method(self, shipping_method):
+    def verify_shipping_method(self, shipping_method: str) -> Self:
         expect(self.order_details).to_contain_text(shipping_method)
         return self
 
-    def verify_payment_method(self, payment_method):
+    def verify_payment_method(self, payment_method: str) -> Self:
         expect(self.order_details).to_contain_text(payment_method)
         return self
 
-    def verify_total_amount(self, expected_total):
+    def verify_total_amount(self, expected_total: float) -> Self:
         self._verify_summary_row_amount("Total (tax incl.)", expected_total)
         return self
 
-    def verify_subtotal_amount(self, expected_subtotal):
+    def verify_subtotal_amount(self, expected_subtotal: float) -> Self:
         self._verify_summary_row_amount("Subtotal", expected_subtotal)
         return self
 
-    def verify_shipping_amount(self, expected_shipping):
+    def verify_shipping_amount(self, expected_shipping: float) -> Self:
         self._verify_summary_row_amount("Shipping and handling", expected_shipping)
         return self
 
-    def _verify_summary_row_amount(self, row_label, expected_amount):
+    def _verify_summary_row_amount(self, row_label: str, expected_amount: float) -> Self:
         row = self.order_summary_table.locator("tr", has_text=row_label)
         amount = row.locator("td").last.inner_text().replace("€", "").replace("\u00a0", "").strip()
         if not abs(float(amount) - float(expected_amount)) < 0.01:
