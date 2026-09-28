@@ -162,12 +162,15 @@ Business-readable scenario documentation for the storefront suite is stored unde
 - `docs/prestashop/storefront/localization.md`
 
 ## AI-assisted development
-Project contain definitions of two agents:
-- `.github/agents/test-designer.agent.md` - an agent that can generate new test scenarios based on existing ones and the AUT
-- `.github/agents/playwright-implementer.agent.md` - an agent that can implement Playwright test code based on a scenario definition
 
-Both agents are designed to help with local development. They are not intended for use in a CI/CD pipeline. 
-And in general this is rather 'work in progress' feature - they are not intended to replace human test designers or developers, but rather to assist them in generating new scenarios and implementing them.
+GitHub Copilot is used as an engineering aid rather than as an autonomous test generator.
+
+The repository contains two custom agents:
+
+- test-designer — analyzes requirements and existing coverage and produces implementation-independent test scenarios.
+- playwright-implementer — implements approved scenarios while following the repository's Page Object, locator, synchronization, and reporting conventions.
+
+AI-generated changes are reviewed manually and validated through the same test and CI pipeline as manually written changes.
 
 
 ## Notes
