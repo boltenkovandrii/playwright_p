@@ -9,7 +9,7 @@ Its current active scope is **PrestaShop storefront automation**.
 - **Pattern**: Page Object Model (POM)
 - **Execution**: pytest + pytest-playwright + pytest-xdist
 - **Reporting**: Allure
-- **Target usage**: portfolio-quality framework demonstrating scalable UI automation design
+- **Target usage**: demo framework demonstrating scalable UI automation design
 
 ## Current Scope
 

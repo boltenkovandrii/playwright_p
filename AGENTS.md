@@ -2,7 +2,7 @@
 
 ## Project
 
-This is a Python + Playwright + pytest UI automation portfolio project. Current automated coverage targets the PrestaShop storefront.
+This is a Python + Playwright + pytest UI automation demo project. Current automated coverage targets the PrestaShop storefront.
 
 The project demonstrates maintainable E2E automation rather than exhaustive coverage of the AUT.
 

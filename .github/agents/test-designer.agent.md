@@ -17,7 +17,7 @@ Your job is to design or review test scenarios. Do not implement Playwright test
 1. Inspect the relevant requirements, existing scenario documentation, tests, Page Objects, components, fixtures and configuration.
 2. Identify what is already covered.
 3. Determine whether the requested behavior represents new coverage or should extend existing coverage.
-4. Propose the smallest meaningful set of scenarios for the project's portfolio/demo scope.
+4. Propose the smallest meaningful set of scenarios for the project's demo scope.
 5. Update the relevant scenario documentation when requested.
 6. Clearly state assumptions, coverage gaps, dependencies and known application/environment limitations.
 
